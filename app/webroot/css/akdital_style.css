@@ -1,3 +1,11 @@
+:root {
+    --text-color-primary: #283d62;
+}
+
+.text-color-primary {
+	color: var(--text-color-primary);
+}
+
 #content {
 	top: -83px;
 	position: relative;
@@ -160,7 +168,8 @@
 }
 
 /* necessary to give position: relative to parent. */
-input[type="text"] {
+/* for text */
+input[type="text"], input[type="password"] {
 	font-size: 15px;
 	color: #333;
 	width: 100%;
@@ -168,12 +177,13 @@ input[type="text"] {
 	letter-spacing: 1px;
 }
 
-.text {
+.text, .password {
 	width: 100%;
 	position: relative;
 	margin-bottom: 20px;
+	overflow: hidden;
 } /* necessary to give position: relative to parent. */
-input[type="text"] {
+input[type="text"], input[type="password"] {
 	font: 15px/24px "inter", Arial, sans-serif;
 	color: #333;
 	width: 100%;
@@ -181,7 +191,7 @@ input[type="text"] {
 	letter-spacing: 1px;
 }
 
-input[type="text"] {
+input[type="text"], input[type="password"] {
 	border: 1px solid #ebebeb;
 	padding: 11px 14px 0px;
 	transition: 0.4s;
@@ -190,7 +200,7 @@ input[type="text"] {
 	border-radius: 8px;
 }
 
-.text label {
+.text label , .password label {
 	position: absolute;
 	left: 14px;
 	width: 100%;
@@ -201,8 +211,8 @@ input[type="text"] {
 	letter-spacing: 0.5px;
 }
 
-.text:focus-within label,
-.text:has(input[type="text"]:not(:placeholder-shown)) label {
+.text:focus-within label, .password:focus-within label, 
+.text:has(input[type="text"]:not(:placeholder-shown)) label,.text:has(input[type="password"]:not(:placeholder-shown)) label {
 	top: 3px;
 	left: 14px; /* Changed from 1px to 14px to match original left position */
 	font-size: 12px;
@@ -210,9 +220,10 @@ input[type="text"] {
 	color: #53575a;
 }
 
-.text:focus-within input[type="text"] {
+.text:focus-within input[type="text"],.text:focus-within input[type="password"] {
 	border-color: #2d2a32;
 }
+/* end text  */
 
 .input-slogan {
 	font-size: 12px;
@@ -266,3 +277,180 @@ textarea {
 }
 
 /* end stye form  */
+
+/* start poppin font  */
+
+.poppins-thin {
+  font-family: "Poppins", sans-serif;
+  font-weight: 100;
+  font-style: normal;
+}
+
+.poppins-extralight {
+  font-family: "Poppins", sans-serif;
+  font-weight: 200;
+  font-style: normal;
+}
+
+.poppins-light {
+  font-family: "Poppins", sans-serif;
+  font-weight: 300;
+  font-style: normal;
+}
+
+.poppins-regular {
+  font-family: "Poppins", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.poppins-medium {
+  font-family: "Poppins", sans-serif;
+  font-weight: 500;
+  font-style: normal;
+}
+
+.poppins-semibold {
+  font-family: "Poppins", sans-serif;
+  font-weight: 600;
+  font-style: normal;
+}
+
+.poppins-bold {
+  font-family: "Poppins", sans-serif;
+  font-weight: 700;
+  font-style: normal;
+}
+
+.poppins-extrabold {
+  font-family: "Poppins", sans-serif;
+  font-weight: 800;
+  font-style: normal;
+}
+
+.poppins-black {
+  font-family: "Poppins", sans-serif;
+  font-weight: 900;
+  font-style: normal;
+}
+
+.poppins-thin-italic {
+  font-family: "Poppins", sans-serif;
+  font-weight: 100;
+  font-style: italic;
+}
+
+.poppins-extralight-italic {
+  font-family: "Poppins", sans-serif;
+  font-weight: 200;
+  font-style: italic;
+}
+
+.poppins-light-italic {
+  font-family: "Poppins", sans-serif;
+  font-weight: 300;
+  font-style: italic;
+}
+
+.poppins-regular-italic {
+  font-family: "Poppins", sans-serif;
+  font-weight: 400;
+  font-style: italic;
+}
+
+.poppins-medium-italic {
+  font-family: "Poppins", sans-serif;
+  font-weight: 500;
+  font-style: italic;
+}
+
+.poppins-semibold-italic {
+  font-family: "Poppins", sans-serif;
+  font-weight: 600;
+  font-style: italic;
+}
+
+.poppins-bold-italic {
+  font-family: "Poppins", sans-serif;
+  font-weight: 700;
+  font-style: italic;
+}
+
+.poppins-extrabold-italic {
+  font-family: "Poppins", sans-serif;
+  font-weight: 800;
+  font-style: italic;
+}
+
+.poppins-black-italic {
+  font-family: "Poppins", sans-serif;
+  font-weight: 900;
+  font-style: italic;
+}
+/* end poppin font  */
+
+
+
+/* text check  */
+
+.control {
+  display: block;
+  position: relative;
+  padding-left: 30px;
+  margin-bottom: 15px;
+  cursor: pointer;
+  font-size: 18px; }
+
+.control input {
+  position: absolute;
+  z-index: -1;
+  opacity: 0; }
+
+.control__indicator {
+  position: absolute;
+  top: 2px;
+  left: 0;
+  height: 20px;
+  width: 20px;
+  background: #e6e6e6;
+  border-radius: 4px; }
+
+
+.control:hover input ~ .control__indicator,
+.control input:focus ~ .control__indicator {
+  background: #ccc; }
+
+.control input:checked ~ .control__indicator {
+  background: #f1f1f1; }
+
+.control:hover input:not([disabled]):checked ~ .control__indicator,
+.control input:checked:focus ~ .control__indicator {
+  background: #f1f1f1; }
+
+.control input:disabled ~ .control__indicator {
+  background: #e6e6e6;
+  opacity: 0.9;
+  pointer-events: none; }
+
+.control__indicator:after {
+  font-family: 'fontawesome';
+  content: '\f00c';
+  
+  position: absolute;
+  display: none;
+  font-size: 14px;
+  -webkit-transition: .3s all ease;
+  -o-transition: .3s all ease;
+  transition: .3s all ease; }
+
+.control input:checked ~ .control__indicator:after {
+  display: block;
+  color: #00548D; }
+
+.control--checkbox .control__indicator:after {
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%); }
+

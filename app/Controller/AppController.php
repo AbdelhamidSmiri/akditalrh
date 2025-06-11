@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Application level Controller
  *
@@ -30,5 +31,29 @@ App::uses('Controller', 'Controller');
  * @package		app.Controller
  * @link		https://book.cakephp.org/2.0/en/controllers.html#the-app-controller
  */
-class AppController extends Controller {
+class AppController extends Controller
+{
+
+    public $components = array(
+        'Session',
+        'Auth' => array(
+            'loginRedirect' => array('controller' => 'users', 'action' => 'index'),
+            'logoutRedirect' => array('controller' => 'users', 'action' => 'login'),
+            'authError' => 'You must be logged in to access this page.',
+            'authorize' => array('Controller') // Use controller-based authorization
+        )
+    );
+
+    public function beforeFilter()
+    {
+        // Allow login page without authentication
+        // $this->Auth->allow('login');
+        $this->Auth->allow(); // allow access without login
+    }
+
+    public function isAuthorized($user)
+    {
+        // You can customize role-based access here
+        return true;
+    }
 }

@@ -38,7 +38,7 @@ class EmailConfig {
 
 	public $default = array(
 		'transport' => 'Mail',
-		'from' => 'you@localhost',
+		'from' => 'no-reply@akditalrh.icozdev.com',
 		//'charset' => 'utf-8',
 		//'headerCharset' => 'utf-8',
 	);

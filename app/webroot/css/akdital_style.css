@@ -1,0 +1,268 @@
+#content {
+	top: -83px;
+	position: relative;
+}
+.profile-section {
+	z-index: 99;
+	position: relative;
+	margin: 32px 0px 0;
+}
+
+.btn-primary-rounded {
+	background-color: #3780cb;
+	border-color: #3780cb;
+	color: #ffffff;
+	font-weight: 400;
+	font-size: 14px;
+	padding: 8px 16px;
+	border-radius: 25px;
+	margin-left: 12px !important;
+	border-bottom-left-radius: 25px !important;
+	border-top-left-radius: 25px !important;
+}
+.btn-primary-rounded:hover {
+	background-color: #000000;
+	border-color: #000000;
+	color: #ffffff;
+}
+
+.actions a {
+	text-decoration: none;
+	color: #19161d;
+	padding: 5px 12px;
+	border-radius: 25px;
+}
+
+.actions a:hover {
+	background: #eaf1fe;
+}
+
+/* start table style  */
+.table-akdital thead tr {
+	border: 0;
+}
+.table-akdital thead tr th {
+	border-bottom-width: 0px;
+	text-transform: capitalize;
+}
+
+.table-akdital thead th {
+	background-color: #ebf1fc;
+	color: #19161d;
+	font-weight: 500;
+	font-size: 12px;
+	text-align: left;
+	padding: 10px 15px;
+}
+
+.table-akdital tbody td {
+	padding: 17px 12px;
+}
+/* end table style  */
+
+/* start page header */
+.page-header {
+	margin: 12px 0 80px;
+	width: 74%;
+}
+.title-page {
+	font-size: 32px;
+	font-weight: 500;
+	color: #1e2c5a;
+	margin-bottom: 12px;
+}
+.slogan {
+	font-size: 18px;
+	font-weight: 400;
+	color: #878787;
+	line-height: 26px;
+}
+/* end page header */
+
+/* style search button  */
+.search-section {
+	margin-bottom: 30px;
+}
+.input-group-text {
+	background-color: #ffffff;
+	border: 1px solid #ebebeb;
+	color: #19161d;
+	font-weight: 500;
+	font-size: 16px;
+	padding: 8px 12px;
+	border-right: 0;
+	border-radius: 25px;
+}
+.search-section .form-control {
+	border: 1px solid #ebebeb;
+	border-radius: 25px;
+	padding: 8px 12px;
+	font-size: 14px;
+	color: #53575a;
+	font-weight: 400;
+	border-left: 0;
+	border-bottom-right-radius: 20px !important;
+	border-top-right-radius: 20px !important;
+}
+.search-section .input-group-text i {
+	color: #53575a;
+}
+#search_input:focus {
+    box-shadow: none;
+}
+/* end search button  */
+
+/* view style  */
+.little-title-section {
+	display: flex;
+	justify-content: space-between;
+	margin-top: 109px;
+}
+.little-title {
+	font-size: 16px;
+	font-weight: 700;
+	color: #1e2c5a;
+	margin-bottom: 22px;
+	line-height: 32px;
+}
+
+.info {
+	display: flex;
+	flex-direction: column;
+}
+.row-gap-3 {
+	row-gap: 12px;
+}
+.info label {
+	font-size: 16px;
+	font-weight: 400;
+	color: #1e2c5a;
+}
+
+.info span {
+	font-size: 16px;
+	font-weight: 500;
+	color: #1e2c5a;
+	margin-bottom: 4px;
+}
+.view-card {
+	border: 1px solid #d0d9ff;
+	border-radius: 12px;
+}
+.view-card .card-body {
+	padding: 27px 32px;
+}
+
+/* form style (inputs) */
+
+:focus {
+	outline: none;
+}
+
+/* necessary to give position: relative to parent. */
+input[type="text"] {
+	font-size: 15px;
+	color: #333;
+	width: 100%;
+	box-sizing: border-box;
+	letter-spacing: 1px;
+}
+
+.text {
+	width: 100%;
+	position: relative;
+	margin-bottom: 20px;
+} /* necessary to give position: relative to parent. */
+input[type="text"] {
+	font: 15px/24px "inter", Arial, sans-serif;
+	color: #333;
+	width: 100%;
+	box-sizing: border-box;
+	letter-spacing: 1px;
+}
+
+input[type="text"] {
+	border: 1px solid #ebebeb;
+	padding: 11px 14px 0px;
+	transition: 0.4s;
+	background: transparent;
+	height: 48px;
+	border-radius: 8px;
+}
+
+.text label {
+	position: absolute;
+	left: 14px;
+	width: 100%;
+	top: 15px;
+	color: #53575a;
+	transition: 0.3s;
+	z-index: -1;
+	letter-spacing: 0.5px;
+}
+
+.text:focus-within label,
+.text:has(input[type="text"]:not(:placeholder-shown)) label {
+	top: 3px;
+	left: 14px; /* Changed from 1px to 14px to match original left position */
+	font-size: 12px;
+	transition: 0.3s;
+	color: #53575a;
+}
+
+.text:focus-within input[type="text"] {
+	border-color: #2d2a32;
+}
+
+.input-slogan {
+	font-size: 12px;
+	color: #53575a;
+	font-weight: 400;
+	margin-top: 4px;
+	margin-bottom: 12px;
+}
+
+textarea {
+	font: 15px/24px "inter", Arial, sans-serif;
+	color: #333;
+	width: 100%;
+	box-sizing: border-box;
+	letter-spacing: 1px;
+	height: 100px;
+	border-radius: 8px;
+	border: 1px solid #ebebeb;
+	padding: 11px 14px 0px;
+	transition: 0.4s;
+	background: transparent;
+}
+
+.textarea label {
+	color: #152259;
+	font-weight: 600;
+	font-size: 12px;
+	margin-bottom: 9px;
+}
+.submit-section {
+	height: 120px;
+	display: flex;
+	justify-content: flex-end;
+	align-items: center;
+}
+
+.btn-submit {
+    background-color: #2E61B4;
+    border: 0px;
+    color: #ffffff;
+    height: 48px;
+    font-weight: 400;
+    font-size: 14px;
+    padding: 0 21px;
+    border-radius: 40px;
+}
+.btn-submit:hover{
+    background-color: #000000;
+	border-color: #000000;
+	color: #ffffff;
+}
+
+/* end stye form  */

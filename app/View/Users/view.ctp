@@ -1,8 +1,5 @@
 <div class="users view">
-	<div class="page-header">
-		<h1 class="title-page">Users</h1>
-		<span class="slogan"></span>
-	</div>
+	
 	<div class="col-md-12 little-title-section">
 		<span class="little-title">User</span>
 		<div class="actions">

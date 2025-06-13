@@ -1,8 +1,5 @@
 <div class="hotels view">
-	<div class="page-header">
-		<h1 class="title-page">Hotels</h1>
-		<span class="slogan"></span>
-	</div>
+
 	<div class="col-md-12 little-title-section">
 		<span class="little-title">Hotel</span>
 		<div class="actions">

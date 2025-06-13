@@ -1,9 +1,6 @@
 <div class="sites form">
 	<?php echo $this->Form->create('Site'); ?>
-	<div class="page-header">
-		<h1 class="title-page">Site</h1>
-		<span class="slogan"></span>
-	</div>
+
 	<div class="row">
 		<div class="col"></div>
 		<div class="col-8">

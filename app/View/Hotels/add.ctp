@@ -1,9 +1,5 @@
 <div class="hotels form">
 	<?php echo $this->Form->create('Hotel'); ?>
-	<div class="page-header">
-		<h1 class="title-page">Hotel</h1>
-		<span class="slogan"></span>
-	</div>
 	<div class="row">
 		<div class="col"></div>
 		<div class="col-8">

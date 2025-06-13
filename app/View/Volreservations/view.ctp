@@ -1,8 +1,5 @@
 <div class="volreservations view">
-	<div class="page-header">
-		<h1 class="title-page">Volreservations</h1>
-		<span class="slogan"></span>
-	</div>
+
 	<div class="col-md-12 little-title-section">
 		<span class="little-title">Volreservation</span>
 		<div class="actions">

@@ -37,7 +37,7 @@ class AppController extends Controller
     public $components = array(
         'Session',
         'Auth' => array(
-            'loginRedirect' => array('controller' => 'users', 'action' => 'index'),
+            'loginRedirect' => array('controller' => 'reservations', 'action' => 'index'),
             'logoutRedirect' => array('controller' => 'users', 'action' => 'login'),
             'authError' => 'You must be logged in to access this page.',
             'authorize' => array('Controller') // Use controller-based authorization

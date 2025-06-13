@@ -208,7 +208,7 @@
 .main-content {
 	margin-left: var(--sidebar-width);
 	min-height: 100vh;
-	padding: 2rem;
+	padding: 12px 2rem 2em;
 }
 
 #container {
@@ -263,7 +263,7 @@
 .role-profile {
 	font-size: 12px;
 	font-weight: 400;
-	color: #86888A;
+	color: #86888a;
 	text-transform: capitalize;
 }
 

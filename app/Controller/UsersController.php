@@ -119,18 +119,20 @@ class UsersController extends AppController
 
 		// other layout 
 		$this->layout = 'login';
+		if ($this->Auth->user()) {
+			return $this->redirect($this->Auth->loginRedirect); // or Auth->redirect()
+		}
 		if ($this->request->is('post')) {
 			if ($this->Auth->login()) {
 				$this->Session->write('Auth.User.nom', $this->Auth->user('nom'));
 				$this->Session->write('Auth.User.prenom', $this->Auth->user('prenom'));
-
 				$this->loadModel('Role');
 
 				$this->Role->recursive = -2;
 				$role = $this->Role->findById($this->Auth->user('role_id'));
 				$this->Session->write('Auth.User.role', $role['Role']['role']);
 				$this->Session->setFlash(
-					'Bonjour ' . $this->Auth->user('username') . ', vous êtes connecté avec succès.',
+					'Bonjour ' . $this->Auth->user('nom') . ', vous êtes connecté avec succès.',
 					'Flash/success',
 					array(),
 					'success'

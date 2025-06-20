@@ -62,7 +62,7 @@
 				</div>
 				<div class='col-12'>
 					<?php
-					echo $this->Form->input('transfert', [
+					echo $this->Form->input('transfer', [
 						'type' => 'checkbox',
 						'label' => 'Je veux un transfert'
 					]);

@@ -9,17 +9,43 @@ App::uses('AppController', 'Controller');
 class VolreservationsController extends AppController
 {
 
-	/**
-	 * Components
-	 *
-	 * @var array
-	 */
+	function agence_index()
+	{
+		$this->set('volreservations', $this->Volreservation->find("all", array(
+			'conditions' => array('Volreservation.etat' => "En cours")
+		)));
+	}
+	public function agence_view($id = null)
+	{
+		if (!$this->Volreservation->exists($id)) {
+			throw new NotFoundException(__('Invalid volreservation'));
+		}
+		$options = array('conditions' => array('Volreservation.id'=> $id));
+		$this->set('volreservation', $this->Volreservation->find('first', $options));
+	}
 
-	/**
-	 * index method
-	 *
-	 * @return void
-	 */
+	public function agence_valide($id)
+	{
+		if ($this->request->is('post')) 
+		{
+			$this->Volreservation->id=$id;
+			$this->request->data['Volreservation']['date_reponse'] =date("Y-m-d H:i:s");
+			$this->request->data['Volreservation']['etat']="Validé";
+			$this->request->data['Volreservation']['file_aller'] = $this->uploadFile('volreservations', $this->request->data['Volreservation']['file_aller']);
+			$this->request->data['Volreservation']['file_retour'] = $this->uploadFile('volreservations', $this->request->data['Volreservation']['file_retour']);
+			$this->request->data['Volreservation']['documents'] = $this->uploadFile('volreservations', $this->request->data['Volreservation']['documents']);
+			$this->Volreservation->save($this->request->data);
+			$this->Session->setFlash(__('La réservation a été validée.'));
+			exit();
+			return $this->redirect(array('action' => 'agence_index'));
+			
+		}
+		$vol=$this->Volreservation->findById($id);
+		$this->set('vol', $vol);
+	}
+
+
+
 	public function index()
 	{
 		$this->Volreservation->recursive = 0;
@@ -41,6 +67,8 @@ class VolreservationsController extends AppController
 		$options = array('conditions' => array('Volreservation.' . $this->Volreservation->primaryKey => $id));
 		$this->set('volreservation', $this->Volreservation->find('first', $options));
 	}
+
+
 
 	/**
 	 * add method

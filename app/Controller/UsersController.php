@@ -122,21 +122,26 @@ class UsersController extends AppController
 		if ($this->Auth->user()) {
 			return $this->redirect($this->Auth->loginRedirect); // or Auth->redirect()
 		}
-		if ($this->request->is('post')) {
-			if ($this->Auth->login()) {
-				$this->Session->write('Auth.User.nom', $this->Auth->user('nom'));
-				$this->Session->write('Auth.User.prenom', $this->Auth->user('prenom'));
-				$this->loadModel('Role');
-
-				$this->Role->recursive = -2;
-				$role = $this->Role->findById($this->Auth->user('role_id'));
-				$this->Session->write('Auth.User.role', $role['Role']['role']);
+		if ($this->request->is('post')) 
+		{
+			if ($this->Auth->login()) 
+			{
 				$this->Session->setFlash(
 					'Bonjour ' . $this->Auth->user('nom') . ', vous êtes connecté avec succès.',
 					'Flash/success',
 					array(),
 					'success'
 				);
+
+				if(AuthComponent::user('role_id') == 1) {
+					$this->Auth->redirectUrl(array('controller' => 'users', 'action' => 'index'));
+				} elseif (AuthComponent::user('role_id') == 2) {
+					$this->Auth->redirectUrl(array('controller' => 'volreservations', 'action' => 'agence_index'));
+				} elseif (AuthComponent::user('role_id') == 3) {
+					$this->Auth->redirectUrl(array('controller' => 'volreservations', 'action' => 'agence_index'));
+				}
+				
+				
 				return $this->redirect($this->Auth->redirect());
 			} else {
 				$this->Session->setFlash(

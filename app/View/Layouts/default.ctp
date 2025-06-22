@@ -10,7 +10,9 @@
 	</title>
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-	<link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+	<link
+		href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
+		rel="stylesheet">
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	<link href="https://fonts.googleapis.com/css2?family=Kumbh+Sans:wght@100..900&display=swap" rel="stylesheet">
@@ -52,173 +54,262 @@
 			</div>
 		</div>
 
+
 		<!-- Navigation -->
 		<div class="sidebar-nav">
 			<ul class="nav flex-column">
-				<!-- Dashboard -->
-				<li class="nav-item">
-					<?php
-					echo $this->Html->link(
-						$dashboard_icon . ' Dashboard',
-						array('controller' => 'dashboard', 'action' => 'index'),
-						array('class' => 'nav-link', 'escape' => false)
-					); ?>
-				</li>
 
-				<!-- Réservations Dropdown -->
-				<li class="nav-item dropdown">
-					<button class="nav-link dropdown-toggle" type="button" data-bs-toggle="collapse" data-bs-target="#reservationsDropdown" aria-expanded="false">
-						<?php echo $reservations_icon; ?>
-						Réservations
-					</button>
-					<div class="collapse" id="reservationsDropdown">
-						<div class="dropdown-menu show">
-							<?php echo $this->Html->link(
-								'<svg width="16" height="17" class="me-2" viewBox="0 0 16 17" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path d="M10.578 3.02C11.1953 2.52134 11.8873 2.49067 12.6427 2.50134C13.034 2.50734 13.2293 2.51 13.386 2.57067C13.6347 2.66734 13.8327 2.86534 13.9293 3.114C13.99 3.27067 13.9927 3.466 13.9987 3.85734C14.0093 4.61267 13.9787 5.304 13.48 5.922C13.06 6.442 12.3373 6.714 11.99 7.28867C11.7247 7.726 11.848 8.18 11.962 8.64734L12.8153 12.144C12.9853 12.8413 12.8553 13.2873 12.3687 13.7747C12.1093 14.0347 11.8933 14.0213 11.6833 13.686L9.10867 9.58334L7.87867 10.5607C7.43267 10.9153 7.21 11.0927 7.09267 11.342C6.81867 11.926 6.99267 12.8033 7.00133 13.4367C7.00667 13.7867 6.704 14.4767 6.276 14.4993C6.012 14.514 5.922 14.198 5.836 14.004L5.01467 12.136C4.81867 11.6893 4.81067 11.6813 4.364 11.4853L2.496 10.6633C2.30267 10.578 1.986 10.488 2.00067 10.224C2.024 9.796 2.714 9.49334 3.06333 9.49867C3.69667 9.50734 4.574 9.68134 5.158 9.40734C5.40733 9.29 5.58467 9.06734 5.93933 8.62067L6.91667 7.39134L2.814 4.81667C2.47867 4.606 2.466 4.39067 2.72533 4.13134C3.212 3.64467 3.65867 3.51467 4.356 3.68467L7.85267 4.538C8.31933 4.652 8.774 4.77534 9.212 4.51C9.786 4.16334 10.058 3.44067 10.578 3.02Z" stroke="white" stroke-linecap="round" stroke-linejoin="round"/>
-</svg>
- Demandes de billets',
-								array('controller' => 'volreservations', 'action' => 'add'),
-								array('class' => 'dropdown-item', 'escape' => false)
+				<?php
+				if (AuthComponent::user("Role.role") === 'Agence'): ?>
+					<li class="nav-item dropdown">
+						<button class="nav-link dropdown-toggle" type="button" data-bs-toggle="collapse"
+							data-bs-target="#agence" aria-expanded="false">
+							<?php echo $bons_commande_icon; ?> Gestion des vols
+						</button>
+						<div class="collapse" id="agence">
+							<div class="dropdown-menu show">
+								<?php echo $this->Html->link(
+									$billetterie_icon .
+									' Vols demander',
+									array('controller' => 'volreservations', 'action' => 'agence_index'),
+									array('class' => 'dropdown-item', 'escape' => false)
+								);
+								echo $this->Html->link(
+									$hebergement_icon .
+									' Vols términer',
+									array('controller' => 'volreservations', 'action' => 'agence_valider'),
+									array('class' => 'dropdown-item', 'escape' => false)
+								);
+								echo $this->Html->link(
+									$hebergement_icon .
+									' Vols Annuler',
+									array('controller' => 'volreservations', 'action' => 'agence_annuler'),
+									array('class' => 'dropdown-item', 'escape' => false)
+								);
 
-							); ?>
-							<?php echo $this->Html->link(
-								$demande_hotel_icon . ' Demandes d\'hôtel',
-								array('controller' => 'demandes', 'action' => 'add'),
-								array('class' => 'dropdown-item', 'escape' => false)
-							); ?>
+								?>
+							</div>
 						</div>
-					</div>
-				</li>
+					</li>
+				<?php endif; ?>
 
-				<!-- Bons de commande Dropdown -->
-				<li class="nav-item dropdown">
-					<button class="nav-link dropdown-toggle" type="button" data-bs-toggle="collapse" data-bs-target="#commandesDropdown" aria-expanded="false">
-						<?php echo $bons_commande_icon; ?>
-						Bons de commande
-					</button>
-					<div class="collapse" id="commandesDropdown">
-						<div class="dropdown-menu show">
-							<?php echo $this->Html->link(
-								$billetterie_icon .
+				<?php
+				if (!in_array(AuthComponent::user("Role.role"), ['Agence', 'Admin'])): ?>
+					<li class="nav-item dropdown">
+						<button class="nav-link dropdown-toggle" type="button" data-bs-toggle="collapse"
+							data-bs-target="#reservationsDropdown" aria-expanded="false">
+							<?php echo $reservations_icon; ?>
+							Mes billets de vol
+						</button>
+						<div class="collapse" id="reservationsDropdown">
+							<div class="dropdown-menu show">
+								<?php echo $this->Html->link(
+									'Créé une demande',
+									array('controller' => 'volreservations', 'action' => 'add'),
+									array('class' => 'dropdown-item', 'escape' => false)
+
+								); ?>
+								<?php echo $this->Html->link(
+									$demande_hotel_icon . 'Mes demandes',
+									array('controller' => 'volreservations', 'action' => 'agent_index'),
+									array('class' => 'dropdown-item', 'escape' => false)
+								); ?>
+							</div>
+						</div>
+					</li>
+
+					<!-- Bons de commande Dropdown -->
+					<li class="nav-item dropdown">
+						<button class="nav-link dropdown-toggle" type="button" data-bs-toggle="collapse"
+							data-bs-target="#commandesDropdown" aria-expanded="false">
+							<?php echo $bons_commande_icon; ?>
+							Bons de commande
+						</button>
+						<div class="collapse" id="commandesDropdown">
+							<div class="dropdown-menu show">
+								<?php echo $this->Html->link(
+									'Demandes de billets',
+									array('controller' => 'volreservations', 'action' => 'add'),
+									array('class' => 'dropdown-item', 'escape' => false)
+
+								);
+								echo $this->Html->link(
+									$demande_hotel_icon . ' Demandes d\'hôtel',
+									array('controller' => 'demandes', 'action' => 'add'),
+									array('class' => 'dropdown-item', 'escape' => false)
+								); ?>
+							</div>
+						</div>
+					</li>
+				<?php endif; ?>
+
+
+				<?php if (AuthComponent::user("Role.role") === 'Admin'): ?>
+					<!-- Dashboard -->
+					<li class="nav-item">
+						<?php
+						echo $this->Html->link(
+							$dashboard_icon . ' Dashboard',
+							array('controller' => 'dashboard', 'action' => 'index'),
+							array('class' => 'nav-link', 'escape' => false)
+						); ?>
+					</li>
+
+					<!-- Réservations Dropdown -->
+					<li class="nav-item dropdown">
+						<button class="nav-link dropdown-toggle" type="button" data-bs-toggle="collapse"
+							data-bs-target="#reservationsDropdown" aria-expanded="false">
+							<?php echo $reservations_icon; ?>
+							Réservations
+						</button>
+						<div class="collapse" id="reservationsDropdown">
+							<div class="dropdown-menu show">
+								<?php echo $this->Html->link(
+									'Demandes de billets',
+									array('controller' => 'volreservations', 'action' => 'add'),
+									array('class' => 'dropdown-item', 'escape' => false)
+
+								); ?>
+								<?php echo $this->Html->link(
+									$demande_hotel_icon . ' Demandes d\'hôtel',
+									array('controller' => 'demandes', 'action' => 'add'),
+									array('class' => 'dropdown-item', 'escape' => false)
+								); ?>
+							</div>
+						</div>
+					</li>
+
+					<!-- Bons de commande Dropdown -->
+					<li class="nav-item dropdown">
+						<button class="nav-link dropdown-toggle" type="button" data-bs-toggle="collapse"
+							data-bs-target="#commandesDropdown" aria-expanded="false">
+							<?php echo $bons_commande_icon; ?>
+							Bons de commande
+						</button>
+						<div class="collapse" id="commandesDropdown">
+							<div class="dropdown-menu show">
+								<?php echo $this->Html->link(
+									$billetterie_icon .
 									' Billetterie',
-								array('controller' => 'bons', 'action' => 'billetterie'),
-								array('class' => 'dropdown-item', 'escape' => false)
-							); ?>
-							<?php echo $this->Html->link(
-								$hebergement_icon .
+									array('controller' => 'bons', 'action' => 'billetterie'),
+									array('class' => 'dropdown-item', 'escape' => false)
+								); ?>
+								<?php echo $this->Html->link(
+									$hebergement_icon .
 									' Hébergement',
-								array('controller' => 'bons', 'action' => 'hebergement'),
-								array('class' => 'dropdown-item', 'escape' => false)
-							); ?>
+									array('controller' => 'bons', 'action' => 'hebergement'),
+									array('class' => 'dropdown-item', 'escape' => false)
+								); ?>
+							</div>
 						</div>
-					</div>
-				</li>
+					</li>
 
-				<!-- Parc automobile Dropdown -->
-				<li class="nav-item dropdown">
-					<button class="nav-link dropdown-toggle" type="button" data-bs-toggle="collapse" data-bs-target="#parcDropdown" aria-expanded="false">
-						<i class="fas fa-car"></i>
-						Parc automobile
-					</button>
-					<div class="collapse" id="parcDropdown">
-						<div class="dropdown-menu show">
-							<?php echo $this->Html->link(
-								'Liste des véhicules',
-								array('controller' => 'parc', 'action' => 'liste_vehicules'),
-								array('class' => 'dropdown-item')
-							); ?>
-							<?php echo $this->Html->link(
-								'Requêtes collaborateurs',
-								array('controller' => 'parc', 'action' => 'requetes_collaborateurs'),
-								array('class' => 'dropdown-item')
-							); ?>
-							<?php echo $this->Html->link(
-								'Contrats',
-								array('controller' => 'parc', 'action' => 'contrats'),
-								array('class' => 'dropdown-item')
-							); ?>
-							<?php echo $this->Html->link(
-								'Suivi des cartes carburant',
-								array('controller' => 'parc', 'action' => 'suivi_cartes_carburant'),
-								array('class' => 'dropdown-item')
-							); ?>
-							<?php echo $this->Html->link(
-								'Suivi des Tag Jawaz',
-								array('controller' => 'parc', 'action' => 'suivi_tag_jawaz'),
-								array('class' => 'dropdown-item')
-							); ?>
-							<?php echo $this->Html->link(
-								'Référentiel de prix',
-								array('controller' => 'parc', 'action' => 'referentiel_prix'),
-								array('class' => 'dropdown-item')
-							); ?>
+					<!-- Parc automobile Dropdown -->
+					<li class="nav-item dropdown">
+						<button class="nav-link dropdown-toggle" type="button" data-bs-toggle="collapse"
+							data-bs-target="#parcDropdown" aria-expanded="false">
+							<i class="fas fa-car"></i>
+							Parc automobile
+						</button>
+						<div class="collapse" id="parcDropdown">
+							<div class="dropdown-menu show">
+								<?php echo $this->Html->link(
+									'Liste des véhicules',
+									array('controller' => 'parc', 'action' => 'liste_vehicules'),
+									array('class' => 'dropdown-item')
+								); ?>
+								<?php echo $this->Html->link(
+									'Requêtes collaborateurs',
+									array('controller' => 'parc', 'action' => 'requetes_collaborateurs'),
+									array('class' => 'dropdown-item')
+								); ?>
+								<?php echo $this->Html->link(
+									'Contrats',
+									array('controller' => 'parc', 'action' => 'contrats'),
+									array('class' => 'dropdown-item')
+								); ?>
+								<?php echo $this->Html->link(
+									'Suivi des cartes carburant',
+									array('controller' => 'parc', 'action' => 'suivi_cartes_carburant'),
+									array('class' => 'dropdown-item')
+								); ?>
+								<?php echo $this->Html->link(
+									'Suivi des Tag Jawaz',
+									array('controller' => 'parc', 'action' => 'suivi_tag_jawaz'),
+									array('class' => 'dropdown-item')
+								); ?>
+								<?php echo $this->Html->link(
+									'Référentiel de prix',
+									array('controller' => 'parc', 'action' => 'referentiel_prix'),
+									array('class' => 'dropdown-item')
+								); ?>
+							</div>
 						</div>
-					</div>
-				</li>
+					</li>
 
-				<!-- Appartements Dropdown -->
-				<li class="nav-item dropdown">
-					<button class="nav-link dropdown-toggle" type="button" data-bs-toggle="collapse" data-bs-target="#appartementsDropdown" aria-expanded="false">
-						<i class="fas fa-building"></i>
-						Appartements
-					</button>
-					<div class="collapse" id="appartementsDropdown">
-						<div class="dropdown-menu show">
-							<?php echo $this->Html->link(
-								'Disponibilités',
-								array('controller' => 'appartements', 'action' => 'disponibilites'),
-								array('class' => 'dropdown-item')
-							); ?>
-							<?php echo $this->Html->link(
-								'Affectations',
-								array('controller' => 'appartements', 'action' => 'affectations'),
-								array('class' => 'dropdown-item')
-							); ?>
-							<?php echo $this->Html->link(
-								'Historique logements',
-								array('controller' => 'appartements', 'action' => 'historique_logements'),
-								array('class' => 'dropdown-item')
-							); ?>
+					<!-- Appartements Dropdown -->
+					<li class="nav-item dropdown">
+						<button class="nav-link dropdown-toggle" type="button" data-bs-toggle="collapse"
+							data-bs-target="#appartementsDropdown" aria-expanded="false">
+							<i class="fas fa-building"></i>
+							Appartements
+						</button>
+						<div class="collapse" id="appartementsDropdown">
+							<div class="dropdown-menu show">
+								<?php echo $this->Html->link(
+									'Disponibilités',
+									array('controller' => 'appartements', 'action' => 'disponibilites'),
+									array('class' => 'dropdown-item')
+								); ?>
+								<?php echo $this->Html->link(
+									'Affectations',
+									array('controller' => 'appartements', 'action' => 'affectations'),
+									array('class' => 'dropdown-item')
+								); ?>
+								<?php echo $this->Html->link(
+									'Historique logements',
+									array('controller' => 'appartements', 'action' => 'historique_logements'),
+									array('class' => 'dropdown-item')
+								); ?>
+							</div>
 						</div>
-					</div>
-				</li>
+					</li>
 
-				<!-- Paramètres -->
-				<li class="nav-item dropdown">
-					<button class="nav-link dropdown-toggle" type="button" data-bs-toggle="collapse" data-bs-target="#appartementsDropdown" aria-expanded="false">
-						<i class="fas fa-building"></i>
-						Paramètres
-					</button>
-					<div class="collapse" id="appartementsDropdown">
-						<div class="dropdown-menu show">
-							<?php echo $this->Html->link(
-								'Gestion des utilisateurs',
-								array('controller' => 'users', 'action' => 'index'),
-								array('class' => 'dropdown-item')
-							); 
-							 echo $this->Html->link(
-								'Gestion des rôles',
-								array('controller' => 'roles', 'action' => 'index'),
-								array('class' => 'dropdown-item')
-							); 
-							echo $this->Html->link(
-								'Gestion des sites',
-								array('controller' => 'sites', 'action' => 'index'),
-								array('class' => 'dropdown-item')
-							);
-							echo $this->Html->link(
-								'Gestion des utulisateurs',
-								array('controller' => 'users', 'action' => 'index'),
-								array('class' => 'dropdown-item')
-							);
-							 ?>
+					<!-- Paramètres -->
+					<li class="nav-item dropdown">
+						<button class="nav-link dropdown-toggle" type="button" data-bs-toggle="collapse"
+							data-bs-target="#parametres" aria-expanded="false">
+							<i class="fas fa-building"></i>
+							Paramètres
+						</button>
+						<div class="collapse" id="parametres">
+							<div class="dropdown-menu show">
+								<?php echo $this->Html->link(
+									'Gestion des utilisateurs',
+									array('controller' => 'users', 'action' => 'index'),
+									array('class' => 'dropdown-item')
+								);
+								echo $this->Html->link(
+									'Gestion des rôles',
+									array('controller' => 'roles', 'action' => 'index'),
+									array('class' => 'dropdown-item')
+								);
+								echo $this->Html->link(
+									'Gestion des sites',
+									array('controller' => 'sites', 'action' => 'index'),
+									array('class' => 'dropdown-item')
+								);
+								echo $this->Html->link(
+									'Gestion des utulisateurs',
+									array('controller' => 'users', 'action' => 'index'),
+									array('class' => 'dropdown-item')
+								);
+								?>
+							</div>
 						</div>
-					</div>
-				</li>
+					</li>
+				<?php endif; ?>
 
-				<!-- Paramètres -->
-				
 			</ul>
 		</div>
 
@@ -300,15 +391,18 @@
 	</div>
 
 	<!-- Mobile Menu Toggle (for responsive) -->
-	<button class="btn btn-primary d-md-none" id="sidebarToggle" style="position: fixed; top: 1rem; left: 1rem; z-index: 1001;">
+	<button class="btn btn-primary d-md-none" id="sidebarToggle"
+		style="position: fixed; top: 1rem; left: 1rem; z-index: 1001;">
 		<i class="fas fa-bars"></i>
 	</button>
 
-	<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
+		integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p"
+		crossorigin="anonymous"></script>
 	<?php echo $this->Html->script('bootstrap.min.js'); ?>
 
 	<script>
-		document.addEventListener('DOMContentLoaded', function() {
+		document.addEventListener('DOMContentLoaded', function () {
 			// Handle active states based on current URL
 			const currentController = '<?php echo $this->request->controller; ?>';
 			const currentAction = '<?php echo $this->request->action; ?>';
@@ -356,11 +450,11 @@
 			const sidebar = document.querySelector('.sidebar');
 
 			if (sidebarToggle && sidebar) {
-				sidebarToggle.addEventListener('click', function() {
+				sidebarToggle.addEventListener('click', function () {
 					sidebar.classList.toggle('show');
 				});
 
-				document.addEventListener('click', function(e) {
+				document.addEventListener('click', function (e) {
 					if (window.innerWidth <= 768) {
 						if (!sidebar.contains(e.target) && !sidebarToggle.contains(e.target)) {
 							sidebar.classList.remove('show');

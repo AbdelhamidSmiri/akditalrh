@@ -8,15 +8,14 @@
 
 			<div class="row">
 
-				<div class='col-12'>
-					<?php
-					echo $this->Form->input('reponse', array('placeholder' => ''));
-					?>
-				</div>
+				<div class='col-12'> <?php echo $this->Form->input('reponse', array('placeholder' => ''));?></div>
 				<div class='col-12'>
 					<?php
 					echo $this->Form->input('num_vol', array('placeholder' => ''));
 					?>
+				</div>
+				<div class='col-12'>
+					<?php echo $this->Form->input('prix_vol', array('placeholder' => ''));?>
 				</div>
 				file_aller
 				<div class='col-12'>
@@ -49,6 +48,11 @@
 					<div class='col-12'>
 						<?php
 						echo $this->Form->input('description_transfer', array('placeholder' => ''));
+						?>
+					</div>
+					<div class='col-12'>
+						<?php
+						echo $this->Form->input('prix_transfert', array('placeholder' => ''));
 						?>
 					</div>
 				<?php endif; ?>

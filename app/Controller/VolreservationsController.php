@@ -9,10 +9,54 @@ App::uses('AppController', 'Controller');
 class VolreservationsController extends AppController
 {
 
+	public function isAuthorized($user)
+	{
+		// Exemples de rôle : agent, agence, admin
+		$role = AuthComponent::user('Role.role');
+		// Actions autorisées pour "agence"
+		if ($role === 'Agence') {
+			return in_array($this->action, ['agence_index', 'agence_valider', 'agence_archive',"view",'agence_valide', 'agence_annuler']);
+		}
+
+		// Actions autorisées pour "agent"
+		if ($role !==' Admin' && $role !== 'Agence') 
+		{
+			return in_array($this->action, ['agent_index',"add", 'view', 'edit']);
+		}
+
+		// Admin : accès à tout
+		if ($role === 'admin') {
+			return true;
+		}
+		// Refus par défaut
+		return false;
+	}
+
+	function agent_index()
+	{
+		$this->set('volreservations', $this->Volreservation->find("all", array(
+			'conditions' => array('Volreservation.user_id' => AuthComponent::user("id" )))));
+	}
+
 	function agence_index()
 	{
 		$this->set('volreservations', $this->Volreservation->find("all", array(
 			'conditions' => array('Volreservation.etat' => "En cours")
+		)));
+	}
+
+	
+
+	function agence_valider()
+	{
+		$this->set('volreservations', $this->Volreservation->find("all", array(
+			'conditions' => array('Volreservation.etat' => "Validé")
+		)));
+	}
+	function agence_annuler()
+	{
+		$this->set('volreservations', $this->Volreservation->find("all", array(
+			'conditions' => array('Volreservation.etat' => "Annulé")
 		)));
 	}
 	public function agence_view($id = null)
@@ -20,28 +64,42 @@ class VolreservationsController extends AppController
 		if (!$this->Volreservation->exists($id)) {
 			throw new NotFoundException(__('Invalid volreservation'));
 		}
-		$options = array('conditions' => array('Volreservation.id'=> $id));
+		$options = array('conditions' => array('Volreservation.id' => $id));
 		$this->set('volreservation', $this->Volreservation->find('first', $options));
 	}
 
 	public function agence_valide($id)
 	{
-		if ($this->request->is('post')) 
-		{
-			$this->Volreservation->id=$id;
-			$this->request->data['Volreservation']['date_reponse'] =date("Y-m-d H:i:s");
-			$this->request->data['Volreservation']['etat']="Validé";
+		if ($this->request->is('post')) {
+			$this->Volreservation->id = $id;
+			$this->request->data['Volreservation']['date_reponse'] = date("Y-m-d H:i:s");
+			$this->request->data['Volreservation']['etat'] = "Validé";
 			$this->request->data['Volreservation']['file_aller'] = $this->uploadFile('volreservations', $this->request->data['Volreservation']['file_aller']);
 			$this->request->data['Volreservation']['file_retour'] = $this->uploadFile('volreservations', $this->request->data['Volreservation']['file_retour']);
 			$this->request->data['Volreservation']['documents'] = $this->uploadFile('volreservations', $this->request->data['Volreservation']['documents']);
 			$this->Volreservation->save($this->request->data);
 			$this->Session->setFlash(__('La réservation a été validée.'));
-			exit();
 			return $this->redirect(array('action' => 'agence_index'));
-			
 		}
-		$vol=$this->Volreservation->findById($id);
+		$vol = $this->Volreservation->findById($id);
 		$this->set('vol', $vol);
+	}
+
+	function agence_archive($id)
+	{
+		if (!$this->Volreservation->exists($id)) {
+			throw new NotFoundException(__('Invalid volreservation'));
+		}
+
+
+		if ($this->request->is(array('post', 'put'))) {
+			$this->Volreservation->id = $id;
+			$this->request->data['Volreservation']['date_reponse'] = date("Y-m-d H:i:s");
+			$this->request->data['Volreservation']['etat'] = "Annulé";
+			$this->Volreservation->save($this->request->data);
+			$this->Session->setFlash(__('La réservation a été annulée.'));
+		}
+		return $this->redirect(array('action' => 'agence_index'));
 	}
 
 
@@ -52,13 +110,6 @@ class VolreservationsController extends AppController
 		$this->set('volreservations', $this->Volreservation->find("all"));
 	}
 
-	/**
-	 * view method
-	 *
-	 * @throws NotFoundException
-	 * @param string $id
-	 * @return void
-	 */
 	public function view($id = null)
 	{
 		if (!$this->Volreservation->exists($id)) {
@@ -77,18 +128,17 @@ class VolreservationsController extends AppController
 	 */
 	public function add()
 	{
-		if ($this->request->is('post')) 
-		{
+		if ($this->request->is('post')) {
 			$this->Volreservation->create();
 			$this->Volreservation->data["Volreservation"]["user_id"] = AuthComponent::user("id");
 			debug($this->request->data);
 			$this->request->data['Volreservation']['ordre_mission'] = $this->uploadFile('volreservations', $this->request->data['Volreservation']['ordre_mission']);
 			$this->request->data['Volreservation']['cin'] = $this->uploadFile('volreservations', $this->request->data['Volreservation']['cin']);
 			$this->request->data['Volreservation']['passport'] = $this->uploadFile('volreservations', $this->request->data['Volreservation']['passport']);
-			
+
 			if ($this->Volreservation->save($this->request->data)) {
 				$this->Session->setFlash(__('The volreservation has been saved.'));
-				return $this->redirect(array('action' => 'index'));
+				return $this->redirect(array('action' => 'agent_index'));
 			} else {
 				$this->Session->setFlash(__('The volreservation could not be saved. Please, try again.'));
 			}
@@ -110,11 +160,9 @@ class VolreservationsController extends AppController
 			throw new NotFoundException(__('Invalid volreservation'));
 		}
 		if ($this->request->is(array('post', 'put'))) {
-			
-			
 			if ($this->Volreservation->save($this->request->data)) {
 				$this->Session->setFlash(__('The volreservation has been saved.'));
-				return $this->redirect(array('action' => 'index'));
+				return $this->redirect(array('action' => 'agent_index'));
 			} else {
 				$this->Session->setFlash(__('The volreservation could not be saved. Please, try again.'));
 			}

@@ -22,8 +22,9 @@
 				<th>Date aller</th>
 				<th>Date retour</th>
 				<th>message</th>
-				<th>Date d'ajout</th>
-				<th>Transfert</th>
+				<th>Date demande</th>
+				<th>Prix Vol</th>
+				<th>Prix Transfert</th>
 				<th class="actions">Actions</th>
 			</tr>
 		</thead>
@@ -42,7 +43,8 @@
 					<td><?php echo $volreservation['Volreservation']['date_retour']; ?></td>
 					<td><?php echo $volreservation['Volreservation']['message']; ?></td>
 					<td><?php echo $volreservation['Volreservation']['created']; ?></td>
-					<td><?php echo $volreservation['Volreservation']['transfer']; ?></td>
+					<td><?php echo $volreservation['Volreservation']['prix_vol']; ?> DH</td>
+					<td><?php echo $volreservation['Volreservation']['prix_transfert']; ?> DH</td>
 					<td class="actions">
 						<?php echo $this->Html->link(__('View'), array('action' => 'view', $volreservation['Volreservation']['id'])); ?>
 					</td>

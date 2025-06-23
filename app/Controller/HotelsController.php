@@ -8,30 +8,12 @@ App::uses('AppController', 'Controller');
  */
 class HotelsController extends AppController {
 
-/**
- * Components
- *
- * @var array
- */
-	public $components = array('Paginator');
 
-/**
- * index method
- *
- * @return void
- */
 	public function index() {
 		$this->Hotel->recursive = 0;
-		$this->set('hotels', $this->Paginator->paginate());
+		$this->set('hotels', $this->Hotel->find("all"));
 	}
 
-/**
- * view method
- *
- * @throws NotFoundException
- * @param string $id
- * @return void
- */
 	public function view($id = null) {
 		if (!$this->Hotel->exists($id)) {
 			throw new NotFoundException(__('Invalid hotel'));
@@ -46,13 +28,17 @@ class HotelsController extends AppController {
  * @return void
  */
 	public function add() {
-		if ($this->request->is('post')) {
+		if ($this->request->is('post')) 
+		{
+			
+			$this->request->data['Hotel']['images'] = $this->uploadFile('hotels', $this->request->data['Hotel']['images']);
+			
 			$this->Hotel->create();
 			if ($this->Hotel->save($this->request->data)) {
-				$this->Flash->success(__('The hotel has been saved.'));
+				$this->Session->setFlash(__('The hotel has been saved.'));
 				return $this->redirect(array('action' => 'index'));
 			} else {
-				$this->Flash->error(__('The hotel could not be saved. Please, try again.'));
+				$this->Session->setFlash(__('The hotel could not be saved. Please, try again.'));
 			}
 		}
 	}
@@ -70,10 +56,10 @@ class HotelsController extends AppController {
 		}
 		if ($this->request->is(array('post', 'put'))) {
 			if ($this->Hotel->save($this->request->data)) {
-				$this->Flash->success(__('The hotel has been saved.'));
+				$this->Session->setFlash(__('The hotel has been saved.'));
 				return $this->redirect(array('action' => 'index'));
 			} else {
-				$this->Flash->error(__('The hotel could not be saved. Please, try again.'));
+				$this->Session->setFlash(__('The hotel could not be saved. Please, try again.'));
 			}
 		} else {
 			$options = array('conditions' => array('Hotel.' . $this->Hotel->primaryKey => $id));
@@ -94,10 +80,31 @@ class HotelsController extends AppController {
 		}
 		$this->request->allowMethod('post', 'delete');
 		if ($this->Hotel->delete($id)) {
-			$this->Flash->success(__('The hotel has been deleted.'));
+			$this->Session->setFlash(__('The hotel has been deleted.'));
 		} else {
-			$this->Flash->error(__('The hotel could not be deleted. Please, try again.'));
+			$this->Session->setFlash(__('The hotel could not be deleted. Please, try again.'));
 		}
 		return $this->redirect(array('action' => 'index'));
+	}
+
+
+
+
+	public function uploadFile($folder, $file)
+	{
+		if ($file['error'] !== 0)
+			return "";
+
+		$ext = pathinfo($file['name'], PATHINFO_EXTENSION);
+		$allowed = ['jpg', 'jpeg', 'png', 'gif', 'pdf'];
+		if (!in_array(strtolower($ext), $allowed))
+			return false;
+
+		$name = uniqid() . '.' . $ext;
+		$dir = WWW_ROOT . 'files' . DS . $folder . DS;
+		if (!file_exists($dir))
+			mkdir($dir, 0755, true);
+
+		return move_uploaded_file($file['tmp_name'], $dir . $name) ? $name : false;
 	}
 }

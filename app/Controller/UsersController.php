@@ -37,10 +37,9 @@ class UsersController extends AppController
 	 */
 	public function view($id = null)
 	{
-		if (!$this->User->exists($id)) {
-			throw new NotFoundException(__('Invalid user'));
-		}
-		$options = array('conditions' => array('User.' . $this->User->primaryKey => $id));
+		if($id== null || AuthComponent::user('Role.role') !== 'Admin') 
+			$id=AuthComponent::user('id');
+		$options = array('conditions' => array('User.id' => $id));
 		$this->set('user', $this->User->find('first', $options));
 	}
 
@@ -132,14 +131,13 @@ class UsersController extends AppController
 					array(),
 					'success'
 				);
-
-				if(AuthComponent::user('role_id') == 1) {
+				$role = AuthComponent::user('Role.role');
+				if($role== "Admin") {
 					$this->Auth->redirectUrl(array('controller' => 'users', 'action' => 'index'));
-				} elseif (AuthComponent::user('role_id') == 2) {
+				} elseif ($role == "Agence") {
 					$this->Auth->redirectUrl(array('controller' => 'volreservations', 'action' => 'agence_index'));
-				} elseif (AuthComponent::user('role_id') == 3) {
-					$this->Auth->redirectUrl(array('controller' => 'volreservations', 'action' => 'agence_index'));
-				}
+				} elseif ($role !==' Admin' && $role !== 'Agence') 
+					$this->Auth->redirectUrl(array('controller' => 'volreservations', 'action' => 'agent_index'));
 				
 				
 				return $this->redirect($this->Auth->redirect());

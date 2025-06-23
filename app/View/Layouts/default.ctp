@@ -300,10 +300,11 @@
 									array('class' => 'dropdown-item')
 								);
 								echo $this->Html->link(
-									'Gestion des utulisateurs',
-									array('controller' => 'users', 'action' => 'index'),
+									'Gestion des hotels',
+									array('controller' => 'hotels', 'action' => 'index'),
 									array('class' => 'dropdown-item')
 								);
+								
 								?>
 							</div>
 						</div>

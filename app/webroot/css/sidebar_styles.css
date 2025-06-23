@@ -208,7 +208,7 @@
 .main-content {
 	margin-left: var(--sidebar-width);
 	min-height: 100vh;
-	padding: 12px 2rem 2em;
+	padding: 12px 2rem 7em;
 }
 
 #container {

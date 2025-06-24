@@ -5,7 +5,7 @@
 		<div class="input-group mb-3">
 			<span class="input-group-text" id="basic-addon1"><i class="fa-solid fa-magnifying-glass"></i></span>
 			<input type="text" class="form-control" id="search_input" placeholder="Rechercher" aria-label="Search">
-			<button class="btn btn-primary-rounded" type="button"><i class="fa-solid fa-magnifying-glass"></i>
+			<button class="btn btn-primary-rounded search-btn" type="button"><i class="fa-solid fa-magnifying-glass"></i>
 				Rechercher</button>
 		</div>
 	</div>
@@ -46,7 +46,7 @@
 					<td><?php echo $volreservation['Volreservation']['prix_vol']; ?> DH</td>
 					<td><?php echo $volreservation['Volreservation']['prix_transfert']; ?> DH</td>
 					<td class="actions">
-						<?php echo $this->Html->link(__('View'), array('action' => 'view', $volreservation['Volreservation']['id'])); ?>
+						<?php echo $this->Html->link(__('Voir'), array('action' => 'view', $volreservation['Volreservation']['id'])); ?>
 					</td>
 				</tr>
 			<?php endforeach; ?>

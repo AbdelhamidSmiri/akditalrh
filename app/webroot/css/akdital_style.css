@@ -600,6 +600,7 @@ textarea {
 	margin-top: 4px;
 	font-size: 14px;
 	color: #6b7280;
+	margin-bottom: 20px;
 }
 
 .files-list {
@@ -664,4 +665,31 @@ textarea {
 .pagin-steps {
 	font-size: 0.9rem;
 	color: #6c757d;
+}
+
+.message-error {
+	color: #b80000;
+	margin-top: -20px;
+	display: none;
+	margin-bottom: 15px;
+}
+
+.input.text.has-calendar-icon {
+	position: relative;
+}
+
+.input.text.has-calendar-icon::before {
+	content: "\f073"; /* icône calendrier FontAwesome */
+	font-family: "Font Awesome 6 Pro";
+	position: absolute;
+	right: 10px;
+	top: 50%;
+	transform: translateY(-50%);
+	pointer-events: none;
+	color: #aaa;
+	font-size: 18px;
+}
+
+.input.text.has-calendar-icon input.flatpickr-input {
+	padding-right: 30px;
 }

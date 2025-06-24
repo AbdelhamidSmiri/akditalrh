@@ -71,19 +71,19 @@
 							<div class="dropdown-menu show">
 								<?php echo $this->Html->link(
 									$billetterie_icon .
-									' Vols demander',
+										' Vols demander',
 									array('controller' => 'volreservations', 'action' => 'agence_index'),
 									array('class' => 'dropdown-item', 'escape' => false)
 								);
 								echo $this->Html->link(
 									$hebergement_icon .
-									' Vols términer',
+										' Vols términer',
 									array('controller' => 'volreservations', 'action' => 'agence_valider'),
 									array('class' => 'dropdown-item', 'escape' => false)
 								);
 								echo $this->Html->link(
 									$hebergement_icon .
-									' Vols Annuler',
+										' Vols Annuler',
 									array('controller' => 'volreservations', 'action' => 'agence_annuler'),
 									array('class' => 'dropdown-item', 'escape' => false)
 								);
@@ -191,13 +191,13 @@
 							<div class="dropdown-menu show">
 								<?php echo $this->Html->link(
 									$billetterie_icon .
-									' Billetterie',
+										' Billetterie',
 									array('controller' => 'bons', 'action' => 'billetterie'),
 									array('class' => 'dropdown-item', 'escape' => false)
 								); ?>
 								<?php echo $this->Html->link(
 									$hebergement_icon .
-									' Hébergement',
+										' Hébergement',
 									array('controller' => 'bons', 'action' => 'hebergement'),
 									array('class' => 'dropdown-item', 'escape' => false)
 								); ?>
@@ -305,7 +305,7 @@
 									array('controller' => 'hotels', 'action' => 'index'),
 									array('class' => 'dropdown-item')
 								);
-								
+
 								?>
 							</div>
 						</div>
@@ -345,8 +345,8 @@
 								<?php
 								$userInitials = 'ZD'; // Default fallback
 								if ($this->Session->check('Auth.User.nom')) {
-									$userName = $this->Session->read('Auth.User.nom');
-									$userLastname = $this->Session->read('Auth.User.prenom');
+									$userName = AuthComponent::user('nom');
+									$userLastname = AuthComponent::user('prenom');
 									$userInitials = strtoupper(substr($userName, 0, 1)) . strtoupper(substr($userLastname, 0, 1));
 								}
 								echo $userInitials;
@@ -355,16 +355,12 @@
 							<div>
 								<small class="name-profile">
 									<?php
-									echo $this->Session->check('Auth.User.nom') && $this->Session->check('Auth.User.prenom')
-										? $this->Session->read('Auth.User.nom') . ' ' . $this->Session->read('Auth.User.prenom')
-										: 'Nom Prénom';
+									echo AuthComponent::user('nom') . ' ' . AuthComponent::user('prenom');
 									?>
 								</small><br>
 								<small class="role-profile">
 									<?php
-									echo $this->Session->check('Auth.User.role')
-										? $this->Session->read('Auth.User.role')
-										: 'Job title';
+									echo AuthComponent::user('Role.role');
 									?>
 								</small>
 							</div>
@@ -401,10 +397,12 @@
 	<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
 		integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p"
 		crossorigin="anonymous"></script>
-	<?php echo $this->Html->script('bootstrap.min.js'); ?>
+	<?php echo $this->Html->script('bootstrap.min'); ?>
+	<?php echo $this->Html->script('search_table'); ?>
+
 
 	<script>
-		document.addEventListener('DOMContentLoaded', function () {
+		document.addEventListener('DOMContentLoaded', function() {
 			// Handle active states based on current URL
 			const currentController = '<?php echo $this->request->controller; ?>';
 			const currentAction = '<?php echo $this->request->action; ?>';
@@ -452,11 +450,11 @@
 			const sidebar = document.querySelector('.sidebar');
 
 			if (sidebarToggle && sidebar) {
-				sidebarToggle.addEventListener('click', function () {
+				sidebarToggle.addEventListener('click', function() {
 					sidebar.classList.toggle('show');
 				});
 
-				document.addEventListener('click', function (e) {
+				document.addEventListener('click', function(e) {
 					if (window.innerWidth <= 768) {
 						if (!sidebar.contains(e.target) && !sidebarToggle.contains(e.target)) {
 							sidebar.classList.remove('show');

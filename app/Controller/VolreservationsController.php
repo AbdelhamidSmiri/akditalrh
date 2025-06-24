@@ -15,13 +15,12 @@ class VolreservationsController extends AppController
 		$role = AuthComponent::user('Role.role');
 		// Actions autorisées pour "agence"
 		if ($role === 'Agence') {
-			return in_array($this->action, ['agence_index', 'agence_valider', 'agence_archive',"view",'agence_valide', 'agence_annuler']);
+			return in_array($this->action, ['agence_index', 'agence_valider', 'agence_archive', "view", 'agence_valide', 'agence_annuler']);
 		}
 
 		// Actions autorisées pour "agent"
-		if ($role !==' Admin' && $role !== 'Agence') 
-		{
-			return in_array($this->action, ['agent_index',"add", 'view', 'edit']);
+		if ($role !== ' Admin' && $role !== 'Agence') {
+			return in_array($this->action, ['agent_index', "add", 'view', 'edit']);
 		}
 
 		// Admin : accès à tout
@@ -35,7 +34,8 @@ class VolreservationsController extends AppController
 	function agent_index()
 	{
 		$this->set('volreservations', $this->Volreservation->find("all", array(
-			'conditions' => array('Volreservation.user_id' => AuthComponent::user("id" )))));
+			'conditions' => array('Volreservation.user_id' => AuthComponent::user("id"))
+		)));
 	}
 
 	function agence_index()
@@ -45,7 +45,7 @@ class VolreservationsController extends AppController
 		)));
 	}
 
-	
+
 
 	function agence_valider()
 	{
@@ -131,16 +131,26 @@ class VolreservationsController extends AppController
 		if ($this->request->is('post')) {
 			$this->Volreservation->create();
 			$this->Volreservation->data["Volreservation"]["user_id"] = AuthComponent::user("id");
-			debug($this->request->data);
-			$this->request->data['Volreservation']['ordre_mission'] = $this->uploadFile('volreservations', $this->request->data['Volreservation']['ordre_mission']);
-			$this->request->data['Volreservation']['cin'] = $this->uploadFile('volreservations', $this->request->data['Volreservation']['cin']);
-			$this->request->data['Volreservation']['passport'] = $this->uploadFile('volreservations', $this->request->data['Volreservation']['passport']);
+
+			$this->request->data['Volreservation']['ordre_mission'] = json_encode($this->uploadFiles('volreservations', $this->request->data['Volreservation']['ordre_mission']));
+			$this->request->data['Volreservation']['cin'] = json_encode($this->uploadFiles('volreservations', $this->request->data['Volreservation']['cin']));
+			$this->request->data['Volreservation']['passport'] = json_encode($this->uploadFiles('volreservations', $this->request->data['Volreservation']['passport']));
 
 			if ($this->Volreservation->save($this->request->data)) {
-				$this->Session->setFlash(__('The volreservation has been saved.'));
+				$this->Session->setFlash(
+					'La réservation de vol a été enregistrée.',
+					'Flash/success',
+					array(),
+					'success'
+				);
 				return $this->redirect(array('action' => 'agent_index'));
 			} else {
-				$this->Session->setFlash(__('The volreservation could not be saved. Please, try again.'));
+				$this->Session->setFlash(
+					'La réservation de vol n’a pas pu être enregistrée. Veuillez réessayer.',
+					'Flash/error',
+					array(),
+					'error'
+				);
 			}
 		}
 		$sites = $this->Volreservation->Site->find('list');
@@ -198,21 +208,26 @@ class VolreservationsController extends AppController
 
 
 
-	public function uploadFile($folder, $file)
+	public function uploadFiles($folder, $files)
 	{
-		if ($file['error'] !== 0)
-			return "";
+		$uploadedFiles = [];
 
-		$ext = pathinfo($file['name'], PATHINFO_EXTENSION);
-		$allowed = ['jpg', 'jpeg', 'png', 'gif', 'pdf'];
-		if (!in_array(strtolower($ext), $allowed))
-			return false;
+		foreach ($files as $file) {
+			if (!isset($file['error']) || $file['error'] !== 0) continue;
 
-		$name = uniqid() . '.' . $ext;
-		$dir = WWW_ROOT . 'files' . DS . $folder . DS;
-		if (!file_exists($dir))
-			mkdir($dir, 0755, true);
+			$ext = pathinfo($file['name'], PATHINFO_EXTENSION);
+			$allowed = ['jpg', 'jpeg', 'png', 'gif', 'pdf'];
+			if (!in_array(strtolower($ext), $allowed)) continue;
 
-		return move_uploaded_file($file['tmp_name'], $dir . $name) ? $name : false;
+			$newName = uniqid() . '.' . $ext;
+			$dir = WWW_ROOT . 'files' . DS . $folder . DS;
+			if (!file_exists($dir)) mkdir($dir, 0755, true);
+
+			if (move_uploaded_file($file['tmp_name'], $dir . $newName)) {
+				$uploadedFiles[] = $newName;
+			}
+		}
+
+		return $uploadedFiles;
 	}
 }

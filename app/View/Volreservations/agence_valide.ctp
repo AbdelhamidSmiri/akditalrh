@@ -23,7 +23,7 @@
 		<div class="col-8">
 
 			<div class="row">
-				<div class="step_1">
+				<div class="step step_1">
 					<div class='col-12'> <?php echo $this->Form->input('reponse', array('placeholder' => '')); ?></div>
 					<div class='col-12'>
 						<?php
@@ -85,7 +85,7 @@
 					</div>
 
 				</div>
-				<div class="step_2">
+				<div class="step step_2">
 					<?php if ($vol["Volreservation"]["transfer"] == 1): ?>
 						<div class='col-12'>
 							<?php
@@ -152,22 +152,22 @@
 						</div>
 					</div>
 				</div>
-				<div class="col-12 ">
-					<div class='col-12 text-end mt-4 btns-step1'>
+				<div class="col-12">
+					<div class='col-12 text-end mt-4 btns-step'>
 						<button type="button" id="btn-next" class="btn btn-primary-rounded">
 							<span class="rounded_icon"><i class="fa-solid fa-arrow-right"></i></span> Suivant
 						</button>
 					</div>
-					<div class='submit-section btns-step2'>
+
+					<div class='submit-section btns-submit' style="display:none">
 						<button type="submit" class="btn btn-submit">
 							<i class="fa-solid fa-paper-plane"></i> Envoyer
 						</button>
-
-
 					</div>
+
 					<div class="col-12 d-flex justify-content-between mt-3">
 						<span class="import-span">Tous les champs sont obligatoires.</span>
-						<span class="pagin-steps">1 sur 2 étapes</span>
+						<span class="pagin-steps">1 sur X étapes</span>
 					</div>
 				</div>
 
@@ -192,21 +192,42 @@
 		});
 	});
 	// Handle the "Next" button click
-	document.getElementById('btn-next').addEventListener('click', function() {
-		// If validation passes, hide the first step and show the second step
-		document.querySelector('.btns-step1, .step_1').style.display = 'none';
-		document.querySelector('.btns-step2, .step_2').style.display = 'block';
 
-		// Update the pagination step text
-		document.querySelector('.pagin-steps').textContent = '2 sur 2 étapes';
-		// Handle the "Next" button click
-		document.getElementById('btn-next').addEventListener('click', function() {
-			// Scroll to the top of the form
-			window.scrollTo({
-				top: 0,
-				behavior: 'smooth'
-			});
+	const steps = document.querySelectorAll('.step');
+	const nextBtn = document.getElementById('btn-next');
+	const submitSection = document.querySelector('.btns-submit');
+	const paginSteps = document.querySelector('.pagin-steps');
+	let currentStep = 0;
 
+	function showStep(index) {
+		steps.forEach((step, i) => {
+			step.style.display = i === index ? 'block' : 'none';
 		});
+
+		paginSteps.textContent = `${index + 1} sur ${steps.length} étapes`;
+
+		if (index === steps.length - 1) {
+			nextBtn.style.display = 'none';
+			submitSection.style.display = 'flex';
+		} else {
+			nextBtn.style.display = 'inline-block';
+			submitSection.style.display = 'none';
+		}
+
+		// Scroll to top smoothly
+		window.scrollTo({
+			top: 0,
+			behavior: 'smooth'
+		});
+	}
+
+	nextBtn.addEventListener('click', () => {
+		if (currentStep < steps.length - 1) {
+			currentStep++;
+			showStep(currentStep);
+		}
 	});
+
+	// Initial display
+	showStep(currentStep);
 </script>

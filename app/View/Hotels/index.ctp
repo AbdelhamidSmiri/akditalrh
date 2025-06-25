@@ -1,3 +1,64 @@
+<style>
+	.content-table {
+		padding: 20px;
+	}
+
+	.image {
+		height: 181px;
+		width: 42%;
+		background-size: cover;
+		background-position: center;
+		border-top-left-radius: 16px;
+		border-bottom-left-radius: 16px;
+	}
+
+	.content-card {
+		padding: 12px 27px;
+		width: 58%;
+	}
+
+	.title-card {
+		font-size: 22px;
+	}
+
+	.sub-content {
+		font-size: 14px;
+		height: 65%;
+		display: flex;
+		flex-direction: column;
+		justify-content: flex-end;
+		row-gap: 3px;
+	}
+
+	.topcart {
+		justify-content: space-between;
+	}
+
+	.respo {
+		background-color: #eaf1fe;
+		padding: 7px 16px;
+		border-radius: 20px;
+		font-weight: 600;
+		font-size: 12px;
+	}
+
+	.reglement {
+		color: #7C7C7C;
+		font-size: 14px;
+	}
+
+	.hotel-card {
+		border: 1px solid #D9D9D9;
+		box-shadow: 0px 0px 9px 0px #d9d9d9b0;
+		border-radius: 16px;
+		transition: 0.2s;
+	}
+
+	.hotel-card:hover {
+		scale: 1.01;
+	}
+</style>
+
 <div class="hotels index"></div>
 
 <div class="col-md-5">
@@ -11,46 +72,62 @@
 </div>
 <div class="col-md-12 filter-section"></div>
 <div class="content-table">
-	<table class="table table-akdital">
-		<thead>
-			<tr>
-				<th>nom</th>
-				<th>etoile</th>
-				<th>region</th>
-				<th>ville</th>
-				<th>adresse</th>
-				<th>images</th>
-				<th>mail</th>
-				<th>telephone</th>
-				<th>nom_responsable</th>
-				<th>created</th>
-				<th>reglement</th>
-				<th class="actions">Actions</th>
-			</tr>
-		</thead>
-		<tbody>
-			<?php foreach ($hotels as $hotel): ?>
-				<tr>
-					<td><?php echo $hotel['Hotel']['nom']; ?></td>
-					<td><?php echo $hotel['Hotel']['etoile']; ?></td>
-					<td><?php echo $hotel['Hotel']['region']; ?></td>
-					<td><?php echo $hotel['Hotel']['ville']; ?></td>
-					<td><?php echo $hotel['Hotel']['adresse']; ?></td>
-					<td><?php echo $hotel['Hotel']['images']; ?></td>
-					<td><?php echo $hotel['Hotel']['mail']; ?></td>
-					<td><?php echo $hotel['Hotel']['telephone']; ?></td>
-					<td><?php echo $hotel['Hotel']['nom_responsable']; ?></td>
-					<td><?php echo $hotel['Hotel']['created']; ?></td>
-					<td><?php echo $hotel['Hotel']['reglement']; ?></td>
-					<td class="actions">
+	<?php foreach ($hotels as $hotel): ?>
+		<div class="d-flex hotel-card">
+			<div class="image" style="background-image: url('<?php echo Router::url('/files/hotels/' . $hotel['Hotel']['images'], true); ?>');">
+			</div>
+
+			<div class="content-card">
+				<div class="d-flex topcart">
+					<div class="head_card">
+						<h3 class="title-card">
+							<?php
+							echo $hotel['Hotel']['nom'];
+							for ($i = 0; $i < $hotel['Hotel']['etoile']; $i++) {
+							?>
+								<i class="fa-solid fa-star yellow m--3"></i>
+							<?php } ?>
+						</h3>
+						<div class="info">
+							<?php echo $hotel['Hotel']['mail']; ?>
+							<?php echo $hotel['Hotel']['telephone']; ?>
+						</div>
+					</div>
+
+					<div>
+
+						<span class="respo">
+							<i class="fa-regular fa-user-tie"></i>
+							<?php echo $hotel['Hotel']['nom_responsable']; ?></span>
+					</div>
+				</div>
+
+
+				<div class="sub-content">
+					<div class="adress">
+						<?php echo $hotel['Hotel']['region']; ?>
+						<?php echo $hotel['Hotel']['ville']; ?>
+						<?php echo $hotel['Hotel']['adresse']; ?>
+					</div>
+
+
+					<div class="reglement">
+						<?php echo $hotel['Hotel']['reglement']; ?>
+					</div>
+					<div class="actions text-end">
+
 						<?php echo $this->Html->link(__('View'), array('action' => 'view', $hotel['Hotel']['id'])); ?> /
 						<?php echo $this->Html->link(__('Edit'), array('action' => 'edit', $hotel['Hotel']['id'])); ?> /
 						<?php echo $this->Form->postLink(__('Delete'), array('action' => 'delete', $hotel['Hotel']['id']), array('confirm' => __('Are you sure you want to delete # %s?', $hotel['Hotel']['id']))); ?>
-					</td>
-				</tr>
-			<?php endforeach; ?>
-		</tbody>
-	</table>
+
+					</div>
+				</div>
+
+			</div>
+
+
+		</div>
+	<?php endforeach; ?>
 </div>
 
 </div>

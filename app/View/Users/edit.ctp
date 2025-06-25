@@ -45,8 +45,9 @@
 					</div><?php echo $this->Form->end(); ?>
 				</div>
 			</div>
-			<div class="col"></div>
+
 
 
 		</div>
+		<div class="col"></div>
 	</div>

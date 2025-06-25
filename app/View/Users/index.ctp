@@ -14,13 +14,12 @@
 	<table class="table table-akdital">
 		<thead>
 			<tr>
-				<th>role_id</th>
-				<th>username</th>
-				<th>password</th>
+				<th>Role</th>
+				<th>Nom d'utlisateur</th>
 				<th>etat</th>
 				<th>nom</th>
 				<th>prenom</th>
-				<th>created</th>
+				<th>Date de création</th>
 				<th class="actions">Actions</th>
 			</tr>
 		</thead>
@@ -31,7 +30,6 @@
 						<?php echo $this->Html->link($user['Role']['role'], array('controller' => 'roles', 'action' => 'view', $user['Role']['id'])); ?>
 					</td>
 					<td><?php echo $user['User']['username']; ?></td>
-					<td><?php echo $user['User']['password']; ?></td>
 					<td><?php echo $user['User']['etat']; ?></td>
 					<td><?php echo $user['User']['nom']; ?></td>
 					<td><?php echo $user['User']['prenom']; ?></td>

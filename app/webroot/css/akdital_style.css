@@ -568,7 +568,6 @@ textarea {
 	position: absolute;
 	opacity: 0;
 	width: 100%;
-	height: 100%;
 	cursor: pointer;
 }
 
@@ -693,3 +692,30 @@ textarea {
 .input.text.has-calendar-icon input.flatpickr-input {
 	padding-right: 30px;
 }
+
+/* start badge-primary style  */
+
+.badge-primary-rounded {
+	background-color: #3780cb;
+	border-radius: 20px;
+	font-size: 12px;
+}
+.text-badge {
+	font-size: 14px;
+}
+
+.yellow {
+	color: #ffd123;
+}
+.m--3 {
+	margin: -3px;
+}
+/* end badge-primary style  */
+
+/* hotel index */
+/* start card  */
+
+.title-card {
+	text-transform: capitalize;
+}
+/* end card */

@@ -13,7 +13,7 @@
 	</div>
 	<div class='col-12'>
 	<?php
-		echo $this->Form->input('nom', array('placeholder'=>''));
+		echo $this->Form->input('hotel', array('placeholder'=>''));
 	?>
 	</div>
 	<div class='col-12'>

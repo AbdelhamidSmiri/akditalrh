@@ -82,7 +82,7 @@
 					<div class="head_card">
 						<h3 class="title-card">
 							<?php
-							echo $hotel['Hotel']['nom'];
+							echo $hotel['Hotel']['hotel'];
 							for ($i = 0; $i < $hotel['Hotel']['etoile']; $i++) {
 							?>
 								<i class="fa-solid fa-star yellow m--3"></i>

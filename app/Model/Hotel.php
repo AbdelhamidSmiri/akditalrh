@@ -24,8 +24,8 @@ class Hotel extends AppModel {
  * @var array
  */
 	public $hasMany = array(
-		'Hotelprice' => array(
-			'className' => 'Hotelprice',
+		'Chambre' => array(
+			'className' => 'Chambre',
 			'foreignKey' => 'hotel_id',
 			'dependent' => false,
 			'conditions' => '',
@@ -37,19 +37,6 @@ class Hotel extends AppModel {
 			'finderQuery' => '',
 			'counterQuery' => ''
 		),
-		'Reservation' => array(
-			'className' => 'Reservation',
-			'foreignKey' => 'hotel_id',
-			'dependent' => false,
-			'conditions' => '',
-			'fields' => '',
-			'order' => '',
-			'limit' => '',
-			'offset' => '',
-			'exclusive' => '',
-			'finderQuery' => '',
-			'counterQuery' => ''
-		)
 	);
 
 }

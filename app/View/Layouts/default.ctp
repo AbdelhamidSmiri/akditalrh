@@ -305,6 +305,11 @@
 									array('controller' => 'hotels', 'action' => 'index'),
 									array('class' => 'dropdown-item')
 								);
+								echo $this->Html->link(
+									'Gestion des chambres',
+									array('controller' => 'chambres', 'action' => 'index'),
+									array('class' => 'dropdown-item')
+								);
 
 								?>
 							</div>

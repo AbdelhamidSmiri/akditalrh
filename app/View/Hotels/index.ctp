@@ -15,6 +15,8 @@
 	.content-card {
 		padding: 12px 27px;
 		width: 58%;
+		height: fit-content;
+		padding-bottom: 32px;
 	}
 
 	.title-card {
@@ -40,6 +42,8 @@
 		border-radius: 20px;
 		font-weight: 600;
 		font-size: 12px;
+		width: max-content;
+		display: inline-block;
 	}
 
 	.reglement {
@@ -52,26 +56,85 @@
 		box-shadow: 0px 0px 9px 0px #d9d9d9b0;
 		border-radius: 16px;
 		transition: 0.2s;
+		position: relative;
 	}
 
-	.hotel-card:hover {
-		scale: 1.01;
+	.profil-info {
+		width: fit-content;
+	}
+
+	.hotel-card .actions {
+		position: absolute;
+		bottom: 14px;
+		right: 6px;
+	}
+
+	.emails {
+		display: flex;
+		flex-wrap: wrap;
+		flex-direction: row;
+	}
+
+	.info .email,
+	.info .tel {
+		font-size: 14px;
+		font-weight: 400;
+
+	}
+
+	.starts {
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		justify-content: flex-start;
+		column-gap: 7px;
+		max-width: 20%;;
+	}
+
+	.starts i {
+		font-size: 14px;
+	}
+
+	.ville span {
+		font-size: 16px;
+		font-weight: 400;
+		color: #5d5d5d;
+
 	}
 </style>
 
 <div class="hotels index"></div>
+<div class="row">
+	<div class="col-md-5">
+		<div class="search-section">
+			<div class="input-group mb-3">
+				<span class="input-group-text" id="basic-addon1"><i class="fa-solid fa-magnifying-glass"></i></span>
+				<input type="text" class="form-control" id="search_input" placeholder="Rechercher" aria-label="Search">
+				<button class="btn btn-primary-rounded search-btn" type="button"><i class="fa-solid fa-magnifying-glass"></i> Rechercher</button>
+			</div>
+		</div>
+	</div>
+	<div class="col">
+		<div class="text-end">
+			<!-- Button trigger modal -->
+			<?php
+			echo $this->Html->link(
+				__('<i class="fa-regular fa-plus"></i> Nouveau hotel'),
+				array('action' => 'add'),
+				array(
+					'escape' => false,
+					'class' => 'btn btn-primary-rounded' // ✅ move it here
+				)
+			);
+			?>
 
-<div class="col-md-5">
-	<div class="search-section">
-		<div class="input-group mb-3">
-			<span class="input-group-text" id="basic-addon1"><i class="fa-solid fa-magnifying-glass"></i></span>
-			<input type="text" class="form-control" id="search_input" placeholder="Rechercher" aria-label="Search">
-			<button class="btn btn-primary-rounded search-btn" type="button"><i class="fa-solid fa-magnifying-glass"></i> Rechercher</button>
+
 		</div>
 	</div>
 </div>
+
 <div class="col-md-12 filter-section"></div>
-<div class="content-table">
+<div class="d-grid row-gap-3">
 	<?php foreach ($hotels as $hotel): ?>
 		<div class="d-flex hotel-card">
 			<div class="image" style="background-image: url('<?php echo Router::url('/files/hotels/' . $hotel['Hotel']['images'], true); ?>');">
@@ -81,20 +144,37 @@
 				<div class="d-flex topcart">
 					<div class="head_card">
 						<h3 class="title-card">
-							<?php
-							echo $hotel['Hotel']['hotel'];
-							for ($i = 0; $i < $hotel['Hotel']['etoile']; $i++) {
-							?>
-								<i class="fa-solid fa-star yellow m--3"></i>
-							<?php } ?>
+
+							<span> <?php echo $hotel['Hotel']['hotel']; ?>
+								<div class="starts">
+									<?php for ($i = 0; $i < $hotel['Hotel']['etoile']; $i++) {
+									?>
+										<i class="fa-solid fa-star yellow m--3"></i>
+									<?php } ?>
+								</div>
+							</span>
+							<div class="ville">
+								<?php if (!empty($hotel['Hotel']['ville'])): ?>
+									<span><i class="fa-regular fa-location-dot"></i> <?php echo $hotel['Hotel']['ville']; ?></span>
+								<?php endif; ?>
+							</div>
+
 						</h3>
 						<div class="info">
-							<?php echo $hotel['Hotel']['mail']; ?>
-							<?php echo $hotel['Hotel']['telephone']; ?>
+							<div class="emails">
+								<?php
+								$emails = explode(';', $hotel['Hotel']['mail']);
+								foreach ($emails as $email) { ?>
+									<span class="email"> <i class="fa-regular fa-envelope"></i> <?php echo $email; ?> |&nbsp; </span>
+								<?php } ?>
+							</div>
+							<div>
+								<span class="tel"> <i class="fa-regular fa-phone"></i> <?php echo $hotel['Hotel']['telephone']; ?></span>
+							</div>
 						</div>
 					</div>
 
-					<div>
+					<div class="profil-info">
 
 						<span class="respo">
 							<i class="fa-regular fa-user-tie"></i>
@@ -105,22 +185,24 @@
 
 				<div class="sub-content">
 					<div class="adress">
-						<?php echo $hotel['Hotel']['region']; ?>
-						<?php echo $hotel['Hotel']['ville']; ?>
-						<?php echo $hotel['Hotel']['adresse']; ?>
+						<?php if (!empty($hotel['Hotel']['adresse'])): ?>
+							<span><i class="fa-regular fa-location-dot"></i> <?php echo $hotel['Hotel']['adresse']; ?></span>
+						<?php endif; ?>
 					</div>
+
 
 
 					<div class="reglement">
 						<?php echo $hotel['Hotel']['reglement']; ?>
 					</div>
-					<div class="actions text-end">
 
-						<?php echo $this->Html->link(__('View'), array('action' => 'view', $hotel['Hotel']['id'])); ?> /
-						<?php echo $this->Html->link(__('Edit'), array('action' => 'edit', $hotel['Hotel']['id'])); ?> /
-						<?php echo $this->Form->postLink(__('Delete'), array('action' => 'delete', $hotel['Hotel']['id']), array('confirm' => __('Are you sure you want to delete # %s?', $hotel['Hotel']['id']))); ?>
+				</div>
+				<div class="actions text-end">
 
-					</div>
+					<?php echo $this->Html->link(__('View'), array('action' => 'view', $hotel['Hotel']['id'])); ?> /
+					<?php echo $this->Html->link(__('Edit'), array('action' => 'edit', $hotel['Hotel']['id'])); ?> /
+					<?php echo $this->Form->postLink(__('Delete'), array('action' => 'delete', $hotel['Hotel']['id']), array('confirm' => __('Are you sure you want to delete # %s?', $hotel['Hotel']['id']))); ?>
+
 				</div>
 
 			</div>

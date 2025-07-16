@@ -16,9 +16,9 @@ class Hotelprice extends AppModel {
  * @var array
  */
 	public $belongsTo = array(
-		'Hotel' => array(
-			'className' => 'Hotel',
-			'foreignKey' => 'hotel_id',
+		'Chambre' => array(
+			'className' => 'Chembre',
+			'foreignKey' => 'Chambre_id',
 			'conditions' => '',
 			'fields' => '',
 			'order' => ''

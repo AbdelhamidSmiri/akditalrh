@@ -6,79 +6,121 @@ App::uses('AppController', 'Controller');
  * @property Hotel $Hotel
  * @property PaginatorComponent $Paginator
  */
-class HotelsController extends AppController {
+class HotelsController extends AppController
+{
 
 
-	public function index() 
+	public function index()
 	{
 		$this->Hotel->recursive = 0;
-		$this->set('hotels', $this->Hotel->find("all", array('group' => array('Hotel.hotel'))));
+		$this->set('hotels', $this->Hotel->find("all"));
 	}
 
-	public function view($id = null) 
+	public function view($id = null)
 	{
 		if (!$this->Hotel->exists($id)) {
 			throw new NotFoundException(__('Invalid hotel'));
 		}
-		$hotel=$this->Hotel->findById($id);
-		$hotels =$this->Hotel->findAllByHotel($hotel["Hotel"]["hotel"]);
-		$this->set("hotel",$hotel);
-		$this->set("hotels",$hotels);
-	}
 
-/**
- * add method
- *
- * @return void
- */
-	public function add() {
-		if ($this->request->is('post')) 
-		{
-			$this->request->data['Hotel']['images'] = $this->uploadFile('hotels', $this->request->data['Hotel']['images']);
-			foreach ($this->request->data['chambre'] as $chambre) 
-			{
-				
-				$zid=0;
-				foreach ($chambre['prix'] as $prix) {
-					if(!($prix['date_debut']=="" || $prix['date_fin']=="" || $prix['prix']=="")) {
-						$zid=1;
+		if ($this->request->is('post')) {
+			// Upload image
+			$this->request->data['Chambre']['images'] = $this->uploadFile('chambres', $this->request->data['Chambre']['images']);
+
+			// Création chambre
+			$this->loadModel('Chambre');
+			$this->Chambre->create();
+			if ($this->Chambre->save($this->request->data)) {
+				$chambreId = $this->Chambre->id;
+
+				// Ajout des prix si définis
+				if (!empty($this->request->data['Chambre']['prices'])) {
+					$this->loadModel('Hotelprice');
+					foreach ($this->request->data['Chambre']['prices'] as $price) {
+						if (!empty($price['date_debut']) && !empty($price['date_fin']) && isset($price['prix'])) {
+							$d = array(
+								'Hotelprice' => array(
+									'date_debut' => $price['date_debut'],
+									'date_fin'   => $price['date_fin'],
+									'prix'       => $price['prix'],
+									'chambre_id' => $chambreId
+								)
+							);
+							$this->Hotelprice->create();
+							$this->Hotelprice->save($d);
+						}
 					}
 				}
 
-				if ($chambre['nom']=="" || $zid==0) {
-					continue; // Skip if the chambre name is empty
-				}
-				$d=array();
-				$d["Hotel"]=$this->request->data['Hotel'];
-				$d["Hotel"]["nom"]=$chambre['nom'];
-				$this->Hotel->create();
-				$this->Hotel->save($d);
-				foreach ($chambre['prix'] as $prix) 
-				{
-					if($prix['date_debut']=="" || $prix['date_fin']=="" || $prix['prix']=="")
-						continue;
-					$prix['hotel_id'] = $this->Hotel->id; // Set the hotel_id to the newly created hotel
-					$this->Hotel->Hotelprice->create();
-					$this->Hotel->Hotelprice->save($prix);
-				}
-
-
+				$this->Session->setFlash(
+					'La chambre a été ajoutée avec succès.',
+					'Flash/success',
+					array(),
+					'success'
+				);
+				return $this->redirect($this->referer(true));
+			} else {
+				$this->Session->setFlash(
+					'Erreur lors de l\'ajout de la chambre.',
+					'Flash/error',
+					array(),
+					'error'
+				);
 			}
-			$this->Session->setFlash(__('Hotel a été bien ajouté'));
-			return $this->redirect(array('action' => 'index'));
-			
 		}
-		
+
+
+
+		$this->Hotel->recursive = 2;
+		$hotel = $this->Hotel->findById($id);
+		// Chargement liste des hôtels
+		$this->loadModel('Hotel');
+		$hotels = $this->Hotel->find('list', array(
+			'fields' => array('Hotel.id', 'Hotel.hotel')
+		));
+
+		$this->set(compact('hotel', 'hotels'));
 	}
 
-/**
- * edit method
- *
- * @throws NotFoundException
- * @param string $id
- * @return void
- */
-	public function edit($id = null) {
+	/**
+	 * add method
+	 *
+	 * @return void
+	 */
+	public function add()
+	{
+		if ($this->request->is('post')) {
+			$this->request->data['Hotel']['images'] = $this->uploadFile('hotels', $this->request->data['Hotel']['images']);
+			// Création d'une nouvelle entité
+			$this->Hotel->create();
+
+			// Sauvegarde
+			if ($this->Hotel->save($this->request->data)) {
+				$this->Session->setFlash(__('L\'hôtel a été ajouté avec succès.'), 'default', array('class' => 'alert alert-success'));
+				return $this->redirect(array('action' => 'index'));
+			} else {
+				$this->Session->setFlash(__('Erreur lors de l\'ajout du L\'hôtel.'), 'default', array('class' => 'alert alert-danger'));
+			}
+		}
+
+		$villes_hotel = $this->Hotel->find('list', array(
+			'fields' => array('Hotel.ville', 'Hotel.ville'),
+			'group' => array('Hotel.ville'),
+			'recursive' => -1
+		));
+	
+		$this->set(compact('villes_hotel'));
+	}
+
+
+	/**
+	 * edit method
+	 *
+	 * @throws NotFoundException
+	 * @param string $id
+	 * @return void
+	 */
+	public function edit($id = null)
+	{
 		if (!$this->Hotel->exists($id)) {
 			throw new NotFoundException(__('Invalid hotel'));
 		}
@@ -95,14 +137,15 @@ class HotelsController extends AppController {
 		}
 	}
 
-/**
- * delete method
- *
- * @throws NotFoundException
- * @param string $id
- * @return void
- */
-	public function delete($id = null) {
+	/**
+	 * delete method
+	 *
+	 * @throws NotFoundException
+	 * @param string $id
+	 * @return void
+	 */
+	public function delete($id = null)
+	{
 		if (!$this->Hotel->exists($id)) {
 			throw new NotFoundException(__('Invalid hotel'));
 		}

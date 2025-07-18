@@ -117,7 +117,7 @@ class BeneficiairesController extends AppController {
 				$Email->viewVars(array("id" => $this->Beneficiaire->id));
 				$Email->viewVars(array("nom" => $this->request->data["Beneficiaire"]["nom"]));
 				$Email->emailFormat('html');
-				$Email->to("godsneek@hotmail.com"); //$this->request->data["Beneficiaire"]["mail"]
+				$Email->to($this->request->data["Beneficiaire"]["mail"]); //$this->request->data["Beneficiaire"]["mail"]
 				$Email->from('no-repley@icoz.ma');
 				$Email->subject('Affectation à un logement – Validation requise');
 				$Email->send();

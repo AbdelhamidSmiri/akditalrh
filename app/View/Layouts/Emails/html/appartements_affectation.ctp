@@ -18,7 +18,7 @@
 </p>
 
 
-<p>koko
+<p>
     Une fois votre engagement validé, les informations de votre hébergement vous seront automatiquement envoyées.
 </p>
 

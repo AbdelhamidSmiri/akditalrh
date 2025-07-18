@@ -59,47 +59,8 @@
 		position: relative;
 	}
 
-	.profil-info {
-		width: fit-content;
-	}
-
-	.hotel-card .actions {
-		position: absolute;
-		bottom: 14px;
-		right: 6px;
-	}
-
-	.emails {
-		display: flex;
-		flex-wrap: wrap;
-		flex-direction: row;
-	}
-
-	.info .email,
-	.info .tel {
-		font-size: 14px;
-		font-weight: 400;
-
-	}
-
-	.starts {
-		display: flex;
-		flex-direction: row;
-		align-items: center;
-		justify-content: flex-start;
-		column-gap: 7px;
-		max-width: 20%;;
-	}
-
-	.starts i {
-		font-size: 14px;
-	}
-
-	.ville span {
-		font-size: 16px;
-		font-weight: 400;
-		color: #5d5d5d;
-
+	.hotel-card:hover {
+		scale: 1.01;
 	}
 </style>
 
@@ -144,21 +105,12 @@
 				<div class="d-flex topcart">
 					<div class="head_card">
 						<h3 class="title-card">
-
-							<span> <?php echo $hotel['Hotel']['hotel']; ?>
-								<div class="starts">
-									<?php for ($i = 0; $i < $hotel['Hotel']['etoile']; $i++) {
-									?>
-										<i class="fa-solid fa-star yellow m--3"></i>
-									<?php } ?>
-								</div>
-							</span>
-							<div class="ville">
-								<?php if (!empty($hotel['Hotel']['ville'])): ?>
-									<span><i class="fa-regular fa-location-dot"></i> <?php echo $hotel['Hotel']['ville']; ?></span>
-								<?php endif; ?>
-							</div>
-
+							<?php
+							echo $hotel['Hotel']['hotel'];
+							for ($i = 0; $i < $hotel['Hotel']['etoile']; $i++) {
+							?>
+								<i class="fa-solid fa-star yellow m--3"></i>
+							<?php } ?>
 						</h3>
 						<div class="info">
 							<div class="emails">

@@ -263,8 +263,13 @@
 									array('class' => 'dropdown-item')
 								); ?>
 								<?php echo $this->Html->link(
+									'Affectation',
+									array('controller' => 'beneficiaires', 'action' => 'recherche'),
+									array('class' => 'dropdown-item')
+								); ?>
+								<?php echo $this->Html->link(
 									'Affectations',
-									array('controller' => 'appartements', 'action' => 'affectations'),
+									array('controller' => 'beneficiaires', 'action' => 'add'),
 									array('class' => 'dropdown-item')
 								); ?>
 								<?php echo $this->Html->link(
@@ -310,6 +315,11 @@
 									array('controller' => 'chambres', 'action' => 'index'),
 									array('class' => 'dropdown-item')
 								);
+								echo $this->Html->link(
+									'Gestion des appartements',
+									array('controller' => 'appartements', 'action' => 'index'),
+									array('class' => 'dropdown-item')
+								);
 
 								?>
 							</div>
@@ -349,7 +359,7 @@
 							<div class="profile-avatar me-2">
 								<?php
 								$userInitials = 'ZD'; // Default fallback
-								if ($this->Session->check('Auth.User.nom')) {
+								if (AuthComponent::user('nom')) {
 									$userName = AuthComponent::user('nom');
 									$userLastname = AuthComponent::user('prenom');
 									$userInitials = strtoupper(substr($userName, 0, 1)) . strtoupper(substr($userLastname, 0, 1));

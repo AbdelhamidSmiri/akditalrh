@@ -41,9 +41,10 @@ class AppartementsController extends AppController {
 		$appartement= $this->Appartement->findById($id);
 		$this->loadModel('Site');
 		$this->loadModel('User');
-		$sites= $this->Site->find('list', array('recursive' => -1));
-		$users= $this->User->find('list', array('recursive' => -1));
-		$this->set(compact('sites', 'users', 'appartement'));
+		$sites= $this->Site->find('list');
+		$users= $this->User->find('list');
+		$villes= $this->Appartement->Ville->find('list');
+		$this->set(compact('sites', 'users', 'appartement',"ville"));
 	}
 
 /**
@@ -82,6 +83,8 @@ class AppartementsController extends AppController {
 				);
 			}
 		}
+		$villes= $this->Appartement->Ville->find('list');
+		$this->set(compact("ville"));
 	}
 
 /**
@@ -138,6 +141,8 @@ class AppartementsController extends AppController {
 		} else {
 			$this->request->data = $this->Appartement->findById($id);
 		}
+		$villes= $this->Appartement->Ville->find('list');
+		$this->set(compact("ville"));
 	}
 
 /**

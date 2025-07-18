@@ -16,6 +16,12 @@
 				<div class="row row-gap-3">
 					<div class="col-md-3">
 	<div class="info">
+		<label><?php echo __('Ville Id'); ?></label>
+		<span><?php echo h($site['Site']['ville_id']); ?></span>
+	</div>
+</div>
+<div class="col-md-3">
+	<div class="info">
 		<label><?php echo __('Site'); ?></label>
 		<span><?php echo h($site['Site']['site']); ?></span>
 	</div>
@@ -24,12 +30,6 @@
 	<div class="info">
 		<label><?php echo __('Adresse'); ?></label>
 		<span><?php echo h($site['Site']['adresse']); ?></span>
-	</div>
-</div>
-<div class="col-md-3">
-	<div class="info">
-		<label><?php echo __('Ville'); ?></label>
-		<span><?php echo h($site['Site']['ville']); ?></span>
 	</div>
 </div>
 <div class="col-md-3">

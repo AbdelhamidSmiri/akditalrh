@@ -33,7 +33,7 @@
 				<tr>
 					<td><?php echo $appartement['Appartement']['nom']; ?></td>
 					<td><?php echo $appartement['Appartement']['capacite']; ?></td>
-					<td><?php echo $appartement['Appartement']['ville']; ?></td>
+					<td><?php echo $appartement['Ville']['ville']; ?></td>
 					<td><?php echo $appartement['Appartement']['adresse']; ?></td>
 					<td><?php echo $appartement['Appartement']['images']; ?></td>
 					<td><?php echo $appartement['Appartement']['created']; ?></td>

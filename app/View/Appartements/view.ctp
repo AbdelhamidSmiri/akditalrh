@@ -35,7 +35,7 @@
 					<div class="col-md-3">
 						<div class="info">
 							<label><?php echo __('Ville'); ?></label>
-							<span><?php echo h($appartement['Appartement']['ville']); ?></span>
+							<span><?php echo h($appartement['Ville']['ville']); ?></span>
 						</div>
 					</div>
 					<div class="col-md-3">

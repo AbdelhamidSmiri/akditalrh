@@ -59,7 +59,7 @@
 				</div>
 				<div class='col-12'>
 					<?php
-					echo $this->Form->input('ville', array('placeholder' => '', "options" => $villes));
+					echo $this->Form->input('ville_id', array('placeholder' => '', "options" => $villes));
 					?>
 				</div>
 				<div class='submit-section'>

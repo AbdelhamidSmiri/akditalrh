@@ -24,7 +24,7 @@
 				</div>
 				<div class='col-12'>
 					<?php
-					echo $this->Form->input('ville', array('placeholder' => ''));
+					echo $this->Form->input('ville_id', array('placeholder' => ''));
 					?>
 				</div>
 				<div class='col-12'>

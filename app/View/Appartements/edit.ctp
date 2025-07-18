@@ -48,7 +48,7 @@
 					<div class="row">
 						<div class="col-md-6">
 							<div class="form-group">
-								<?php echo $this->Form->input('ville', array(
+								<?php echo $this->Form->input('ville_id', array(
 									'class' => 'form-control',
 									'label' => 'Ville',
 									'placeholder' => 'Entrez la ville'

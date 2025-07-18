@@ -55,6 +55,8 @@ class SitesController extends AppController {
 				$this->Flash->error(__('The site could not be saved. Please, try again.'));
 			}
 		}
+		$villes = $this->Site->Ville->find('list');
+		$this->set(compact('villes'));
 	}
 
 /**
@@ -79,6 +81,8 @@ class SitesController extends AppController {
 			$options = array('conditions' => array('Site.' . $this->Site->primaryKey => $id));
 			$this->request->data = $this->Site->find('first', $options);
 		}
+		$villes = $this->Site->Ville->find('list');
+		$this->set(compact('villes'));
 	}
 
 /**

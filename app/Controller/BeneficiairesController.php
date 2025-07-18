@@ -34,13 +34,13 @@ class BeneficiairesController extends AppController {
 			$date_debut = $this->request->data["Beneficiaire"]["date_debut"];
 			$date_fin = $this->request->data["Beneficiaire"]["date_fin"];
 			$sexe =  $this->request->data["Beneficiaire"]["sexe"];
-			$ville = $this->request->data["Beneficiaire"]["ville"];
+			$ville = $this->request->data["Beneficiaire"]["ville_id"];
 			
 			// Tous les appartements du sexe et ville demandés
 			$appartements = $this->Beneficiaire->Appartement->find('all', array(
 				'conditions' => array(
 					'sexe' => $sexe,
-					'ville' => $ville
+					'ville_id' => $ville
 				)
 			));
 			
@@ -69,13 +69,8 @@ class BeneficiairesController extends AppController {
 			debug($disponibles);exit();
 			$this->set('appartements', $disponibles);
 		}
-		$villes=[];
-		$villes = $this->Beneficiaire->Appartement->find('list', array(
-			'fields' => array('Appartement.ville', 'Appartement.ville'),
-			'group' => array('Appartement.ville'),
-			'order' => array('Appartement.ville' => 'ASC'),
-			'recursive' => -1
-		));
+		$this->loadModel("Ville");
+		$villes = $this->Ville->find('list');
 		$this->set('villes', $villes);
 
 		
@@ -137,14 +132,8 @@ class BeneficiairesController extends AppController {
 			}
 		}
 		$sites = $this->Beneficiaire->Site->find('list');
-		
-		$villes=[];
-		$villes = $this->Beneficiaire->Appartement->find('list', array(
-			'fields' => array('Appartement.ville', 'Appartement.ville'),
-			'group' => array('Appartement.ville'),
-			'order' => array('Appartement.ville' => 'ASC'),
-			'recursive' => -1
-		));
+		$this->loadModel("Ville");
+		$villes = $this->Ville->find('list');
 		// a suuper il faut passer par systeme de recherche abdhamid
 		$appartements = $this->Beneficiaire->Appartement->find('list');
 		$this->set(compact('sites',"villes", 'appartements'));

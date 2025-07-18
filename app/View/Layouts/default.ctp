@@ -315,14 +315,6 @@
 									array('controller' => 'chambres', 'action' => 'index'),
 									array('class' => 'dropdown-item')
 								);
-<<<<<<< HEAD
-								echo $this->Html->link(
-									'Gestion des appartements',
-									array('controller' => 'appartements', 'action' => 'index'),
-									array('class' => 'dropdown-item')
-								);
-=======
->>>>>>> 3f1325f30664e890d60437014e1942d40c361729
 
 								?>
 							</div>

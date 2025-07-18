@@ -233,7 +233,7 @@
 /**
  * A random string used in security hashing methods.
  */
-	Configure::write('Security.salt', 'koko'); // Example
+	Configure::write('Security.salt', 'koko');
 
 /**
  * A random numeric string (digits only) used to encrypt/decrypt strings.
@@ -278,7 +278,7 @@
  * Uncomment this line and correct your server timezone to fix
  * any date & time related errors.
  */
-	//date_default_timezone_set('UTC');
+	date_default_timezone_set('Africa/Casablanca');
 
 /**
  * `Config.timezone` is available in which you can set users' timezone string.

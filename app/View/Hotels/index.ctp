@@ -88,17 +88,11 @@
 		align-items: center;
 		justify-content: flex-start;
 		column-gap: 7px;
-		max-width: 20%;
+		max-width: 20%;;
 	}
 
 	.starts i {
 		font-size: 14px;
-	}
-
-	.ville {
-		display: flex;
-		column-gap: 12px;
-		padding: 6px 0 16px;
 	}
 
 	.ville span {
@@ -151,17 +145,18 @@
 					<div class="head_card">
 						<h3 class="title-card">
 
-							<span> <?php echo $hotel['Hotel']['hotel']; ?></span>
-							<div class="ville">
-								<?php if (!empty($hotel['Hotel']['ville'])): ?>
-									<span><i class="fa-regular fa-location-dot"></i> <?php echo $hotel['Hotel']['ville']; ?></span>
-								<?php endif; ?>
+							<span> <?php echo $hotel['Hotel']['hotel']; ?>
 								<div class="starts">
 									<?php for ($i = 0; $i < $hotel['Hotel']['etoile']; $i++) {
 									?>
 										<i class="fa-solid fa-star yellow m--3"></i>
 									<?php } ?>
 								</div>
+							</span>
+							<div class="ville">
+								<?php if (!empty($hotel['Hotel']['ville'])): ?>
+									<span><i class="fa-regular fa-location-dot"></i> <?php echo $hotel['Hotel']['ville']; ?></span>
+								<?php endif; ?>
 							</div>
 
 						</h3>

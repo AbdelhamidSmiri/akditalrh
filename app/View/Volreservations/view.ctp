@@ -70,7 +70,7 @@
 						<div class="info">
 							<label>Site</label>
 							<span>
-								<?php echo $volreservation['Site']['nom']; ?>
+								<?php echo $volreservation['Site']['site']; ?>
 							</span>
 						</div>
 					</div>

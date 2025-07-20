@@ -25,9 +25,9 @@ class Reservation extends AppModel {
 			'fields' => '',
 			'order' => ''
 		),
-		'Hotel' => array(
-			'className' => 'Hotel',
-			'foreignKey' => 'hotel_id',
+		'Chambre' => array(
+			'className' => 'Chambre',
+			'foreignKey' => 'chambre_id',
 			'conditions' => '',
 			'fields' => '',
 			'order' => ''

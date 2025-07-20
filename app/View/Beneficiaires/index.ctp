@@ -18,18 +18,18 @@
 	<table class="table table-akdital">
 		<thead>
 			<tr>
-				<th>site_id</th>
-				<th>user_id</th>
+				<th>Site</th>
+				<th>Affecter_par</th>
 				<th>appartement_id</th>
 				<th>nom</th>
 				<th>mail</th>
-				<th>telephone</th>
+				<th>Téléphone</th>
 				<th>status</th>
 				<th>etat</th>
 				<th>date_debut</th>
 				<th>date_fin</th>
 				<th>note</th>
-				<th>created</th>
+				<th>Date d'ajout</th>
 				<th class="actions">Actions</th>
 			</tr>
 		</thead>
@@ -37,13 +37,13 @@
 			<?php foreach ($beneficiaires as $beneficiaire): ?>
 				<tr>
 					<td>
-						<?php echo $this->Html->link($beneficiaire['Site']['nom'], array('controller' => 'sites', 'action' => 'view', $beneficiaire['Site']['id'])); ?>
+						<?php echo $beneficiaire['Site']['site']; ?>
 					</td>
 					<td>
-						<?php echo $this->Html->link($beneficiaire['User']['nom'], array('controller' => 'users', 'action' => 'view', $beneficiaire['User']['id'])); ?>
+						<?php echo $beneficiaire['User']['nom']; ?>
 					</td>
 					<td>
-						<?php echo $this->Html->link($beneficiaire['Appartement']['id'], array('controller' => 'appartements', 'action' => 'view', $beneficiaire['Appartement']['id'])); ?>
+						<?php echo $beneficiaire['Appartement']['nom']; ?>
 					</td>
 					<td><?php echo $beneficiaire['Beneficiaire']['nom']; ?></td>
 					<td><?php echo $beneficiaire['Beneficiaire']['mail']; ?></td>

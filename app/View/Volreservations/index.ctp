@@ -16,7 +16,7 @@
 		<thead>
 			<tr>
 				<th>user_id</th>
-				<th>site_id</th>
+				<th>site</th>
 				<th>depart</th>
 				<th>destination</th>
 				<th>date_aller</th>

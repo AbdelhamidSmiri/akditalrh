@@ -8,7 +8,7 @@
 <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/fr.js"></script>
 
 <div class="reservations form">
-	<?php echo $this->Form->create('Reservation'); ?>
+	<?php echo $this->Form->create('Reservation',["type"=>"file"]); ?>
 
 	<div class="row">
 		<div class="col"></div>
@@ -17,19 +17,14 @@
 			<div class="row">
 				<div class='col-12'>
 					<?php
-					echo $this->Form->input('user_id', array(
+					echo $this->Form->input('ville_id', array(
 						'placeholder' => '',
-						'label' => 'Utilisateur',
-						'empty' => 'Choisissez l\'utilisateur ',
+						'label' => 'Ville',
+						'empty' => 'Choisissez une ville ',
 					));
 					?>
-					<div class="message-error user-error">
-						Veuillez choisir un utilisateur?.
-					</div>
-				</div>
-				<div class='col-12'>
 					<?php
-					echo $this->Form->input('hotel_id', array(
+					echo $this->Form->input('chambre_id', array(
 						'placeholder' => '',
 						'label' => 'Hôtel',
 						'empty' => 'Choisissez un hôtel ',
@@ -53,15 +48,15 @@
 				</div>
 				<div class='col-12'>
 					<div class="has-calendar-icon input text">
-					<?php
-					echo $this->Form->input('checkin', array(
-						'label' => 'Check-in',
-						'type' => 'text', // important: not 'date'
-						'id' => 'date_checkin', // so we can replace it
-						'placeholder' => '',
-						'div' => false,
-					));
-					?>
+						<?php
+						echo $this->Form->input('checkin', array(
+							'label' => 'Check-in',
+							'type' => 'text', // important: not 'date'
+							'id' => 'date_checkin', // so we can replace it
+							'placeholder' => '',
+							'div' => false,
+						));
+						?>
 					</div>
 					<div class="message-error checkin-error">
 						Veuillez sélectionner la date de check-in de l’hôtel
@@ -91,12 +86,12 @@
 				</div>
 				<div class='col-12'>
 					<?php
-					echo $this->Form->input('ordre_mission', array('placeholder' => ''));
+					echo $this->Form->file('ordre_mission', array('placeholder' => ''));
 					?>
 				</div>
 				<div class='col-12'>
 					<?php
-					echo $this->Form->input('cin', array('placeholder' => ''));
+					echo $this->Form->file('cin', array('placeholder' => '', "multiple" => true));
 					?>
 				</div>
 				<div class='col-12'>
@@ -104,26 +99,7 @@
 					echo $this->Form->input('message', array('placeholder' => ''));
 					?>
 				</div>
-				<div class='col-12'>
-					<?php
-					echo $this->Form->input('confirmation', array('placeholder' => ''));
-					?>
-				</div>
-				<div class='col-12'>
-					<?php
-					echo $this->Form->input('etat', array('placeholder' => ''));
-					?>
-				</div>
-				<div class='col-12'>
-					<?php
-					echo $this->Form->input('reponse', array('placeholder' => ''));
-					?>
-				</div>
-				<div class='col-12'>
-					<?php
-					echo $this->Form->input('date_reponse', array('placeholder' => ''));
-					?>
-				</div>
+				
 				<div class='submit-section'>
 					<button type="submit" class="btn btn-submit">
 						<i class="fa-solid fa-paper-plane"></i> Envoyer
@@ -139,7 +115,7 @@
 
 
 <script>
-	document.addEventListener("DOMContentLoaded", function() {
+	document.addEventListener("DOMContentLoaded", function () {
 		flatpickr("#date_checkin ,#date_checkout", {
 			dateFormat: "Y-m-d",
 			locale: "fr",

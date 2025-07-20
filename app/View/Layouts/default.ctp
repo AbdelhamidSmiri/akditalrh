@@ -124,19 +124,19 @@
 						<button class="nav-link dropdown-toggle" type="button" data-bs-toggle="collapse"
 							data-bs-target="#commandesDropdown" aria-expanded="false">
 							<?php echo $bons_commande_icon; ?>
-							Bons de commande
+							Mes reservations hotels
 						</button>
 						<div class="collapse" id="commandesDropdown">
 							<div class="dropdown-menu show">
 								<?php echo $this->Html->link(
-									'Demandes de billets',
-									array('controller' => 'volreservations', 'action' => 'add'),
+									'Demande d\'hôtel',
+									array('controller' => 'reservations', 'action' => 'add'),
 									array('class' => 'dropdown-item', 'escape' => false)
 
 								);
 								echo $this->Html->link(
-									$demande_hotel_icon . ' Demandes d\'hôtel',
-									array('controller' => 'demandes', 'action' => 'add'),
+									$demande_hotel_icon . 'Mes demandes d\'hôtel',
+									array('controller' => 'reservations', 'action' => 'agent_index'),
 									array('class' => 'dropdown-item', 'escape' => false)
 								); ?>
 							</div>
@@ -185,20 +185,14 @@
 						<button class="nav-link dropdown-toggle" type="button" data-bs-toggle="collapse"
 							data-bs-target="#commandesDropdown" aria-expanded="false">
 							<?php echo $bons_commande_icon; ?>
-							Bons de commande
+							Résirvations Hôtels
 						</button>
 						<div class="collapse" id="commandesDropdown">
 							<div class="dropdown-menu show">
 								<?php echo $this->Html->link(
 									$billetterie_icon .
-										' Billetterie',
-									array('controller' => 'bons', 'action' => 'billetterie'),
-									array('class' => 'dropdown-item', 'escape' => false)
-								); ?>
-								<?php echo $this->Html->link(
-									$hebergement_icon .
-										' Hébergement',
-									array('controller' => 'bons', 'action' => 'hebergement'),
+										' Liste des réservations',
+									array('controller' => 'reservations', 'action' => 'index'),
 									array('class' => 'dropdown-item', 'escape' => false)
 								); ?>
 							</div>
@@ -257,24 +251,25 @@
 						</button>
 						<div class="collapse" id="appartementsDropdown">
 							<div class="dropdown-menu show">
-								<?php echo $this->Html->link(
+								<?php 
+								echo $this->Html->link(
 									'Disponibilités',
-									array('controller' => 'appartements', 'action' => 'disponibilites'),
+									array('controller' => 'appartements', 'action' => 'index'),
 									array('class' => 'dropdown-item')
-								); ?>
-								<?php echo $this->Html->link(
-									'Affectation',
+								);
+								echo $this->Html->link(
+									'Recheche (asupprimer abdhamid)',
 									array('controller' => 'beneficiaires', 'action' => 'recherche'),
 									array('class' => 'dropdown-item')
-								); ?>
-								<?php echo $this->Html->link(
+								); 
+								 echo $this->Html->link(
 									'Affectations',
 									array('controller' => 'beneficiaires', 'action' => 'add'),
 									array('class' => 'dropdown-item')
-								); ?>
-								<?php echo $this->Html->link(
-									'Historique logements',
-									array('controller' => 'appartements', 'action' => 'historique_logements'),
+								);
+								echo $this->Html->link(
+									'Liste des affectations',
+									array('controller' => 'beneficiaires', 'action' => 'index'),
 									array('class' => 'dropdown-item')
 								); ?>
 							</div>
@@ -320,7 +315,6 @@
 									array('controller' => 'chambres', 'action' => 'index'),
 									array('class' => 'dropdown-item')
 								);
-
 								?>
 							</div>
 						</div>

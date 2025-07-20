@@ -13,7 +13,7 @@ class Hotel extends AppModel {
  *
  * @var string
  */
-	public $displayField = 'nom';
+	public $displayField = 'hotel';
 
 
 	// The Associations below have been created with all possible keys, those that are not needed can be removed

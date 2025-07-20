@@ -7,56 +7,114 @@ App::import('Controller', 'Outils');
  * @property Appartement $Appartement
  * @property PaginatorComponent $Paginator
  */
-class AppartementsController extends AppController {
+class AppartementsController extends AppController
+{
 
-/**
- * Components
- *
- * @var array
- */
+	/**
+	 * Components
+	 *
+	 * @var array
+	 */
 
-/**
- * index method
- *
- * @return void
- */
-	public function index() {
-		$this->Appartement->recursive = 1;
-		$this->set('appartements', $this->Appartement->find("all"));
+	/**
+	 * index method
+	 *
+	 * @return void
+	 */
+	public function index()
+	{
+		$appartements = $this->Appartement->find('all', [
+			'contain' => ['Ville', 'Beneficiaire']
+		]);
+
+		$stats = [];
+		$global = [
+			'total_appartements' => 0,
+			'total_ocupes' => 0,
+			'total_places_dispo' => 0,
+		];
+
+		foreach ($appartements as $a) {
+			$ville = $a['Ville']['ville'];
+			$sexe = $a['Appartement']['sexe'];
+			$cap = (int) $a['Appartement']['capacite'];
+
+			$nb_ocupants = 0;
+			foreach ($a['Beneficiaire'] as $b) {
+				if ($b['etat'] == 'Checkin') {
+					$nb_ocupants++;
+				}
+			}
+
+			$dispo = $cap - $nb_ocupants;
+
+			// Statistiques par ville et sexe
+			if (!isset($stats[$ville])) {
+				$stats[$ville] = [];
+			}
+			if (!isset($stats[$ville][$sexe])) {
+				$stats[$ville][$sexe] = ['total' => 0, 'ocupes' => 0, 'places_dispo' => 0];
+			}
+
+			$stats[$ville][$sexe]['total']++;
+			if ($nb_ocupants >= $cap) {
+				$stats[$ville][$sexe]['ocupes']++;
+			}
+			$stats[$ville][$sexe]['places_dispo'] += $dispo;
+
+			// Pour chaque appartement
+			$appart_info[] = [
+				'id' => $a['Appartement']['id'],
+				'nom' => $a['Appartement']['nom'],
+				'ville' => $ville,
+				'sexe' => $sexe,
+				'capacite' => $cap,
+				'ocupants' => $nb_ocupants,
+				'places_dispo' => $dispo
+			];
+
+			$global['total_appartements']++;
+			if ($nb_ocupants >= $cap) {
+				$global['total_ocupes']++;
+			}
+			$global['total_places_dispo'] += $dispo;
+		}
+
+		$this->set(compact('stats', 'appart_info', 'global'));
 	}
 
-/**
- * view method
- *
- * @throws NotFoundException
- * @param string $id
- * @return void
- */
-	public function view($id = null) 
+	/**
+	 * view method
+	 *
+	 * @throws NotFoundException
+	 * @param string $id
+	 * @return void
+	 */
+	public function view($id = null)
 	{
 		if (!$this->Appartement->exists($id)) {
 			throw new NotFoundException(__('Invalid appartement'));
 		}
 		$this->Appartement->recursive = 1;
-		$appartement= $this->Appartement->findById($id);
+		$appartement = $this->Appartement->findById($id);
 		$this->loadModel('Site');
 		$this->loadModel('User');
-		$sites= $this->Site->find('list');
-		$users= $this->User->find('list');
-		$villes= $this->Appartement->Ville->find('list');
-		$this->set(compact('sites', 'users', 'appartement',"ville"));
+		$sites = $this->Site->find('list');
+		$users = $this->User->find('list');
+		$villes = $this->Appartement->Ville->find('list');
+		$this->set(compact('sites', 'users', 'appartement', "ville"));
 	}
 
-/**
- * add method
- *
- * @return void
- */
-	public function add() {
-		if ($this->request->is('post')) 
-		{
-			$images="";
-			foreach($this->request->data['image'] as $key => $image) {
+	/**
+	 * add method
+	 *
+	 * @return void
+	 */
+	public function add()
+	{
+		if ($this->request->is('post')) {
+			$images = "";
+			foreach ($this->request->data['image'] as $key => $image) {
 				$outils = new OutilsController;
 				$uploadedImage = $outils->uploadFile('appartements', $image);
 				if ($uploadedImage) {
@@ -83,29 +141,29 @@ class AppartementsController extends AppController {
 				);
 			}
 		}
-		$villes= $this->Appartement->Ville->find('list');
+		$villes = $this->Appartement->Ville->find('list');
 		$this->set(compact("ville"));
 	}
 
-/**
- * edit method
- *
- * @throws NotFoundException
- * @param string $id
- * @return void
- */
-	public function edit($id = null) {
+	/**
+	 * edit method
+	 *
+	 * @throws NotFoundException
+	 * @param string $id
+	 * @return void
+	 */
+	public function edit($id = null)
+	{
 		if (!$this->Appartement->exists($id)) {
 			throw new NotFoundException(__('Invalid appartement'));
 		}
-		
+
 		if ($this->request->is(array('post', 'put'))) {
 			// Handle image uploads
-			if (!empty($this->request->data['Appartement']['image'][0]['name'])) 
-			{
-				$appt=$this->Appartement->findById($id);
-				$images =$appt['Appartement']['images'];
-				foreach($this->request->data['Appartement']['image'] as $key => $image) {
+			if (!empty($this->request->data['Appartement']['image'][0]['name'])) {
+				$appt = $this->Appartement->findById($id);
+				$images = $appt['Appartement']['images'];
+				foreach ($this->request->data['Appartement']['image'] as $key => $image) {
 					if (!empty($image['name'])) {
 						$outils = new OutilsController;
 						$uploadedImage = $outils->uploadFile('appartements', $image);
@@ -141,49 +199,51 @@ class AppartementsController extends AppController {
 		} else {
 			$this->request->data = $this->Appartement->findById($id);
 		}
-		$villes= $this->Appartement->Ville->find('list');
+		$villes = $this->Appartement->Ville->find('list');
 		$this->set(compact("ville"));
 	}
 
-/**
- * delete method
- *
- * @throws NotFoundException
- * @param string $id
- * @return void
- */
-	public function delete($id = null) {
+	/**
+	 * delete method
+	 *
+	 * @throws NotFoundException
+	 * @param string $id
+	 * @return void
+	 */
+	public function delete($id = null)
+	{
 		if (!$this->Appartement->exists($id)) {
 			throw new NotFoundException(__('Invalid appartement'));
 		}
 		$this->request->allowMethod('post', 'delete');
 		if ($this->Appartement->delete($id)) {
 			$this->Session->setFlash(
-					'Appartement a été supprimé avec succès.',
-					'Flash/success',
-					array(),
-					'success'
-				);
+				'Appartement a été supprimé avec succès.',
+				'Flash/success',
+				array(),
+				'success'
+			);
 		} else {
 			$this->Session->setFlash(
-					"Appartement n'a pas été supprimé.",
-					'Flash/success',
-					array(),
-					'success'
-				);
+				"Appartement n'a pas été supprimé.",
+				'Flash/success',
+				array(),
+				'success'
+			);
 		}
 		return $this->redirect(array('action' => 'index'));
 	}
 
-/**
- * deleteImage method
- * 
- * @throws NotFoundException
- * @param string $id
- * @param string $imageName
- * @return void
- */
-	public function deleteImage($id = null, $num = null) {
+	/**
+	 * deleteImage method
+	 * 
+	 * @throws NotFoundException
+	 * @param string $id
+	 * @param string $imageName
+	 * @return void
+	 */
+	public function deleteImage($id = null, $num = null)
+	{
 		$this->request->allowMethod('post');
 		$appt = $this->Appartement->findById($id);
 		$images = explode(';', $appt['Appartement']['images']);
@@ -196,7 +256,7 @@ class AppartementsController extends AppController {
 			$this->Appartement->id = $id;
 			$this->Appartement->saveField('images', $updatedImages);
 		}
-		
+
 		return $this->redirect(array('action' => 'edit', $id));
 	}
 }

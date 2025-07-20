@@ -34,7 +34,7 @@
 						<?php echo $volreservation['User']['nom'] ?>
 					</td>
 					<td>
-						<?php echo $volreservation['Site']['nom']; ?>
+						<?php echo $volreservation['Site']['site']; ?>
 					</td>
 					<td><?php echo $volreservation['Volreservation']['depart']; ?></td>
 					<td><?php echo $volreservation['Volreservation']['destination']; ?></td>

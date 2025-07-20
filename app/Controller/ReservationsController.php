@@ -1,5 +1,7 @@
 <?php
 App::uses('AppController', 'Controller');
+App::import('Controller', 'Outils');
+
 /**
  * Reservations Controller
  *
@@ -20,9 +22,12 @@ class ReservationsController extends AppController {
  *
  * @return void
  */
-	public function index() {
-		$this->Reservation->recursive = 0;
-		$this->set('reservations', $this->Paginator->paginate());
+	public function index() 
+	{
+		$reservations= $this->Reservation->find("all");
+		$this->loadModel("Hotel");
+		$hotels=$this->Hotel->find("list");
+		$this->set(compact("hotels","reservations"));
 	}
 
 /**
@@ -36,8 +41,7 @@ class ReservationsController extends AppController {
 		if (!$this->Reservation->exists($id)) {
 			throw new NotFoundException(__('Invalid reservation'));
 		}
-		$options = array('conditions' => array('Reservation.' . $this->Reservation->primaryKey => $id));
-		$this->set('reservation', $this->Reservation->find('first', $options));
+		$this->set('reservation', $this->Reservation->findById($id));
 	}
 
 /**
@@ -45,20 +49,87 @@ class ReservationsController extends AppController {
  *
  * @return void
  */
-	public function add() {
-		if ($this->request->is('post')) {
+	public function add($ville_id=1) {
+		if ($this->request->is('post')) 
+		{
+			$image=$this->request->data['Reservation']['cin'];
+			$outils = new OutilsController;
+			$uploadedImage = $outils->uploadFile('reservations', $image);
+			$this->request->data['Reservation']['cin'] = $uploadedImage;
+
+			$image=$this->request->data['Reservation']['ordre_mission'];
+			$outils = new OutilsController;
+			$uploadedImage = $outils->uploadFile('reservations', $image);
+			$this->request->data['Reservation']['ordre_mission'] = $uploadedImage;
+
+
 			$this->Reservation->create();
+			$this->request->data['Reservation']['user_id'] = $this->Auth->user('id'); 
 			if ($this->Reservation->save($this->request->data)) {
-				$this->Flash->success(__('The reservation has been saved.'));
-				return $this->redirect(array('action' => 'index'));
+				$this->Session->setFlash(
+					'La reservation a été ajoutée avec succès.',
+					'Flash/success',
+					array(),
+					'success'
+				);
+				return $this->redirect(array('action' => 'view', $this->Reservation->id));
 			} else {
-				$this->Flash->error(__('The reservation could not be saved. Please, try again.'));
+				$this->Session->setFlash(
+					"La reservation n'a pas été ajoutée.",
+					'Flash/success',
+					array(),
+					'success'
+				);
 			}
 		}
-		$users = $this->Reservation->User->find('list');
-		$hotels = $this->Reservation->Hotel->find('list');
-		$sites = $this->Reservation->Site->find('list');
-		$this->set(compact('users', 'hotels', 'sites'));
+		
+		$this->loadModel('Hotel');
+		$this->Hotel->recursive = -1;
+		//a supprimer apres matsali rajae f t3mrar dial fichier excel
+		$ville= $this->Reservation->Site->Ville->findById($ville_id);
+		$ville=$ville["Ville"]["ville"];
+		//-------------fin superession
+
+		$hotels=$this->Hotel->find('all', array('conditions' => array('Hotel.ville' => $ville)));
+		$ids=0;
+		foreach($hotels as $hotel) {
+			$ids ="$ids,". $hotel['Hotel']['id'];
+		}
+		$chambres = $this->Reservation->Chambre->find('all', array(
+			'conditions' => array("Chambre.hotel_id IN ($ids)"),
+			'contain' => array('Hotel', 'Hotelprice') // on exclut Reservation ici
+		));
+		$data=array();
+		$today = date('Y-m-d');
+		$this->loadModel("Role");
+		$role = $this->Role->findById($this->Auth->user('role_id'));
+
+		foreach ($chambres as $chambre) {
+			foreach ($chambre['Hotelprice'] as $prix) {
+				if ($today >= $prix['date_debut'] && $today <= $prix['date_fin']) 
+				{
+					if($role["Role"]["plafond_hotel"] < $prix['prix']) {
+						continue; // on ignore les prix supérieurs au plafond
+					}
+					$chambre['Chambre']['prix'] = $prix['prix']; 
+					unset($chambre['Hotelprice']);
+					$chambre['Chambre']['hotel'] = $chambre['Hotel']['hotel'];
+					$chambre['Chambre']['etoile'] = $chambre['Hotel']['etoile'];
+					$chambre['Chambre']['images'] = $chambre['Hotel']['images'];
+					$chambre['Chambre']['adresse'] = $chambre['Hotel']['adresse'];
+					$chambre['Chambre']['reglement'] = $chambre['Hotel']['reglement'];
+					unset($chambre['Hotel']);
+					$data[] = $chambre;
+					break; // on sort de la boucle dès qu'on trouve le bon prix
+				}
+			}
+		}
+		$chambres=$data;
+		$chambres = $this->Reservation->Chambre->find('list');
+		$sites = $this->Reservation->Site->find('list',["conditions" => ["Site.ville_id" => $ville_id]]);
+		$this->loadModel('Ville');
+		$villes = $this->Ville->find('list');
+		$this->set(compact( 'chambres', 'sites',"villes"));
 	}
 
 /**

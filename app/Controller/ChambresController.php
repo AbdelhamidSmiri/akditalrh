@@ -62,8 +62,12 @@ class ChambresController extends AppController
 						}
 					}
 				}
-
-				$this->Session->setFlash(__('La chambre a été ajoutée avec succès.'), 'default', array('class' => 'alert alert-success'));
+				$this->Session->setFlash(
+					'La chambre a été ajoutée avec succès.',
+					'Flash/success',
+					array(),
+					'success'
+				);
 				return $this->redirect(array('action' => 'index'));
 			} else {
 				$this->Session->setFlash(__('Erreur lors de l\'ajout de la chambre.'), 'default', array('class' => 'alert alert-danger'));
@@ -88,11 +92,13 @@ class ChambresController extends AppController
 	 */
 	public function edit($id = null)
 	{
-		if (!$id || !$this->Chambre->exists($id)) {
-			throw new NotFoundException(__('Chambre invalide'));
-		}
 
 		if ($this->request->is('post') || $this->request->is('put')) {
+			$chambre_id = $this->request->data['Chambre']['id'];
+			if (!$chambre_id || !$this->Chambre->exists($chambre_id)) {
+				throw new NotFoundException(__('Chambre invalide'));
+			}
+
 			// Upload image si une nouvelle image est envoyée
 			if (!empty($this->request->data['Chambre']['images']['name'])) {
 				$this->request->data['Chambre']['images'] = $this->uploadFile('chambres', $this->request->data['Chambre']['images']);
@@ -103,59 +109,19 @@ class ChambresController extends AppController
 
 			// Sauvegarde de la chambre
 			if ($this->Chambre->save($this->request->data)) {
-				$chambreId = $id;
-				$this->loadModel('Hotelprice');
 
-				// Supprimer les anciens prix (si nécessaire, sinon tu peux faire une vraie mise à jour)
-				$this->Hotelprice->deleteAll(array('Hotelprice.chambre_id' => $chambreId), false);
+				$this->Session->setFlash(
+					'La chambre a été modifiée avec succès.',
+					'Flash/success',
+					array(),
+					'success'
+				);
 
-				// Ajouter les nouveaux prix
-				if (!empty($this->request->data['Chambre']['prices'])) {
-					foreach ($this->request->data['Chambre']['prices'] as $price) {
-						if (!empty($price['date_debut']) && !empty($price['date_fin']) && isset($price['prix'])) {
-							$d = array(
-								'Hotelprice' => array(
-									'date_debut' => $price['date_debut'],
-									'date_fin'   => $price['date_fin'],
-									'prix'       => $price['prix'],
-									'chambre_id' => $chambreId
-								)
-							);
-							$this->Hotelprice->create();
-							$this->Hotelprice->save($d);
-						}
-					}
-				}
-
-				$this->Session->setFlash(__('La chambre a été modifiée avec succès.'), 'default', array('class' => 'alert alert-success'));
-				return $this->redirect(array('action' => 'index'));
+				return $this->redirect(array('controller' => 'Hotels', 'action' => 'view', $id));
 			} else {
 				$this->Session->setFlash(__('Erreur lors de la modification de la chambre.'), 'default', array('class' => 'alert alert-danger'));
 			}
-		} else {
-			// Pré-remplir le formulaire
-			$this->request->data = $this->Chambre->read(null, $id);
-			$this->loadModel('Hotelprice');
-			$rawPrices = $this->Hotelprice->find('all', array(
-				'conditions' => array('Hotelprice.chambre_id' => $id),
-				'fields' => array('Hotelprice.id', 'Hotelprice.date_debut', 'Hotelprice.date_fin', 'Hotelprice.prix'),
-				'recursive' => -1
-			));
-
-			// Reformater pour qu'on ait : [0 => [date_debut => ..., ...], 1 => [...], ...]
-			$prices = array();
-			foreach ($rawPrices as $p) {
-				$prices[] = $p['Hotelprice'];
-			}
-			$this->request->data['Chambre']['prices'] = $prices;
 		}
-
-		// Liste des hôtels
-		$this->loadModel('Hotel');
-		$hotels = $this->Hotel->find('list', array(
-			'fields' => array('Hotel.id', 'Hotel.hotel')
-		));
-		$this->set('hotels', $hotels);
 	}
 
 

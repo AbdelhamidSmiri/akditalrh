@@ -51,6 +51,17 @@
 
 	}
 
+	.price_card .card-body td {
+		font-size: 12px;
+
+	}
+
+	.price_card .card-body .fin,
+	.price_card .card-body .debut {
+		font-weight: 700;
+
+	}
+
 	.badge {
 		display: inline-flex;
 		align-items: center;
@@ -79,6 +90,16 @@
 	.price_card .alert {
 		padding: 12px 1rem;
 		margin-bottom: 0px;
+	}
+
+	.div_card-title {
+		width: 70%;
+	}
+
+	.arrow_icon {
+		background: #d0d9ff;
+		border-radius: 25px;
+		padding: 1px 5px;
 	}
 </style>
 
@@ -164,7 +185,7 @@
 							</div>
 							<div class="col-12">
 								<div class="text-end">
-									<button type="button" class="btn btn-primary-rounded " data-model_index="2" onclick="addrowprice(this)">
+									<button type="button" class="btn btn-primary-rounded  " data-model_index="2" onclick="addrowprice(this)">
 										<i class="fa-regular fa-plus"></i>
 									</button>
 								</div>
@@ -202,6 +223,7 @@
 						<div class="step3">
 							<input name="data[Chambre][delete_ids]" id="delete_ids" class="delete_ids" type="hidden" value="">
 
+
 							<div class="col-12">
 								<div class="text-end">
 									<button type="button" class="btn btn-primary-rounded add_btn" data-chambre_id="" data-model_index="3" onclick="addrowprice(this)">
@@ -209,6 +231,76 @@
 									</button>
 								</div>
 							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary-rounded" data-bs-dismiss="modal">Fermer</button>
+				<button type="submit" class="btn btn-primary-rounded">Enregistrer</button>
+			</div>
+			<?php echo $this->Form->end(); ?>
+		</div>
+	</div>
+</div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="edit_info_modal" tabindex="-1" aria-labelledby="edit_info_modalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered modal-lg">
+		<div class="modal-content">
+			<?php echo $this->Form->create('chambres', array(
+				'url' => array('controller' => 'chambres', 'action' => 'edit', $hotel['Hotel']['id'])
+			)); ?>
+			<div class="modal-header">
+				<h1 class="modal-title fs-5" id="edit_info_modalLabel">Éditer les informations de la chambre<span class="chambre_name"></span></h1>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body">
+				<div class="form-add-chambre">
+					<div class="row">
+						<div class="step4">
+							<div class="row">
+								<div class="col-md-6">
+									<div class="input text">
+										<input name="data[Chambre][id]" id="Chambreidedite" type="hidden">
+										<label for="ChambreNomedite">Nom/N° de la chambre</label>
+										<input name="data[Chambre][nom]" id="ChambreNomedite" placeholder="" type="text">
+									</div>
+								</div>
+								<div class="col-md-6">
+									<div class="input text">
+										<label for="Chambretypeedite">Catégorie</label>
+										<input name="data[Chambre][type]" id="Chambretypeedite" placeholder="" type="text">
+									</div>
+								</div>
+								<div class='col-12 mb-4 input-file'>
+									<div class="file-upload-wrapper">
+										<div class="file-upload-area">
+											<div class="upload-text">Glissez-déposez les Images ici</div>
+											<div class="upload-subtext">Ou</div>
+											<button type="button" class="choose-files-btn">Choisir des images <i class="fa-light fa-cloud-arrow-up"></i></button>
+
+											<?php echo $this->Form->file('images', array(
+												'name' => 'data[Chambre][images][]',
+												'class' => 'file-input',
+												'accept' => '.jpg, .jpeg, .png', // Accept only image and PDF files
+												'multiple' => true
+											)); ?>
+										</div>
+
+										<div class="file-info">
+											<div class="files-list"></div>
+										</div>
+									</div>
+
+									<div class="description-text">
+										Téléversez les images de la chambre.
+									</div>
+								</div>
+							</div>
+
+
 						</div>
 					</div>
 				</div>
@@ -354,23 +446,39 @@
 		<?php $hotelprices = $val["Hotelprice"];
 		$jsonPrices = htmlspecialchars(json_encode($hotelprices), ENT_QUOTES, 'UTF-8'); ?>
 
-		<div class="col-4">
+		<div class="col-xl-4 col-lg-6 col-md-6  ">
 			<div class="card view-card price_card">
 				<div class="card-header">
-					<h5 class="card-title">
-						<?php echo $val["nom"]; ?>
-					</h5>
-					<button
-						type="button"
-						class="btn btn-primary-rounded"
-						data-bs-toggle="modal"
-						data-bs-target="#add_price_modal"
-						data-prices="<?php echo $jsonPrices; ?>"
-						data-name="<?php echo htmlspecialchars($val["nom"], ENT_QUOTES, 'UTF-8'); ?>"
-						data-chambre_id="<?php echo $val["id"]; ?>"
-						onclick="edit_prices(this)">
-						<i class="fa-solid fa-arrows-rotate"></i>
-					</button>
+					<div class="div_card-title">
+						<h5 class="card-title">
+							<?php echo $val["nom"]; ?>
+						</h5>
+					</div>
+					<div class="action">
+						<button
+							type="button"
+							class="btn btn-primary-rounded btn-edit-price"
+							data-bs-toggle="modal"
+							data-bs-target="#add_price_modal"
+							data-prices="<?php echo $jsonPrices; ?>"
+							data-name="<?php echo htmlspecialchars($val["nom"], ENT_QUOTES, 'UTF-8'); ?>"
+							data-chambre_id="<?php echo $val["id"]; ?>"
+							onclick="edit_prices(this)">
+							<i class="fa-solid fa-arrows-rotate"></i>
+						</button>
+						<button
+							type="button"
+							class="btn btn-orange-rounded"
+							data-bs-toggle="modal"
+							data-bs-target="#edit_info_modal"
+							data-type="<?php echo $val["type"]; ?>"
+							data-images="<?php echo $val["images"]; ?>"
+							data-name="<?php echo htmlspecialchars($val["nom"], ENT_QUOTES, 'UTF-8'); ?>"
+							data-chambre_id="<?php echo $val["id"]; ?>"
+							onclick="edit_info_chambre(this)">
+							<i class="fa-regular fa-pen"></i>
+						</button>
+					</div>
 				</div>
 				<div class="card-body">
 					<table class="table">
@@ -380,12 +488,14 @@
 								foreach ($hotelprices as $hotelprice): ?>
 									<tr>
 										<?php (date('Y-m-d') >= $hotelprice['date_debut'] && date('Y-m-d') <= $hotelprice['date_fin']) ?  $badge_color = "badge-light-success" : $badge_color = "badge-light-danger"; ?>
-										<td>
+										<td class="debut">
 											<i class="fa-light fa-calendar-arrow-down"></i>
 											<?php echo $hotelprice['date_debut']; ?>
 										</td>
 										<td>
-											<i class="fa-light fa-arrow-right"></i>
+											<div class="arrow_icon">
+												<i class="fa-light fa-arrow-right"></i>
+											</div>
 										</td>
 										<td class="fin">
 											<i class="fa-light fa-calendar-arrow-up"></i>
@@ -742,5 +852,18 @@
 		});
 
 		updateRemoveButtons();
+	}
+
+	async function edit_info_chambre(button) {
+
+		const name = button.getAttribute('data-name');
+		const type = button.getAttribute('data-type');
+		const images = button.getAttribute('data-images');
+		const chambre_id = button.getAttribute('data-chambre_id');
+
+		document.getElementById("Chambreidedite").value = chambre_id;
+		document.getElementById("ChambreNomedite").value = name;
+		document.getElementById("Chambretypeedite").value = type;
+
 	}
 </script>

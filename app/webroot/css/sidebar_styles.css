@@ -14,7 +14,7 @@
 	position: fixed;
 	top: 0;
 	left: 0;
-	height: 100vh;
+	height: 101vh;
 	width: var(--sidebar-width);
 	background: var(--sidebar-bg);
 	color: var(--sidebar-text);

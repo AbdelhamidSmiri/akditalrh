@@ -11,7 +11,46 @@
 
 	font-style: normal;
 }
+.status-btn {
+    display: inline-flex
+;
+    align-items: center;
+    gap: 6px;
+    padding: 3px 12px;
+    border-radius: 7px;
+    font-size: 12px;
+    color: #fff;
+    white-space: nowrap;
+    font-weight: 300;
+}
 
+        .status-btn i {
+            font-size: 0.9rem;
+        }
+
+        /* Each status must have its own class defined */
+       .status-btn.confirmed {
+    background-color: #2e7d32e6;
+}
+
+        .status-btn.in-progress {
+    background-color: #1e40aff0;
+}
+
+        .status-btn.refused {
+            background-color: #dc3545;
+            /* Red */
+        }
+
+        .status-btn.passe {
+            background-color: #6c757d;
+            /* Gray */
+        }
+
+        .status-btn.other {
+            background-color: #6c757d;
+            /* Default gray */
+        }
 .poppins-extralight {
 	font-family: "Poppins", sans-serif;
 

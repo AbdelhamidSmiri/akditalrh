@@ -60,47 +60,7 @@ function dureeSejour($checkin_date, $checkout_date)
     <title>Dashboard Réservations</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
-        .status-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            padding: 5px 12px;
-            border-radius: 999px;
-            font-size: 0.85rem;
-            font-weight: 500;
-            color: #fff;
-            white-space: nowrap;
-        }
-
-        .status-btn i {
-            font-size: 0.9rem;
-        }
-
-        /* Each status must have its own class defined */
-        .status-btn.confirmed {
-            background-color: #2e7d32;
-            /* Green */
-        }
-
-        .status-btn.in-progress {
-            background-color: #1e40af;
-            /* Blue */
-        }
-
-        .status-btn.refused {
-            background-color: #dc3545;
-            /* Red */
-        }
-
-        .status-btn.passe {
-            background-color: #6c757d;
-            /* Gray */
-        }
-
-        .status-btn.other {
-            background-color: #6c757d;
-            /* Default gray */
-        }
+        
 
         .stat-card {
             border-radius: 12px;
@@ -132,10 +92,6 @@ function dureeSejour($checkin_date, $checkout_date)
     background-color: rgb(214 234 248);
     color: #3498db;
 }
-
-       
-
-       
 
         .table-akdital td {
             white-space: nowrap;

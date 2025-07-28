@@ -33,8 +33,8 @@ class VolreservationsController extends AppController
 
 	function agent_index()
 	{
-		$title_for_layout = "Réservations vols";
-		$pageSubtitle = "Consulter les réservations vols";
+		$title_for_layout = "Gestion des Réservations de Vols";
+		$pageSubtitle = "Consultez les détails des réservations de vols";
 
 
 		$this->set('volreservations', $this->Volreservation->find("all", array(

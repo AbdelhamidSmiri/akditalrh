@@ -38,7 +38,8 @@ class VolreservationsController extends AppController
 
 
 		$this->set('volreservations', $this->Volreservation->find("all", array(
-			'conditions' => array('Volreservation.user_id' => AuthComponent::user("id"))
+			'conditions' => array('Volreservation.user_id' => AuthComponent::user("id")),
+			'order' => array('Volreservation.created' => 'DESC')
 		)));
 
 
@@ -49,7 +50,8 @@ class VolreservationsController extends AppController
 	{
 
 		$volreservations = $this->Volreservation->find("all", array(
-			'conditions' => array('Volreservation.etat' => "En cours")
+			'conditions' => array('Volreservation.etat' => "En cours"),
+			'order' => array('Volreservation.created' => 'DESC') // or any other field you want to sort by
 		));
 
 		$this->set('title_for_layout', 'Réservations d\'hôtel'); // for <h2>
@@ -86,11 +88,16 @@ class VolreservationsController extends AppController
 			$this->Volreservation->id = $id;
 			$this->request->data['Volreservation']['date_reponse'] = date("Y-m-d H:i:s");
 			$this->request->data['Volreservation']['etat'] = "Validé";
-			$this->request->data['Volreservation']['file_aller'] = $this->uploadFile('volreservations', $this->request->data['Volreservation']['file_aller']);
-			$this->request->data['Volreservation']['file_retour'] = $this->uploadFile('volreservations', $this->request->data['Volreservation']['file_retour']);
-			$this->request->data['Volreservation']['documents'] = $this->uploadFile('volreservations', $this->request->data['Volreservation']['documents']);
+			$this->request->data['Volreservation']['file_aller'] = json_encode($this->uploadFiles('volreservations', $this->request->data['Volreservation']['file_aller']));
+			$this->request->data['Volreservation']['file_retour'] = json_encode($this->uploadFiles('volreservations', $this->request->data['Volreservation']['file_retour']));
+			$this->request->data['Volreservation']['documents'] = json_encode($this->uploadFiles('volreservations',  $this->request->data['Volreservation']['documents']));
 			$this->Volreservation->save($this->request->data);
-			$this->Session->setFlash(__('La réservation a été validée.'));
+			$this->Session->setFlash(
+				'La réservation a été validée.',
+				'Flash/success',
+				array(),
+				'success'
+			);
 			return $this->redirect(array('action' => 'agence_index'));
 		}
 		$vol = $this->Volreservation->findById($id);

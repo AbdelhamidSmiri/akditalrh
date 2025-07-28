@@ -220,7 +220,26 @@
 						<div class="col-md-3">
 							<div class="info">
 								<label>État</label>
-								<span><?php echo h($volreservation['Volreservation']['etat']); ?></span>
+								<?php
+
+								switch ($volreservation['Volreservation']['etat']) {
+
+									case 'En cours':
+										echo '<span class="status-btn in-progress"><i class="fas fa-clock"></i> En cours</span>';
+										break;
+									case 'Validé':
+										echo '<span class="status-btn confirmed"><i class="fas fa-check-circle"></i> Validé</span>';
+										break;
+									case 'refusée':
+										echo '<span class="status-btn refused"><i class="fas fa-times-circle"></i> Refusée</span>';
+										break;
+									case 'passe':
+										echo '<span class="status-btn passe"><i class="fas fa-calendar-times"></i> Passé</span>';
+										break;
+									default:
+										echo '<span class="status-btn passe"><i class="fas fa-question-circle"></i> ' . htmlspecialchars($volreservation['Volreservation']['etat']) . '</span>';
+								}
+								?>
 							</div>
 						</div>
 					<?php endif; ?>
@@ -319,7 +338,11 @@
 						<div class="col-md-3">
 							<div class="info">
 								<label>Transfert</label>
-								<span><?php echo h($volreservation['Volreservation']['transfer']); ?></span>
+								<span class="badge badge-transfer">
+									<?php echo ($volreservation['Volreservation']['transfer'] == "1") ? 'Oui' : 'Non';
+									?>
+								</span>
+
 							</div>
 						</div>
 					<?php endif; ?>

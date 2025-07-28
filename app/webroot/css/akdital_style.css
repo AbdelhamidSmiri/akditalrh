@@ -12,45 +12,45 @@
 	font-style: normal;
 }
 .status-btn {
-    display: inline-flex
-;
-    align-items: center;
-    gap: 6px;
-    padding: 3px 12px;
-    border-radius: 7px;
-    font-size: 12px;
-    color: #fff;
-    white-space: nowrap;
-    font-weight: 300;
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	padding: 3px 12px;
+	border-radius: 7px;
+	font-size: 12px !important;
+	color: #fff !important;
+	white-space: nowrap;
+	font-weight: 300 !important;
+	width: fit-content;
 }
 
-        .status-btn i {
-            font-size: 11px;
-        }
-
-        /* Each status must have its own class defined */
-       .status-btn.confirmed {
-    background-color: #2e7d32e6;
+.status-btn i {
+	font-size: 11px;
 }
 
-        .status-btn.in-progress {
-    background-color: #1e40aff0;
+/* Each status must have its own class defined */
+.status-btn.confirmed {
+	background-color: #2e7d32e6;
 }
 
-        .status-btn.refused {
-            background-color: #dc3545;
-            /* Red */
-        }
+.status-btn.in-progress {
+	background-color: #1e40aff0;
+}
 
-        .status-btn.passe {
-            background-color: #6c757d;
-            /* Gray */
-        }
+.status-btn.refused {
+	background-color: #dc3545;
+	/* Red */
+}
 
-        .status-btn.other {
-            background-color: #6c757d;
-            /* Default gray */
-        }
+.status-btn.passe {
+	background-color: #6c757d;
+	/* Gray */
+}
+
+.status-btn.other {
+	background-color: #6c757d;
+	/* Default gray */
+}
 .poppins-extralight {
 	font-family: "Poppins", sans-serif;
 
@@ -263,9 +263,9 @@
 }
 
 .btn-success-rounded {
-	background-color: #3E875E;
+	background-color: #3e875e;
 
-	border-color: #3E875E;
+	border-color: #3e875e;
 
 	color: #ffffff;
 
@@ -1082,19 +1082,19 @@ textarea {
 	padding-right: 30px;
 }
 td {
-  white-space: nowrap;
+	white-space: nowrap;
 }
 
-.badge{
-	background-color: #E9F3FF;
-    color: #1B84FF;
-    display: inline-flex
-;
-    align-items: center;
-    padding: 5px 14px;
-    border-radius: 7px;
-    font-size: 12px;
-    font-weight: 500;
+.badge-transfer {
+	background-color: #e9f3ff;
+	color: #1b84ff !important;
+	display: inline-flex;
+	align-items: center;
+	padding: 5px 14px;
+	border-radius: 7px;
+	font-size: 12px !important;
+	font-weight: 700 !important;
+	width: fit-content;
 }
 /* start badge-primary style  */
 
@@ -1152,4 +1152,3 @@ td {
 	padding: 4px 8px;
 	margin-left: 0px !important;
 }
-

@@ -20,7 +20,7 @@ class VolreservationsController extends AppController
 
 		// Actions autorisées pour "agent"
 		if ($role !== ' Admin' && $role !== 'Agence') {
-			return in_array($this->action, ['agent_index', "add", 'view', 'edit']);
+			return in_array($this->action, ['agent_index','agence_index','index', "add", 'view', 'edit']);
 		}
 
 		// Admin : accès à tout
@@ -135,6 +135,9 @@ class VolreservationsController extends AppController
 			throw new NotFoundException(__('Invalid volreservation'));
 		}
 		$options = array('conditions' => array('Volreservation.' . $this->Volreservation->primaryKey => $id));
+
+		$this->set('title_for_layout', 'Réservations d\'hôtel'); // for <h2>
+		$this->set('pageSubtitle', 'Consulter les réservations des hôtels'); // for <p>
 		$this->set('volreservation', $this->Volreservation->find('first', $options));
 	}
 

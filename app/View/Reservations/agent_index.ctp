@@ -60,8 +60,6 @@ function dureeSejour($checkin_date, $checkout_date)
     <title>Dashboard Réservations</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
-        
-
         .stat-card {
             border-radius: 12px;
             height: 120px;
@@ -85,13 +83,13 @@ function dureeSejour($checkin_date, $checkout_date)
         }
 
         .stat-icon {
-    width: 45px;
-    height: 45px;
-    border-radius: 50%;
-    font-size: 1.2rem;
-    background-color: rgb(214 234 248);
-    color: #3498db;
-}
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            font-size: 1.2rem;
+            background-color: rgb(214 234 248);
+            color: #3498db;
+        }
 
         .table-akdital td {
             white-space: nowrap;
@@ -122,8 +120,9 @@ function dureeSejour($checkin_date, $checkout_date)
 
 
         }
-        .bg-info{
-                background-color: rgb(214 234 248) !important;
+
+        .bg-info {
+            background-color: rgb(214 234 248) !important;
         }
     </style>
 </head>
@@ -223,18 +222,18 @@ function dureeSejour($checkin_date, $checkout_date)
             <h1 class="main-title">Répartition par Site</h1>
             <div class="row">
                 <?php foreach ($sites_stats as $site => $stats): ?>
-                    <div class="col-md-4">
+                    <div class="col-md-6">
                         <div class="card view-card border-1 h-100">
                             <div class="stats-card card-body d-flex align-items-center justify-content-between p-3">
                                 <div class="d-flex flex-column">
                                     <div class="stats-number mb-1" style="font-size: 17px;; font-weight: 600; line-height: 1;">
-                                       <?php echo $site; ?>
+                                        <?php echo $site; ?>
                                     </div>
                                     <div class="stats-label mb-0" style="font-size: 0.95rem; font-weight: 400; line-height: 1.3;">
                                         <strong style="font-size: 1.2rem;"><?php echo $stats['total']; ?></strong> <span class="stats-label mb-0 text-muted"> total</span><br>
-                                        <span class="stats-label mb-0 text-muted"><?php echo $stats['valide']; ?> validées</span> -
-                                        <span class="stats-label mb-0 text-muted"><?php echo $stats['En cours']; ?> en cours</span> -
-                                        <span class="stats-label mb-0 text-muted"><?php echo $stats['refuse']; ?> refusées</span>
+                                        <span class="badge stats-label mb-0 text-muted"><?php echo $stats['valide']; ?> validées</span>
+                                        <span class="badge stats-label mb-0 text-muted"><?php echo $stats['En cours']; ?> en cours</span>
+                                        <span class=" badge stats-label mb-0 text-muted"><?php echo $stats['refuse']; ?> refusées</span>
                                     </div>
                                 </div>
                                 <div class="stat-icon d-flex align-items-center justify-content-center flex-shrink-0">
@@ -290,9 +289,15 @@ function dureeSejour($checkin_date, $checkout_date)
                     ?>
                     <tr>
                         <td><strong><?php echo $reservation['User']['nom']; ?></strong></td>
-                        <td><?php echo $hotels[$reservation['Chambre']['hotel_id']]; ?></td>
+                        <td>
+                            <?php
+                            $hotelId = $reservation['Chambre']['hotel_id'];
+                            echo isset($hotels[$hotelId]) ? $hotels[$hotelId] : '';
+                            ?>
+                        </td>
+
                         <td><?php echo $reservation['Chambre']['nom']; ?></td>
-                        <td><i class="fas fa-map-marker-alt me-1"></i><?php echo $reservation['Site']['site']; ?></td>
+                        <td><?php echo $reservation['Site']['site']; ?></td>
                         <td><?php echo date('d/m/Y', strtotime($reservation['Reservation']['checkin'])); ?></td>
                         <td><?php echo date('d/m/Y', strtotime($reservation['Reservation']['checkout'])); ?></td>
                         <td>
@@ -309,7 +314,7 @@ function dureeSejour($checkin_date, $checkout_date)
                         <td>
                             <span class="badge bg-info text-dark"><?php echo $duree_sejour; ?> jour<?php echo $duree_sejour > 1 ? 's' : ''; ?></span>
                         </td>
-                        <td><code><?php echo $reservation['Reservation']['num_odm']; ?></code></td>
+                        <td> <span class="badge"><?php echo $reservation['Reservation']['num_odm']; ?></span></td>
                         <td>
                             <?php
                             switch ($reservation['Reservation']['etat']) {

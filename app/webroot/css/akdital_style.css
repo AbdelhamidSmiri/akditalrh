@@ -25,7 +25,7 @@
 }
 
         .status-btn i {
-            font-size: 0.9rem;
+            font-size: 11px;
         }
 
         /* Each status must have its own class defined */
@@ -1081,7 +1081,21 @@ textarea {
 .input.text.has-calendar-icon input.flatpickr-input {
 	padding-right: 30px;
 }
+td {
+  white-space: nowrap;
+}
 
+.badge{
+	background-color: #E9F3FF;
+    color: #1B84FF;
+    display: inline-flex
+;
+    align-items: center;
+    padding: 5px 14px;
+    border-radius: 7px;
+    font-size: 12px;
+    font-weight: 500;
+}
 /* start badge-primary style  */
 
 .badge-primary-rounded {

@@ -262,6 +262,36 @@
 	color: #ffffff;
 }
 
+.btn-success-rounded {
+	background-color: #3E875E;
+
+	border-color: #3E875E;
+
+	color: #ffffff;
+
+	font-weight: 400;
+
+	font-size: 14px;
+
+	padding: 8px 16px;
+
+	border-radius: 25px;
+
+	margin-left: 12px !important;
+
+	border-bottom-left-radius: 25px !important;
+
+	border-top-left-radius: 25px !important;
+}
+
+.btn-success-rounded:hover {
+	background-color: #000000;
+
+	border-color: #000000;
+
+	color: #ffffff;
+}
+
 .rounded_icon {
 	border-radius: 50%;
 

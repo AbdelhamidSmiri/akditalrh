@@ -15,15 +15,15 @@
 <div class="volreservations view">
 
 	<div class="col-md-12 little-title-section">
-		<span class="little-title">Détail de reservation de vol</span>
-		<div class="actions">
+		<span class="little-title">Informations générales</span>
+		<div class="actions_right">
 			<?php if (AuthComponent::user('Role.role') == 'Agence' && $volreservation["Volreservation"]["etat"] == "En cours"): ?>
-				<button href="<?php echo $this->Html->url(array('controller' => 'Volreservations', 'action' => 'agence_valide', $volreservation['Volreservation']['id'])); ?>"
-					class="btn btn-primary-rounded"> Valider</button>
+				<a href="<?php echo $this->Html->url(array('controller' => 'Volreservations', 'action' => 'agence_valide', $volreservation['Volreservation']['id'])); ?>"
+					class="btn btn-success-rounded">Marquer comme validée</a>
 			<?php endif; ?>
 
 			<?php if ($volreservation["Volreservation"]["etat"] == "En cours"): ?>
-				<button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#archiveModal">
+				<button type="button" class="btn btn-secondary-rounded" data-bs-toggle="modal" data-bs-target="#archiveModal">
 					Archiver
 				</button>
 			<?php endif; ?>

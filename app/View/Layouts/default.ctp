@@ -100,7 +100,7 @@
 						<button class="nav-link dropdown-toggle" type="button" data-bs-toggle="collapse"
 							data-bs-target="#reservationsDropdown" aria-expanded="false">
 							<?php echo $reservations_icon; ?>
-							Mes billets de vol
+							 Mes réservations de vol	
 						</button>
 						<div class="collapse" id="reservationsDropdown">
 							<div class="dropdown-menu show">
@@ -124,7 +124,7 @@
 						<button class="nav-link dropdown-toggle" type="button" data-bs-toggle="collapse"
 							data-bs-target="#commandesDropdown" aria-expanded="false">
 							<?php echo $bons_commande_icon; ?>
-							Mes reservations hotels
+							Mes Réservations Hôtelières
 						</button>
 						<div class="collapse" id="commandesDropdown">
 							<div class="dropdown-menu show">

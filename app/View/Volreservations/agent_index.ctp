@@ -63,9 +63,11 @@
 								echo '<span class="status-btn passe"><i class="fas fa-question-circle"></i> ' . htmlspecialchars($volreservation['Volreservation']['etat']) . '</span>';
 						}
 						?></td>
-					<td><?php
-						echo ($volreservation['Volreservation']['etat'] == 1) ? 'Oui' : 'Non';
+					<td>
+						<span>
+							<?php echo ($volreservation['Volreservation']['transfer'] == "1") ? 'Oui' : 'Non';
 						?>
+						</span>
 					</td>
 					<td class="actions">
 						<?php echo $this->Html->link(__('Voir'), array('action' => 'view', $volreservation['Volreservation']['id'])); ?>

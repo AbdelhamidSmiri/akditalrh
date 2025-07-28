@@ -125,24 +125,17 @@ function dureeSejour($checkin_date, $checkout_date)
         }
 
         .stat-icon {
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
-            font-size: 1.2rem;
-        }
-
-        .stat-card.dark .stat-icon {
-            background-color: rgba(56, 178, 172, 0.2);
-            color: #38b2ac;
-        }
-
-        .stat-card:not(.dark) .stat-icon {
-            background-color: rgba(96, 165, 250, 0.15);
-            color: #60a5fa;
-        }
-        .bg-info {
-    background-color: #0dcaf033 !important;
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    font-size: 1.2rem;
+    background-color: rgb(214 234 248);
+    color: #3498db;
 }
+
+       
+
+       
 
         .table-akdital td {
             white-space: nowrap;
@@ -173,6 +166,9 @@ function dureeSejour($checkin_date, $checkout_date)
 
 
         }
+        .bg-info{
+                background-color: rgb(214 234 248) !important;
+        }
     </style>
 </head>
 
@@ -192,13 +188,13 @@ function dureeSejour($checkin_date, $checkout_date)
     <!-- Statistiques Principales -->
     <div class="row g-3 justify-content-center mb-5">
         <div class="col-12 col-md-4 col-lg-3">
-            <div class="card stat-card dark border-0 h-100">
+            <div class="card view-card border-1 h-100">
                 <div class="stats-card card-body d-flex align-items-center justify-content-between p-3">
                     <div class="d-flex flex-column">
                         <div class="stats-number mb-1" style="font-size: 2.5rem; font-weight: 600; line-height: 1;">
                             <?php echo $total_reservations; ?>
                         </div>
-                        <div class="stats-label mb-0" style="font-size: 0.95rem; font-weight: 400; line-height: 1.3;">
+                        <div class="stats-label mb-0 text-muted" style="font-size: 0.95rem; font-weight: 400; line-height: 1.3;">
                             Total Réservations
                         </div>
                     </div>
@@ -212,14 +208,14 @@ function dureeSejour($checkin_date, $checkout_date)
             <div class="card view-card border-1 h-100">
                 <div class="stats-card card-body d-flex align-items-center justify-content-between p-3">
                     <div class="d-flex flex-column">
-                        <div class="stats-number text-warning mb-1" style="font-size: 2.5rem; font-weight: 600; line-height: 1;">
+                        <div class="stats-number mb-1" style="font-size: 2.5rem; font-weight: 600; line-height: 1;">
                             <?php echo $en_cours; ?>
                         </div>
                         <div class="stats-label mb-0 text-muted" style="font-size: 0.95rem; font-weight: 400; line-height: 1.3;">
                             En Cours
                         </div>
                     </div>
-                    <div class="stat-icon d-flex align-items-center justify-content-center flex-shrink-0" style="background-color: rgba(255, 193, 7, 0.15); color: #ffc107;">
+                    <div class="stat-icon d-flex align-items-center justify-content-center flex-shrink-0">
                         <i class="fas fa-clock"></i>
                     </div>
                 </div>
@@ -231,14 +227,14 @@ function dureeSejour($checkin_date, $checkout_date)
             <div class="card view-card border-1 h-100">
                 <div class="stats-card card-body d-flex align-items-center justify-content-between p-3">
                     <div class="d-flex flex-column">
-                        <div class="stats-number text-success mb-1" style="font-size: 2.5rem; font-weight: 600; line-height: 1;">
+                        <div class="stats-number mb-1" style="font-size: 2.5rem; font-weight: 600; line-height: 1;">
                             <?php echo $valide; ?>
                         </div>
                         <div class="stats-label mb-0 text-muted" style="font-size: 0.95rem; font-weight: 400; line-height: 1.3;">
                             Validées
                         </div>
                     </div>
-                    <div class="stat-icon d-flex align-items-center justify-content-center flex-shrink-0" style="background-color: rgba(25, 135, 84, 0.15); color: #198754;">
+                    <div class="stat-icon d-flex align-items-center justify-content-center flex-shrink-0">
                         <i class="fas fa-check-circle"></i>
                     </div>
                 </div>
@@ -250,14 +246,14 @@ function dureeSejour($checkin_date, $checkout_date)
             <div class="card view-card border-1 h-100">
                 <div class="stats-card card-body d-flex align-items-center justify-content-between p-3">
                     <div class="d-flex flex-column">
-                        <div class="stats-number text-danger mb-1" style="font-size: 2.5rem; font-weight: 600; line-height: 1;">
+                        <div class="stats-number  mb-1" style="font-size: 2.5rem; font-weight: 600; line-height: 1;">
                             <?php echo $refuse; ?>
                         </div>
                         <div class="stats-label mb-0 text-muted" style="font-size: 0.95rem; font-weight: 400; line-height: 1.3;">
                             Refusées
                         </div>
                     </div>
-                    <div class="stat-icon d-flex align-items-center justify-content-center flex-shrink-0" style="background-color: rgba(220, 53, 69, 0.15); color: #dc3545;">
+                    <div class="stat-icon d-flex align-items-center justify-content-center flex-shrink-0">
                         <i class="fas fa-times-circle"></i>
                     </div>
                 </div>
@@ -271,22 +267,22 @@ function dureeSejour($checkin_date, $checkout_date)
             <h1 class="main-title">Répartition par Site</h1>
             <div class="row">
                 <?php foreach ($sites_stats as $site => $stats): ?>
-                    <div class="col-12">
-                        <div class="card stat-card dark border-0 h-100">
+                    <div class="col-md-4">
+                        <div class="card view-card border-1 h-100">
                             <div class="stats-card card-body d-flex align-items-center justify-content-between p-3">
                                 <div class="d-flex flex-column">
                                     <div class="stats-number mb-1" style="font-size: 17px;; font-weight: 600; line-height: 1;">
-                                        <i class="fas fa-building me-2 text-primary"></i><?php echo $site; ?>
+                                       <?php echo $site; ?>
                                     </div>
                                     <div class="stats-label mb-0" style="font-size: 0.95rem; font-weight: 400; line-height: 1.3;">
-                                        <strong style="font-size: 1.2rem;"><?php echo $stats['total']; ?></strong> total<br>
-                                        <span class="text-success"><?php echo $stats['valide']; ?> validées</span> -
-                                        <span class="text-warning"><?php echo $stats['En cours']; ?> en cours</span> -
-                                        <span class="text-danger"><?php echo $stats['refuse']; ?> refusées</span>
+                                        <strong style="font-size: 1.2rem;"><?php echo $stats['total']; ?></strong> <span class="stats-label mb-0 text-muted"> total</span><br>
+                                        <span class="stats-label mb-0 text-muted"><?php echo $stats['valide']; ?> validées</span> -
+                                        <span class="stats-label mb-0 text-muted"><?php echo $stats['En cours']; ?> en cours</span> -
+                                        <span class="stats-label mb-0 text-muted"><?php echo $stats['refuse']; ?> refusées</span>
                                     </div>
                                 </div>
                                 <div class="stat-icon d-flex align-items-center justify-content-center flex-shrink-0">
-                                    <i class="fas fa-chart-pie fa-2x"></i>
+                                    <i class="fas fa-chart-pie"></i>
                                 </div>
                             </div>
                         </div>
@@ -359,9 +355,9 @@ function dureeSejour($checkin_date, $checkout_date)
                         </td>
                         <td><code><?php echo $reservation['Reservation']['num_odm']; ?></code></td>
                         <td>
-                            <?php 
+                            <?php
                             switch ($reservation['Reservation']['etat']) {
-                               
+
                                 case 'En cours':
                                     echo '<span class="status-btn in-progress"><i class="fas fa-clock"></i> En cours</span>';
                                     break;

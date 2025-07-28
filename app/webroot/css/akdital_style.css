@@ -1051,6 +1051,9 @@ textarea {
 .input.text.has-calendar-icon input.flatpickr-input {
 	padding-right: 30px;
 }
+td {
+  white-space: nowrap;
+}
 
 .badge{
 	background-color: #E9F3FF;
@@ -1058,7 +1061,7 @@ textarea {
     display: inline-flex
 ;
     align-items: center;
-    padding: 3px 12px;
+    padding: 5px 14px;
     border-radius: 7px;
     font-size: 12px;
     font-weight: 500;

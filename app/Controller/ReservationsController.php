@@ -43,8 +43,8 @@ class ReservationsController extends AppController
 	 */
 	public function agent_index()
 	{
-		$pageSubtitle = "Consulter les réservations des hôtels";
-		$title_for_layout = "Réservations d'hôtel";
+		$pageSubtitle = "Consulter les réservations hôtelières";
+		$title_for_layout = "Gestion des Réservations Hôtelières";
 				
 		$reservations = $this->Reservation->find("all", array(
 			'conditions' => array('Reservation.user_id' => AuthComponent::user("id"))

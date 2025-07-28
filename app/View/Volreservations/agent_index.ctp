@@ -44,26 +44,29 @@
 					<td><?php echo $volreservation['Volreservation']['message']; ?></td>
 					<td><?php echo $volreservation['Volreservation']['created']; ?></td>
 					<td><?php
-				
-                            switch ($volreservation['Volreservation']['etat']) {
 
-                                case 'En cours':
-                                    echo '<span class="status-btn in-progress"><i class="fas fa-clock"></i> En cours</span>';
-                                    break;
-                                case 'Validé':
-                                    echo '<span class="status-btn confirmed"><i class="fas fa-check-circle"></i> Validé</span>';
-                                    break;
-                                case 'refusée':
-                                    echo '<span class="status-btn refused"><i class="fas fa-times-circle"></i> Refusée</span>';
-                                    break;
-                                case 'passe':
-                                    echo '<span class="status-btn passe"><i class="fas fa-calendar-times"></i> Passé</span>';
-                                    break;
-                                default:
-                                    echo '<span class="status-btn passe"><i class="fas fa-question-circle"></i> ' . htmlspecialchars($volreservation['Volreservation']['etat']) . '</span>';
-                            }
-                            ?></td>
-					<td><?php echo $volreservation['Volreservation']['transfer']; ?></td>
+						switch ($volreservation['Volreservation']['etat']) {
+
+							case 'En cours':
+								echo '<span class="status-btn in-progress"><i class="fas fa-clock"></i> En cours</span>';
+								break;
+							case 'Validé':
+								echo '<span class="status-btn confirmed"><i class="fas fa-check-circle"></i> Validé</span>';
+								break;
+							case 'refusée':
+								echo '<span class="status-btn refused"><i class="fas fa-times-circle"></i> Refusée</span>';
+								break;
+							case 'passe':
+								echo '<span class="status-btn passe"><i class="fas fa-calendar-times"></i> Passé</span>';
+								break;
+							default:
+								echo '<span class="status-btn passe"><i class="fas fa-question-circle"></i> ' . htmlspecialchars($volreservation['Volreservation']['etat']) . '</span>';
+						}
+						?></td>
+					<td><?php
+						echo ($volreservation['Volreservation']['etat'] == 1) ? 'Oui' : 'Non';
+						?>
+					</td>
 					<td class="actions">
 						<?php echo $this->Html->link(__('Voir'), array('action' => 'view', $volreservation['Volreservation']['id'])); ?>
 					</td>
@@ -74,4 +77,3 @@
 </div>
 
 </div>
-

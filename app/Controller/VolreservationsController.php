@@ -33,16 +33,28 @@ class VolreservationsController extends AppController
 
 	function agent_index()
 	{
+		$title_for_layout = "Réservations vols";
+		$pageSubtitle = "Consulter les réservations vols";
+
+
 		$this->set('volreservations', $this->Volreservation->find("all", array(
 			'conditions' => array('Volreservation.user_id' => AuthComponent::user("id"))
 		)));
+
+
+		$this->set(compact("pageSubtitle", 'title_for_layout'));
 	}
 
 	function agence_index()
 	{
-		$this->set('volreservations', $this->Volreservation->find("all", array(
+
+		$volreservations = $this->Volreservation->find("all", array(
 			'conditions' => array('Volreservation.etat' => "En cours")
-		)));
+		));
+
+		$this->set('title_for_layout', 'Réservations d\'hôtel'); // for <h2>
+		$this->set('pageSubtitle', 'Consulter les réservations des hôtels'); // for <p>
+		$this->set(compact('volreservations'));
 	}
 
 

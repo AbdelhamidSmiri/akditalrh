@@ -43,12 +43,15 @@ class ReservationsController extends AppController
 	 */
 	public function agent_index()
 	{
+		$pageSubtitle = "Consulter les réservations des hôtels";
+		$title_for_layout = "Réservations d'hôtel";
+				
 		$reservations = $this->Reservation->find("all", array(
 			'conditions' => array('Reservation.user_id' => AuthComponent::user("id"))
 		));
 		$this->loadModel("Hotel");
 		$hotels = $this->Hotel->find("list");
-		$this->set(compact("hotels", "reservations"));
+		$this->set(compact("hotels", "reservations","pageSubtitle",'title_for_layout'));
 	}
 
 

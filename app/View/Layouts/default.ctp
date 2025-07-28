@@ -173,7 +173,7 @@
 								); ?>
 								<?php echo $this->Html->link(
 									$demande_hotel_icon . ' Demandes d\'hôtel',
-									array('controller' => 'demandes', 'action' => 'add'),
+									array('controller' => 'reservations', 'action' => 'add'),
 									array('class' => 'dropdown-item', 'escape' => false)
 								); ?>
 							</div>
@@ -339,7 +339,9 @@
 					<div>
 						<h2 class="title-page"><?php echo $this->fetch('title'); ?></h2>
 						<p class="slogan">
-							<?php echo isset($pageSubtitle) ? $pageSubtitle : 'Consultez et gérez les informations du système.'; ?>
+							<?php 
+							
+							echo isset($pageSubtitle) ? $pageSubtitle : 'Consultez et gérez les informations du système.'; ?>
 						</p>
 					</div>
 					<!-- User Profile -->

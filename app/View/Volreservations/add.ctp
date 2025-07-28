@@ -84,7 +84,8 @@
 					</div>
 					<div class='col-12 mt-5'>
 						<label class="control control--checkbox">Je veux un transfert
-							<input type="checkbox" name="data[Volreservation][transfer]" />
+							<input type="hidden" name="data[Volreservation][transfer]" id="transferValue" value="" />
+							<input type="checkbox" id="transferCheckbox" />
 							<div class="control__indicator"></div>
 						</label>
 					</div>
@@ -288,6 +289,12 @@
 			behavior: 'smooth'
 		});
 	});
+
+
+	document.getElementById('transferCheckbox').addEventListener('change', function() {
+		document.getElementById('transferValue').value = this.checked ? '1' : '';
+	});
+
 	// Handle the form submission
 	document.querySelector('.volreservations form').addEventListener('submit', function(event) {
 		event.preventDefault(); // Prevent the default form submission

@@ -314,7 +314,7 @@ function dureeSejour($checkin_date, $checkout_date)
                         <td>
                             <span class="badge bg-info text-dark"><?php echo $duree_sejour; ?> jour<?php echo $duree_sejour > 1 ? 's' : ''; ?></span>
                         </td>
-                        <td> <span class="badge"><?php echo $reservation['Reservation']['num_odm']; ?></span></td>
+                        <td> <span class="badge bg-info text-dark"><?php echo $reservation['Reservation']['num_odm']; ?></span></td>
                         <td>
                             <?php
                             switch ($reservation['Reservation']['etat']) {

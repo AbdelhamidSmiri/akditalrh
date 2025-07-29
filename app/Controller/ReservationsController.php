@@ -57,10 +57,13 @@ class ReservationsController extends AppController
 
 	public function index()
 	{
+		$pageSubtitle = "Consulter les réservations hôtelières";
+		$title_for_layout = "Gestion des Réservations Hôtelières";
 		$reservations = $this->Reservation->find("all");
 		$this->loadModel("Hotel");
 		$hotels = $this->Hotel->find("list");
-		$this->set(compact("hotels", "reservations"));
+				$this->set(compact("hotels", "reservations", "pageSubtitle", 'title_for_layout'));
+
 	}
 
 	/**

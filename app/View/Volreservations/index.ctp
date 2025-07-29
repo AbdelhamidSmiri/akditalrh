@@ -15,25 +15,17 @@
 	<table class="table table-akdital">
 		<thead>
 			<tr>
-				<th>user_id</th>
+				<th>Utilisateur</th>
 				<th>site</th>
-				<th>depart</th>
 				<th>destination</th>
 				<th>date_aller</th>
 				<th>date_retour</th>
 				<th>num_odm</th>
-				<th>ordre_mission</th>
-				<th>cin</th>
-				<th>passport</th>
 				<th>message</th>
-				<th>created</th>
 				<th>etat</th>
-				<th>documents</th>
 				<th>reponse</th>
 				<th>date_reponse</th>
 				<th>num_vol</th>
-				<th>file_aller</th>
-				<th>file_retour</th>
 				<th>transfer</th>
 				<th>nom_transfer</th>
 				<th>date_transfer</th>
@@ -46,29 +38,32 @@
 			<?php foreach ($volreservations as $volreservation): ?>
 				<tr>
 					<td>
-						<?php echo $this->Html->link($volreservation['User']['nom'], array('controller' => 'users', 'action' => 'view', $volreservation['User']['id'])); ?>
+						<?php echo $volreservation['User']['nom'] ?>
 					</td>
 					<td>
-						<?php echo $this->Html->link($volreservation['Site']['id'], array('controller' => 'sites', 'action' => 'view', $volreservation['Site']['id'])); ?>
+						<?php echo $volreservation['Site']['site']; ?>
 					</td>
-					<td><?php echo $volreservation['Volreservation']['depart']; ?></td>
-					<td><?php echo $volreservation['Volreservation']['destination']; ?></td>
+					<td>
+						<div>
+							<span><?php echo h($volreservation['Volreservation']['depart']); ?></span>
+							<i class="fa-solid fa-arrow-right"></i>
+							<span><?php echo h($volreservation['Volreservation']['destination']); ?></span>
+						</div>
+					</td>
 					<td><?php echo $volreservation['Volreservation']['date_aller']; ?></td>
 					<td><?php echo $volreservation['Volreservation']['date_retour']; ?></td>
 					<td><?php echo $volreservation['Volreservation']['num_odm']; ?></td>
-					<td><?php echo $volreservation['Volreservation']['ordre_mission']; ?></td>
-					<td><?php echo $volreservation['Volreservation']['cin']; ?></td>
-					<td><?php echo $volreservation['Volreservation']['passport']; ?></td>
 					<td><?php echo $volreservation['Volreservation']['message']; ?></td>
-					<td><?php echo $volreservation['Volreservation']['created']; ?></td>
 					<td><?php echo $volreservation['Volreservation']['etat']; ?></td>
-					<td><?php echo $volreservation['Volreservation']['documents']; ?></td>
 					<td><?php echo $volreservation['Volreservation']['reponse']; ?></td>
 					<td><?php echo $volreservation['Volreservation']['date_reponse']; ?></td>
 					<td><?php echo $volreservation['Volreservation']['num_vol']; ?></td>
-					<td><?php echo $volreservation['Volreservation']['file_aller']; ?></td>
-					<td><?php echo $volreservation['Volreservation']['file_retour']; ?></td>
-					<td><?php echo $volreservation['Volreservation']['transfer']; ?></td>
+					
+					<td>
+					<span class="badge badge-transfer">
+							<?php echo ($volreservation['Volreservation']['transfer'] == "1") ? 'Oui' : 'Non';
+						?>
+						</span></td>
 					<td><?php echo $volreservation['Volreservation']['nom_transfer']; ?></td>
 					<td><?php echo $volreservation['Volreservation']['date_transfer']; ?></td>
 					<td><?php echo $volreservation['Volreservation']['tel_transfer']; ?></td>

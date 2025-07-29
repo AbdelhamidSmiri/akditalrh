@@ -47,7 +47,7 @@
 					<td><?php echo $volreservation['Volreservation']['message']; ?></td>
 					<td><?php echo $volreservation['Volreservation']['created']; ?></td>
 					<td class="actions">
-						<?php echo $this->Html->link(__('View'), array('action' => 'view', $volreservation['Volreservation']['id'])); ?>
+						<?php echo $this->Html->link(__('Voir'), array('action' => 'view', $volreservation['Volreservation']['id'])); ?>
 					</td>
 				</tr>
 			<?php endforeach; ?>

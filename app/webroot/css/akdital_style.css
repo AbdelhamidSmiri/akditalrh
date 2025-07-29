@@ -1152,3 +1152,14 @@ td {
 	padding: 4px 8px;
 	margin-left: 0px !important;
 }
+
+.img_deactive {
+	display: none;
+}
+
+.lightgallery a {
+	text-decoration: none;
+	color: #1e2c5a;
+	font-weight: 500;
+	font-size: 16px;
+}

@@ -113,16 +113,12 @@ class AppartementsController extends AppController
 	public function add()
 	{
 		if ($this->request->is('post')) {
-			$images = "";
-			foreach ($this->request->data['image'] as $key => $image) {
-				$outils = new OutilsController;
-				$uploadedImage = $outils->uploadFile('appartements', $image);
-				if ($uploadedImage) {
-					$images .= $uploadedImage . ';';
-				}
-			}
-			$images = rtrim($images, ';');
-			$this->request->data['Appartement']['images'] = $images;
+
+			$images = $this->request->data['Appartement']['images'];
+			$outils = new OutilsController;
+			$uploadedImage = $outils->uploadFiles('reservations', $images);
+			$this->request->data['Appartement']['images'] = json_encode($images);
+
 			$this->Appartement->create();
 			if ($this->Appartement->save($this->request->data)) {
 				$this->Session->setFlash(
@@ -142,7 +138,7 @@ class AppartementsController extends AppController
 			}
 		}
 		$villes = $this->Appartement->Ville->find('list');
-		$this->set(compact("ville"));
+		$this->set(compact("villes"));
 	}
 
 	/**
@@ -160,20 +156,12 @@ class AppartementsController extends AppController
 
 		if ($this->request->is(array('post', 'put'))) {
 			// Handle image uploads
-			if (!empty($this->request->data['Appartement']['image'][0]['name'])) {
+			if (!empty($this->request->data['Appartement']['images'][0]['name'])) {
 				$appt = $this->Appartement->findById($id);
-				$images = $appt['Appartement']['images'];
-				foreach ($this->request->data['Appartement']['image'] as $key => $image) {
-					if (!empty($image['name'])) {
-						$outils = new OutilsController;
-						$uploadedImage = $outils->uploadFile('appartements', $image);
-						if ($uploadedImage) {
-							$images .= $uploadedImage . ';';
-						}
-					}
-				}
-				$images = rtrim($images, ';');
-				$this->request->data['Appartement']['images'] = $images;
+				$images = $this->request->data['Appartement']['images'];
+				$outils = new OutilsController;
+				$uploadedImage = $outils->uploadFiles('reservations', $images);
+				$this->request->data['Appartement']['images'] = json_encode($images);
 			} else {
 				// Keep existing images if no new ones uploaded
 				unset($this->request->data['Appartement']['images']);
@@ -200,7 +188,7 @@ class AppartementsController extends AppController
 			$this->request->data = $this->Appartement->findById($id);
 		}
 		$villes = $this->Appartement->Ville->find('list');
-		$this->set(compact("ville"));
+		$this->set(compact("villes"));
 	}
 
 	/**

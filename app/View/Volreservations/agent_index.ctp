@@ -64,7 +64,7 @@
 						}
 						?></td>
 					<td>
-						<span class="badge">
+						<span class="badge badge-transfer">
 							<?php echo ($volreservation['Volreservation']['transfer'] == "1") ? 'Oui' : 'Non';
 						?>
 						</span>

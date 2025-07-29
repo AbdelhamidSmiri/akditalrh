@@ -15,15 +15,15 @@
 <div class="volreservations view">
 
 	<div class="col-md-12 little-title-section">
-		<span class="little-title">Détail de reservation de vol</span>
-		<div class="actions">
+		<span class="little-title">Informations générales</span>
+		<div class="actions_right">
 			<?php if (AuthComponent::user('Role.role') == 'Agence' && $volreservation["Volreservation"]["etat"] == "En cours"): ?>
-				<button href="<?php echo $this->Html->url(array('controller' => 'Volreservations', 'action' => 'agence_valide', $volreservation['Volreservation']['id'])); ?>"
-					class="btn btn-primary-rounded"> Valider</button>
+				<a href="<?php echo $this->Html->url(array('controller' => 'Volreservations', 'action' => 'agence_valide', $volreservation['Volreservation']['id'])); ?>"
+					class="btn btn-success-rounded">Marquer comme validée</a>
 			<?php endif; ?>
 
 			<?php if ($volreservation["Volreservation"]["etat"] == "En cours"): ?>
-				<button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#archiveModal">
+				<button type="button" class="btn btn-secondary-rounded" data-bs-toggle="modal" data-bs-target="#archiveModal">
 					Archiver
 				</button>
 			<?php endif; ?>
@@ -220,7 +220,26 @@
 						<div class="col-md-3">
 							<div class="info">
 								<label>État</label>
-								<span><?php echo h($volreservation['Volreservation']['etat']); ?></span>
+								<?php
+
+								switch ($volreservation['Volreservation']['etat']) {
+
+									case 'En cours':
+										echo '<span class="status-btn in-progress"><i class="fas fa-clock"></i> En cours</span>';
+										break;
+									case 'Validé':
+										echo '<span class="status-btn confirmed"><i class="fas fa-check-circle"></i> Validé</span>';
+										break;
+									case 'refusée':
+										echo '<span class="status-btn refused"><i class="fas fa-times-circle"></i> Refusée</span>';
+										break;
+									case 'passe':
+										echo '<span class="status-btn passe"><i class="fas fa-calendar-times"></i> Passé</span>';
+										break;
+									default:
+										echo '<span class="status-btn passe"><i class="fas fa-question-circle"></i> ' . htmlspecialchars($volreservation['Volreservation']['etat']) . '</span>';
+								}
+								?>
 							</div>
 						</div>
 					<?php endif; ?>
@@ -319,7 +338,11 @@
 						<div class="col-md-3">
 							<div class="info">
 								<label>Transfert</label>
-								<span><?php echo h($volreservation['Volreservation']['transfer']); ?></span>
+								<span class="badge badge-transfer">
+									<?php echo ($volreservation['Volreservation']['transfer'] == "1") ? 'Oui' : 'Non';
+									?>
+								</span>
+
 							</div>
 						</div>
 					<?php endif; ?>

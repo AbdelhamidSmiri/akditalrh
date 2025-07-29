@@ -153,11 +153,15 @@ class VolreservationsController extends AppController
 
 	/**
 	 * add method
-	 *
+	 *demandes de vols
+
 	 * @return void
 	 */
 	public function add()
 	{
+		$title_for_layout = "Demandes de vols";
+		$pageSubtitle = "Complétez ce formulaire pour enregistrer une nouvelle demande de vol";
+
 		if ($this->request->is('post')) {
 			$this->Volreservation->create();
 			$this->Volreservation->data["Volreservation"]["user_id"] = AuthComponent::user("id");
@@ -185,6 +189,7 @@ class VolreservationsController extends AppController
 		}
 		$sites = $this->Volreservation->Site->find('list');
 		$this->set(compact('sites'));
+		$this->set(compact("pageSubtitle", 'title_for_layout'));
 	}
 
 	/**

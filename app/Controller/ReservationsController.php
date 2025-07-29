@@ -85,6 +85,8 @@ class ReservationsController extends AppController
 	 */
 	public function add($ville_id = 1)
 	{
+$title_for_layout = "Demande d’hôtel";
+		$pageSubtitle = "Soumettez une nouvelle demande de réservation d’hôtel.";
 
 		$this->loadModel('Hotel');
 		$this->Hotel->recursive = -1;
@@ -189,6 +191,8 @@ class ReservationsController extends AppController
 		$this->loadModel('Ville');
 		$villes = $this->Ville->find('list');
 		$this->set(compact('chambres', 'sites', "villes"));
+				$this->set(compact("pageSubtitle", 'title_for_layout'));
+
 	}
 
 	/**

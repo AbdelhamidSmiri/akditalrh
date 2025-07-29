@@ -161,21 +161,23 @@
 						<button class="nav-link dropdown-toggle" type="button" data-bs-toggle="collapse"
 							data-bs-target="#reservationsDropdown" aria-expanded="false">
 							<?php echo $reservations_icon; ?>
-							Réservations
+							Réservations de Vols
 						</button>
 						<div class="collapse" id="reservationsDropdown">
 							<div class="dropdown-menu show">
 								<?php echo $this->Html->link(
-									$billetterie_icon . 'Demandes de billets',
+									$billetterie_icon . 'Demande de vol',
 									array('controller' => 'volreservations', 'action' => 'add'),
 									array('class' => 'dropdown-item', 'escape' => false)
 
-								); ?>
-								<?php echo $this->Html->link(
-									$demande_hotel_icon . ' Demandes d\'hôtel',
-									array('controller' => 'reservations', 'action' => 'add'),
+								);
+								echo $this->Html->link(
+									$billetterie_icon .
+										' Réservations vols',
+									array('controller' => 'volreservations', 'action' => 'index'),
 									array('class' => 'dropdown-item', 'escape' => false)
-								); ?>
+								);
+								?>
 							</div>
 						</div>
 					</li>
@@ -185,16 +187,24 @@
 						<button class="nav-link dropdown-toggle" type="button" data-bs-toggle="collapse"
 							data-bs-target="#commandesDropdown" aria-expanded="false">
 							<?php echo $bons_commande_icon; ?>
-							Réservation d'hôtel
+							Réservations d’Hôtels
 						</button>
 						<div class="collapse" id="commandesDropdown">
 							<div class="dropdown-menu show">
-								<?php echo $this->Html->link(
-									$billetterie_icon .
-										' Liste des réservations',
+								<?php
+								echo $this->Html->link(
+									$demande_hotel_icon . 'Demande d’hôtel',
+									array('controller' => 'reservations', 'action' => 'add'),
+									array('class' => 'dropdown-item', 'escape' => false)
+								);
+								echo $this->Html->link(
+									$demande_hotel_icon .
+										' Réservations hôtel',
 									array('controller' => 'reservations', 'action' => 'index'),
 									array('class' => 'dropdown-item', 'escape' => false)
-								); ?>
+								);
+								?>
+
 							</div>
 						</div>
 					</li>

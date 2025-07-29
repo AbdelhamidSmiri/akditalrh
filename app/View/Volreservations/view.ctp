@@ -1,17 +1,5 @@
 <link href="https://cdn.jsdelivr.net/npm/lightgallery@2.7.1/css/lightgallery-bundle.min.css" rel="stylesheet" />
 
-<style>
-	.img_deactive {
-		display: none;
-	}
-
-	.lightgallery a {
-		text-decoration: none;
-		color: #1E2C5A;
-		font-weight: 500;
-		font-size: 16px;
-	}
-</style>
 <div class="volreservations view">
 
 	<div class="col-md-12 little-title-section">

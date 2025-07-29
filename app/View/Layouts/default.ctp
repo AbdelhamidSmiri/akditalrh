@@ -100,7 +100,7 @@
 						<button class="nav-link dropdown-toggle" type="button" data-bs-toggle="collapse"
 							data-bs-target="#reservationsDropdown" aria-expanded="false">
 							<?php echo $reservations_icon; ?>
-							 Réservations de Vols	
+							Réservations de Vols
 						</button>
 						<div class="collapse" id="reservationsDropdown">
 							<div class="dropdown-menu show">
@@ -336,20 +336,12 @@
 
 			<div class="page-header">
 				<div class="profile-header">
-					<div>
-						<h2 class="title-page"><?php echo $this->fetch('title'); ?></h2>
-						<p class="slogan">
-							<?php 
-							
-							echo isset($pageSubtitle) ? $pageSubtitle : 'Consultez et gérez les informations du système.'; ?>
-						</p>
-					</div>
 					<!-- User Profile -->
 					<div class="profile-card">
-						<div class="d-flex align-items-center">
+						<div class="d-flex align-items-center names_profile">
 							<div class="profile-avatar me-2">
 								<?php
-								$userInitials = 'ZD'; // Default fallback
+								$userInitials = 'Un'; // Default fallback
 								if (AuthComponent::user('nom')) {
 									$userName = AuthComponent::user('nom');
 									$userLastname = AuthComponent::user('prenom');
@@ -358,12 +350,12 @@
 								echo $userInitials;
 								?>
 							</div>
-							<div>
+							<div class="profile-infos">
 								<small class="name-profile">
 									<?php
 									echo AuthComponent::user('nom') . ' ' . AuthComponent::user('prenom');
 									?>
-								</small><br>
+								</small>
 								<small class="role-profile">
 									<?php
 									echo AuthComponent::user('Role.role');
@@ -373,6 +365,15 @@
 
 						</div>
 					</div>
+					<div>
+						<h2 class="title-page"><?php echo $this->fetch('title'); ?></h2>
+						<p class="slogan">
+							<?php
+
+							echo isset($pageSubtitle) ? $pageSubtitle : 'Consultez et gérez les informations du système.'; ?>
+						</p>
+					</div>
+
 				</div>
 			</div>
 
@@ -395,10 +396,12 @@
 	</div>
 
 	<!-- Mobile Menu Toggle (for responsive) -->
-	<button class="btn btn-primary d-md-none" id="sidebarToggle"
-		style="position: fixed; top: 1rem; left: 1rem; z-index: 1001;">
-		<i class="fas fa-bars"></i>
-	</button>
+	<div class="topmenu_mobile">
+		<button class="btn btn-menu d-md-none " id="sidebarToggle"
+			style="position: fixed; top: 1rem; left: 1rem; z-index: 1001;">
+			<i class="fas fa-bars"></i>
+		</button>
+	</div>
 
 	<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
 		integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p"

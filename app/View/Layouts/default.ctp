@@ -365,7 +365,7 @@
 
 						</div>
 					</div>
-					<div>
+					<div class="ms-2">
 						<h2 class="title-page"><?php echo $this->fetch('title'); ?></h2>
 						<p class="slogan">
 							<?php

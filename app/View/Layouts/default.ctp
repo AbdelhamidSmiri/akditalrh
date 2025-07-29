@@ -124,11 +124,7 @@
 						<button class="nav-link dropdown-toggle" type="button" data-bs-toggle="collapse"
 							data-bs-target="#commandesDropdown" aria-expanded="false">
 							<?php echo $bons_commande_icon; ?>
-<<<<<<< HEAD
 							Mes Réservations Hôtels
-=======
-							Réservations d’Hôtels
->>>>>>> 4f206ee264c9cdbff0c1c3ad60841ae619be62f3
 						</button>
 						<div class="collapse" id="commandesDropdown">
 							<div class="dropdown-menu show">

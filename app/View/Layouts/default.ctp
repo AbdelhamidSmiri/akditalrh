@@ -71,19 +71,19 @@
 							<div class="dropdown-menu show">
 								<?php echo $this->Html->link(
 									$billetterie_icon .
-										' Vols demander',
+										' Demandes de Vols',
 									array('controller' => 'volreservations', 'action' => 'agence_index'),
 									array('class' => 'dropdown-item', 'escape' => false)
 								);
 								echo $this->Html->link(
 									$hebergement_icon .
-										' Vols términer',
+										'Vols Terminés',
 									array('controller' => 'volreservations', 'action' => 'agence_valider'),
 									array('class' => 'dropdown-item', 'escape' => false)
 								);
 								echo $this->Html->link(
 									$hebergement_icon .
-										' Vols Annuler',
+										' Vols Annulés',
 									array('controller' => 'volreservations', 'action' => 'agence_annuler'),
 									array('class' => 'dropdown-item', 'escape' => false)
 								);

@@ -20,7 +20,7 @@ class VolreservationsController extends AppController
 
 		// Actions autorisées pour "agent"
 		if ($role !== ' Admin' && $role !== 'Agence') {
-			return in_array($this->action, ['agent_index','agence_index','index', "add", 'view', 'edit']);
+			return in_array($this->action, ['agent_index', 'agence_index', 'index', "add", 'view', 'edit']);
 		}
 
 		// Admin : accès à tout
@@ -48,7 +48,8 @@ class VolreservationsController extends AppController
 
 	function agence_index()
 	{
-
+		$title_for_layout = "Demandes de Vols";
+		$pageSubtitle = "Consultez les demandes de vols en cours de traitement";
 		$volreservations = $this->Volreservation->find("all", array(
 			'conditions' => array('Volreservation.etat' => "En cours"),
 			'order' => array('Volreservation.created' => 'DESC') // or any other field you want to sort by
@@ -57,21 +58,28 @@ class VolreservationsController extends AppController
 		$this->set('title_for_layout', 'Réservations d\'hôtel'); // for <h2>
 		$this->set('pageSubtitle', 'Consulter les réservations des hôtels'); // for <p>
 		$this->set(compact('volreservations'));
+		$this->set(compact("pageSubtitle", 'title_for_layout'));
 	}
 
 
 
 	function agence_valider()
 	{
+		$title_for_layout = "Vols Terminés";
+		$pageSubtitle = "Consultez l’historique des vols effectués";
 		$this->set('volreservations', $this->Volreservation->find("all", array(
 			'conditions' => array('Volreservation.etat' => "Validé")
 		)));
+		$this->set(compact("pageSubtitle", 'title_for_layout'));
 	}
 	function agence_annuler()
 	{
+		$title_for_layout = "Vols Annulés";
+		$pageSubtitle = "Consultez les réservations de vols annulées.";
 		$this->set('volreservations', $this->Volreservation->find("all", array(
 			'conditions' => array('Volreservation.etat' => "Annulé")
 		)));
+		$this->set(compact("pageSubtitle", 'title_for_layout'));
 	}
 	public function agence_view($id = null)
 	{

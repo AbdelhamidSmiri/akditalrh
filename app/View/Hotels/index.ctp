@@ -143,10 +143,16 @@
 <div class="d-grid row-gap-3">
 	<?php foreach ($hotels as $hotel): ?>
 		<div class="d-flex hotel-card">
-			<div class="image" style="background-image: url('<?php echo Router::url('/files/hotels/' . $hotel['Hotel']['images'], true); ?>');">
-			</div>
+			<?php
+			$width = "100%";
+			if (!empty($hotel['Hotel']['images'])) { ?>
+				<div class="image" style="background-image: url('<?php echo Router::url('/files/hotels/' . $hotel['Hotel']['images'], true); ?>');">
+				</div>
 
-			<div class="content-card">
+			<?php
+				$width = "58%";
+			} ?>
+			<div class="content-card" style="width:<?php echo $width; ?>;">
 				<div class="d-flex topcart">
 					<div class="head_card">
 						<h3 class="title-card">

@@ -223,7 +223,8 @@
 		flatpickr("#date_aller_input, #date_retour_input", {
 			dateFormat: "Y-m-d",
 			locale: "fr",
-			allowInput: true
+			allowInput: false,
+			disableMobile: true
 		});
 	});
 

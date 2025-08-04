@@ -8,7 +8,7 @@ $sites_stats = array();
 
 foreach ($reservations as $reservation) {
     // Comptage par statut
-    switch($reservation['Reservation']['etat']) {
+    switch ($reservation['Reservation']['etat']) {
         case 'En cours':
             $en_cours++;
             break;
@@ -19,24 +19,25 @@ foreach ($reservations as $reservation) {
             $refuse++;
             break;
     }
-    
+
     // Comptage par site
     $site = $reservation['Site']['site'];
     if (!isset($sites_stats[$site])) {
         $sites_stats[$site] = array('total' => 0, 'En cours' => 0, 'valide' => 0, 'refuse' => 0);
     }
     $sites_stats[$site]['total']++;
-	 if (!isset($sites_stats[$site][$reservation['Reservation']['etat']])) 
-		$sites_stats[$site][$reservation['Reservation']['etat']]=0;
+    if (!isset($sites_stats[$site][$reservation['Reservation']['etat']]))
+        $sites_stats[$site][$reservation['Reservation']['etat']] = 0;
     $sites_stats[$site][$reservation['Reservation']['etat']]++;
 }
 
 // Fonction pour calculer les jours restants
-function joursRestants($checkin_date) {
+function joursRestants($checkin_date)
+{
     $aujourd_hui = new DateTime();
     $checkin = new DateTime($checkin_date);
     $diff = $aujourd_hui->diff($checkin);
-    
+
     if ($checkin < $aujourd_hui) {
         return -1; // Déjà passé
     }
@@ -44,7 +45,8 @@ function joursRestants($checkin_date) {
 }
 
 // Fonction pour calculer la durée du séjour
-function dureeSejour($checkin_date, $checkout_date) {
+function dureeSejour($checkin_date, $checkout_date)
+{
     $checkin = new DateTime($checkin_date);
     $checkout = new DateTime($checkout_date);
     $diff = $checkin->diff($checkout);
@@ -52,191 +54,245 @@ function dureeSejour($checkin_date, $checkout_date) {
 }
 ?>
 
-<!DOCTYPE html>
-<html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard Réservations</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
-        body {
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-            min-height: 100vh;
-        }
-        
-        .table-akdital {
-            background: white;
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-        
-        .table-akdital thead {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-        }
-        
-        .table-akdital thead th {
-            border: none;
-            padding: 15px 12px;
-            font-weight: 600;
-        }
-        
-        .table-akdital tbody tr:hover {
-            background-color: #f8f9fa;
-        }
-        
-        .table-akdital tbody td {
-            padding: 12px;
-            vertical-align: middle;
-            border: none;
-        }
-        
-        .btn-primary-rounded {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border: none;
-            border-radius: 25px;
-            padding: 8px 20px;
+        .status-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 5px 12px;
+            border-radius: 999px;
+            font-size: 0.85rem;
             font-weight: 500;
+            color: #fff;
+            white-space: nowrap;
         }
-        
-        .stats-card {
-            background: white;
-            border-radius: 15px;
-            padding: 25px;
-            margin-bottom: 20px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
-            text-align: center;
-        }
-        
-        .stats-number {
-            font-size: 2.5rem;
-            font-weight: bold;
-            margin-bottom: 5px;
-        }
-        
-        .stats-label {
-            color: #6c757d;
+
+        .status-btn i {
             font-size: 0.9rem;
         }
-        
-        .badge-en-cours {
-            background-color: #fff3cd;
-            color: #856404;
-            padding: 5px 10px;
-            border-radius: 15px;
+
+        /* Each status must have its own class defined */
+        .status-btn.confirmed {
+            background-color: #2e7d32;
+            /* Green */
         }
-        
-        .badge-valide {
-            background-color: #d4edda;
-            color: #155724;
-            padding: 5px 10px;
-            border-radius: 15px;
+
+        .status-btn.in-progress {
+            background-color: #1e40af;
+            /* Blue */
         }
-        
-        .badge-refuse {
-            background-color: #f8d7da;
-            color: #721c24;
-            padding: 5px 10px;
-            border-radius: 15px;
+
+        .status-btn.refused {
+            background-color: #dc3545;
+            /* Red */
         }
-        
-        .jours-badge {
-            background: #667eea;
+
+        .status-btn.passe {
+            background-color: #6c757d;
+            /* Gray */
+        }
+
+        .status-btn.other {
+            background-color: #6c757d;
+            /* Default gray */
+        }
+
+        .stat-card {
+            border-radius: 12px;
+            height: 120px;
+        }
+
+        .stat-card.dark {
+            background-color: #2d3748;
             color: white;
-            padding: 4px 8px;
-            border-radius: 10px;
-            font-size: 0.8rem;
         }
-        
-        .jours-urgent {
-            background: #dc3545;
-            animation: pulse 2s infinite;
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 600;
+            line-height: 1;
         }
-        
-        @keyframes pulse {
-            0% { opacity: 1; }
-            50% { opacity: 0.7; }
-            100% { opacity: 1; }
+
+        .stat-label {
+            font-size: 0.95rem;
+            font-weight: 400;
+            line-height: 1.3;
         }
-        
-        .site-card {
-            background: white;
-            border-radius: 10px;
-            padding: 15px;
-            margin-bottom: 15px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+
+        .stat-icon {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            font-size: 1.2rem;
+        }
+
+        .stat-card.dark .stat-icon {
+            background-color: rgba(56, 178, 172, 0.2);
+            color: #38b2ac;
+        }
+
+        .stat-card:not(.dark) .stat-icon {
+            background-color: rgba(96, 165, 250, 0.15);
+            color: #60a5fa;
+        }
+        .bg-info {
+    background-color: #0dcaf033 !important;
+}
+
+        .table-akdital td {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .main-title {
+            color: #2c3e50;
+            font-size: 22px;
+            font-weight: 500;
+            margin-bottom: 0.75rem;
+            line-height: 1.2;
+        }
+
+        .subtitle {
+            color: #6c757d;
+            font-size: 1rem;
+            font-weight: 400;
+            margin-bottom: 0;
+            line-height: 1.5;
+        }
+
+        @media (max-width: 768px) {
+            .main-title {
+                font-size: 1.5rem;
+            }
+
+
         }
     </style>
 </head>
-<body>
+
 
 <div class="container-fluid py-4">
     <!-- Titre -->
-    <div class="row mb-4">
-        <div class="col-12 text-center">
-            <h1 style="color: #2c3e50; font-weight: 700;">
-                <i class="fas fa-chart-line me-3"></i>Dashboard Réservations
-            </h1>
+    <div class="header-section">
+
+        <div class="row">
+            <div class="col-12">
+                <h1 class="main-title">Dashboard Réservations</h1>
+            </div>
         </div>
+
     </div>
 
     <!-- Statistiques Principales -->
-    <div class="row mb-4">
-        <div class="col-md-3">
-            <div class="stats-card">
-                <div class="stats-number text-primary"><?php echo $total_reservations; ?></div>
-                <div class="stats-label">Total Réservations</div>
+    <div class="row g-3 justify-content-center mb-5">
+        <div class="col-12 col-md-4 col-lg-3">
+            <div class="card stat-card dark border-0 h-100">
+                <div class="stats-card card-body d-flex align-items-center justify-content-between p-3">
+                    <div class="d-flex flex-column">
+                        <div class="stats-number mb-1" style="font-size: 2.5rem; font-weight: 600; line-height: 1;">
+                            <?php echo $total_reservations; ?>
+                        </div>
+                        <div class="stats-label mb-0" style="font-size: 0.95rem; font-weight: 400; line-height: 1.3;">
+                            Total Réservations
+                        </div>
+                    </div>
+                    <div class="stat-icon d-flex align-items-center justify-content-center flex-shrink-0">
+                        <i class="fas fa-calendar-check"></i>
+                    </div>
+                </div>
             </div>
         </div>
-        <div class="col-md-3">
-            <div class="stats-card">
-                <div class="stats-number text-warning"><?php echo $en_cours; ?></div>
-                <div class="stats-label">En Cours</div>
+        <div class="col-12 col-md-4 col-lg-3">
+            <div class="card view-card border-1 h-100">
+                <div class="stats-card card-body d-flex align-items-center justify-content-between p-3">
+                    <div class="d-flex flex-column">
+                        <div class="stats-number text-warning mb-1" style="font-size: 2.5rem; font-weight: 600; line-height: 1;">
+                            <?php echo $en_cours; ?>
+                        </div>
+                        <div class="stats-label mb-0 text-muted" style="font-size: 0.95rem; font-weight: 400; line-height: 1.3;">
+                            En Cours
+                        </div>
+                    </div>
+                    <div class="stat-icon d-flex align-items-center justify-content-center flex-shrink-0" style="background-color: rgba(255, 193, 7, 0.15); color: #ffc107;">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                </div>
             </div>
         </div>
-        <div class="col-md-3">
-            <div class="stats-card">
-                <div class="stats-number text-success"><?php echo $valide; ?></div>
-                <div class="stats-label">Validées</div>
+
+        <!-- Card 6 - Validées -->
+        <div class="col-12 col-md-4 col-lg-3">
+            <div class="card view-card border-1 h-100">
+                <div class="stats-card card-body d-flex align-items-center justify-content-between p-3">
+                    <div class="d-flex flex-column">
+                        <div class="stats-number text-success mb-1" style="font-size: 2.5rem; font-weight: 600; line-height: 1;">
+                            <?php echo $valide; ?>
+                        </div>
+                        <div class="stats-label mb-0 text-muted" style="font-size: 0.95rem; font-weight: 400; line-height: 1.3;">
+                            Validées
+                        </div>
+                    </div>
+                    <div class="stat-icon d-flex align-items-center justify-content-center flex-shrink-0" style="background-color: rgba(25, 135, 84, 0.15); color: #198754;">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                </div>
             </div>
         </div>
-        <div class="col-md-3">
-            <div class="stats-card">
-                <div class="stats-number text-danger"><?php echo $refuse; ?></div>
-                <div class="stats-label">Refusées</div>
+
+        <!-- Card 7 - Refusées -->
+        <div class="col-12 col-md-4 col-lg-3">
+            <div class="card view-card border-1 h-100">
+                <div class="stats-card card-body d-flex align-items-center justify-content-between p-3">
+                    <div class="d-flex flex-column">
+                        <div class="stats-number text-danger mb-1" style="font-size: 2.5rem; font-weight: 600; line-height: 1;">
+                            <?php echo $refuse; ?>
+                        </div>
+                        <div class="stats-label mb-0 text-muted" style="font-size: 0.95rem; font-weight: 400; line-height: 1.3;">
+                            Refusées
+                        </div>
+                    </div>
+                    <div class="stat-icon d-flex align-items-center justify-content-center flex-shrink-0" style="background-color: rgba(220, 53, 69, 0.15); color: #dc3545;">
+                        <i class="fas fa-times-circle"></i>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
     <!-- Statistiques par Site -->
     <div class="row mb-4">
-        <div class="col-12">
-            <h4><i class="fas fa-map-marker-alt me-2"></i>Répartition par Site</h4>
+        <div class="col-12 ">
+            <h1 class="main-title">Répartition par Site</h1>
             <div class="row">
                 <?php foreach ($sites_stats as $site => $stats): ?>
-                <div class="col-md-4">
-                    <div class="site-card">
-                        <h6 style="color: #667eea; margin-bottom: 10px;">
-                            <i class="fas fa-building me-2"></i><?php echo $site; ?>
-                        </h6>
-                        <div class="row text-center">
-                            <div class="col-6">
-                                <strong style="font-size: 1.5rem;"><?php echo $stats['total']; ?></strong><br>
-                                <small class="text-muted">Total</small>
-                            </div>
-                            <div class="col-6">
-                                <div style="font-size: 0.9rem;">
-                                    <span class="text-success"><?php echo $stats['valide']; ?> validées</span><br>
-                                    <span class="text-warning"><?php echo $stats['En cours']; ?> en cours</span><br>
-                                    <span class="text-danger"><?php echo $stats['refuse']; ?> refusées</span>
+                    <div class="col-12">
+                        <div class="card stat-card dark border-0 h-100">
+                            <div class="stats-card card-body d-flex align-items-center justify-content-between p-3">
+                                <div class="d-flex flex-column">
+                                    <div class="stats-number mb-1" style="font-size: 17px;; font-weight: 600; line-height: 1;">
+                                        <i class="fas fa-building me-2 text-primary"></i><?php echo $site; ?>
+                                    </div>
+                                    <div class="stats-label mb-0" style="font-size: 0.95rem; font-weight: 400; line-height: 1.3;">
+                                        <strong style="font-size: 1.2rem;"><?php echo $stats['total']; ?></strong> total<br>
+                                        <span class="text-success"><?php echo $stats['valide']; ?> validées</span> -
+                                        <span class="text-warning"><?php echo $stats['En cours']; ?> en cours</span> -
+                                        <span class="text-danger"><?php echo $stats['refuse']; ?> refusées</span>
+                                    </div>
+                                </div>
+                                <div class="stat-icon d-flex align-items-center justify-content-center flex-shrink-0">
+                                    <i class="fas fa-chart-pie fa-2x"></i>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
+
+
                 <?php endforeach; ?>
             </div>
         </div>
@@ -289,7 +345,9 @@ function dureeSejour($checkin_date, $checkout_date) {
                         <td><?php echo date('d/m/Y', strtotime($reservation['Reservation']['checkout'])); ?></td>
                         <td>
                             <?php if ($jours_restants == -1): ?>
-                                <span class="jours-badge" style="background: #6c757d;">Passé</span>
+                                <span class="status-btn passe">
+                                    <i class="fas fa-calendar-times"></i> Passé
+                                </span>
                             <?php elseif ($jours_restants <= 3): ?>
                                 <span class="jours-badge jours-urgent"><?php echo $jours_restants; ?> jour<?php echo $jours_restants > 1 ? 's' : ''; ?></span>
                             <?php else: ?>
@@ -301,21 +359,26 @@ function dureeSejour($checkin_date, $checkout_date) {
                         </td>
                         <td><code><?php echo $reservation['Reservation']['num_odm']; ?></code></td>
                         <td>
-                            <?php
-                            switch($reservation['Reservation']['etat']) {
-                                case 'en-cours':
-                                    echo '<span class="badge-en-cours">⏳ En Cours</span>';
+                            <?php 
+                            switch ($reservation['Reservation']['etat']) {
+                               
+                                case 'En cours':
+                                    echo '<span class="status-btn in-progress"><i class="fas fa-clock"></i> En cours</span>';
                                     break;
-                                case 'valide':
-                                    echo '<span class="badge-valide">✓ Validée</span>';
+                                case 'acceptée':
+                                    echo '<span class="status-btn confirmed"><i class="fas fa-check-circle"></i> Confirmé</span>';
                                     break;
-                                case 'refuse':
-                                    echo '<span class="badge-refuse">✗ Refusée</span>';
+                                case 'refusée':
+                                    echo '<span class="status-btn refused"><i class="fas fa-times-circle"></i> Refusée</span>';
+                                    break;
+                                case 'passe':
+                                    echo '<span class="status-btn passe"><i class="fas fa-calendar-times"></i> Passé</span>';
                                     break;
                                 default:
-                                    echo $reservation['Reservation']['etat'];
+                                    echo '<span class="status-btn passe"><i class="fas fa-question-circle"></i> ' . htmlspecialchars($reservation['Reservation']['etat']) . '</span>';
                             }
                             ?>
+
                         </td>
                         <td><?php echo date('d/m/Y', strtotime($reservation['Reservation']['created'])); ?></td>
                         <td class="actions">
@@ -332,33 +395,30 @@ function dureeSejour($checkin_date, $checkout_date) {
 
 <!-- JavaScript simple pour la recherche -->
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    // Fonction de recherche simple
-    const searchInput = document.getElementById('search_input');
-    const searchBtn = document.querySelector('.search-btn');
-    
-    function rechercher() {
-        const terme = searchInput.value.toLowerCase();
-        const lignes = document.querySelectorAll('tbody tr');
-        
-        lignes.forEach(function(ligne) {
-            const texte = ligne.textContent.toLowerCase();
-            if (texte.includes(terme)) {
-                ligne.style.display = '';
-            } else {
-                ligne.style.display = 'none';
+    document.addEventListener('DOMContentLoaded', function() {
+        // Fonction de recherche simple
+        const searchInput = document.getElementById('search_input');
+        const searchBtn = document.querySelector('.search-btn');
+
+        function rechercher() {
+            const terme = searchInput.value.toLowerCase();
+            const lignes = document.querySelectorAll('tbody tr');
+
+            lignes.forEach(function(ligne) {
+                const texte = ligne.textContent.toLowerCase();
+                if (texte.includes(terme)) {
+                    ligne.style.display = '';
+                } else {
+                    ligne.style.display = 'none';
+                }
+            });
+        }
+
+        searchBtn.addEventListener('click', rechercher);
+        searchInput.addEventListener('keyup', function(e) {
+            if (e.key === 'Enter') {
+                rechercher();
             }
         });
-    }
-    
-    searchBtn.addEventListener('click', rechercher);
-    searchInput.addEventListener('keyup', function(e) {
-        if (e.key === 'Enter') {
-            rechercher();
-        }
     });
-});
 </script>
-
-</body>
-</html>

@@ -8,12 +8,17 @@ App::uses('AppController', 'Controller');
  */
 class VillesController extends AppController {
 
-/**
- * Components
- *
- * @var array
- */
-	public $components = array('Paginator');
+	public function isAuthorized($user)
+	{
+		// Exemples de rôle : agent, agence, admin
+		$role = AuthComponent::user('Role.role');
+		// Admin : accès à tout
+		if ($role === 'Admin') {
+			return true;
+		}
+		// Refus par défaut
+		return false;
+	}
 
 /**
  * index method
@@ -22,7 +27,7 @@ class VillesController extends AppController {
  */
 	public function index() {
 		$this->Ville->recursive = 0;
-		$this->set('villes', $this->Paginator->paginate());
+		$this->set('villes', $this->Ville->find("all"));
 	}
 
 /**

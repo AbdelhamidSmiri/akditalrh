@@ -13,7 +13,16 @@ class SitesController extends AppController {
  *
  * @var array
  */
-	public $components = array('Paginator');
+	public function isAuthorized($user)
+	{
+		// Exemples de rôle : agent, agence, admin
+		$role = AuthComponent::user('Role.role');
+		if ($role === 'Admin') {
+			return true;
+		}
+		// Refus par défaut
+		return false;
+	}
 
 /**
  * index method
@@ -22,7 +31,7 @@ class SitesController extends AppController {
  */
 	public function index() {
 		$this->Site->recursive = 0;
-		$this->set('sites', $this->Paginator->paginate());
+		$this->set('sites', $this->Site->find("all"));
 	}
 
 /**

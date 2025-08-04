@@ -19,12 +19,14 @@ class VolreservationsController extends AppController
 		}
 
 		// Actions autorisées pour "agent"
-		if ($role !== ' Admin' && $role !== 'Agence') {
+		if ($role !== 'Admin' && $role !== 'Agence') 
+		{
+			//echo "koko";exit();
 			return in_array($this->action, ['agent_index', "add", 'view', 'edit']);
 		}
 
 		// Admin : accès à tout
-		if ($role === 'admin') {
+		if ($role === 'Admin') {
 			return true;
 		}
 		// Refus par défaut

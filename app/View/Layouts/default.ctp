@@ -98,6 +98,23 @@
 				if (!in_array(AuthComponent::user("Role.role"), ['Agence', 'Admin'])): ?>
 					<li class="nav-item dropdown">
 						<button class="nav-link dropdown-toggle" type="button" data-bs-toggle="collapse"
+							data-bs-target="#commandesDropdown" aria-expanded="false">
+							<?php echo $bons_commande_icon; ?>
+							Dashboard
+						</button>
+						<div class="collapse" id="commandesDropdown">
+							<div class="dropdown-menu show">
+								<?php echo $this->Html->link(
+									$billetterie_icon .
+										'Dashboard',
+									array('controller' => 'users', 'action' => 'dashboard'),
+									array('class' => 'dropdown-item', 'escape' => false)
+								); ?>
+							</div>
+						</div>
+					</li>
+					<li class="nav-item dropdown">
+						<button class="nav-link dropdown-toggle" type="button" data-bs-toggle="collapse"
 							data-bs-target="#reservationsDropdown" aria-expanded="false">
 							<?php echo $reservations_icon; ?>
 							Mes billets de vol
@@ -105,13 +122,13 @@
 						<div class="collapse" id="reservationsDropdown">
 							<div class="dropdown-menu show">
 								<?php echo $this->Html->link(
-									'Créé une demande',
+									$demande_billet_icon . ' Créé une demande',
 									array('controller' => 'volreservations', 'action' => 'add'),
 									array('class' => 'dropdown-item', 'escape' => false)
 
 								); ?>
 								<?php echo $this->Html->link(
-									$demande_hotel_icon . 'Mes demandes',
+									$reservations_icon . 'Mes demandes',
 									array('controller' => 'volreservations', 'action' => 'agent_index'),
 									array('class' => 'dropdown-item', 'escape' => false)
 								); ?>
@@ -129,13 +146,13 @@
 						<div class="collapse" id="commandesDropdown">
 							<div class="dropdown-menu show">
 								<?php echo $this->Html->link(
-									'Demande d\'hôtel',
+									$demande_hotel_icon . 'Demande d\'hôtel',
 									array('controller' => 'reservations', 'action' => 'add'),
 									array('class' => 'dropdown-item', 'escape' => false)
 
 								);
 								echo $this->Html->link(
-									$demande_hotel_icon . 'Mes demandes d\'hôtel',
+									$bons_commande_icon . 'Mes demandes d\'hôtel',
 									array('controller' => 'reservations', 'action' => 'agent_index'),
 									array('class' => 'dropdown-item', 'escape' => false)
 								); ?>
@@ -166,7 +183,7 @@
 						<div class="collapse" id="reservationsDropdown">
 							<div class="dropdown-menu show">
 								<?php echo $this->Html->link(
-									'Demandes de billets',
+									$billetterie_icon . 'Demandes de billets',
 									array('controller' => 'volreservations', 'action' => 'add'),
 									array('class' => 'dropdown-item', 'escape' => false)
 
@@ -185,7 +202,7 @@
 						<button class="nav-link dropdown-toggle" type="button" data-bs-toggle="collapse"
 							data-bs-target="#commandesDropdown" aria-expanded="false">
 							<?php echo $bons_commande_icon; ?>
-							Résirvations Hôtels
+							Réservation d'hôtel
 						</button>
 						<div class="collapse" id="commandesDropdown">
 							<div class="dropdown-menu show">
@@ -251,7 +268,7 @@
 						</button>
 						<div class="collapse" id="appartementsDropdown">
 							<div class="dropdown-menu show">
-								<?php 
+								<?php
 								echo $this->Html->link(
 									'Disponibilités',
 									array('controller' => 'appartements', 'action' => 'index'),
@@ -261,8 +278,8 @@
 									'Recheche (asupprimer abdhamid)',
 									array('controller' => 'beneficiaires', 'action' => 'recherche'),
 									array('class' => 'dropdown-item')
-								); 
-								 echo $this->Html->link(
+								);
+								echo $this->Html->link(
 									'Affectations',
 									array('controller' => 'beneficiaires', 'action' => 'add'),
 									array('class' => 'dropdown-item')
@@ -280,7 +297,7 @@
 					<li class="nav-item dropdown">
 						<button class="nav-link dropdown-toggle" type="button" data-bs-toggle="collapse"
 							data-bs-target="#parametres" aria-expanded="false">
-							<i class="fas fa-building"></i>
+							<?php echo $parametres_icon; ?>
 							Paramètres
 						</button>
 						<div class="collapse" id="parametres">
@@ -306,13 +323,8 @@
 									array('class' => 'dropdown-item')
 								);
 								echo $this->Html->link(
-									'Gestion des hotels',
+									'Gestion des hôtels',
 									array('controller' => 'hotels', 'action' => 'index'),
-									array('class' => 'dropdown-item')
-								);
-								echo $this->Html->link(
-									'Gestion des chambres',
-									array('controller' => 'chambres', 'action' => 'index'),
 									array('class' => 'dropdown-item')
 								);
 								?>
@@ -424,19 +436,18 @@
 			// Add active class based on controller/action
 			document.querySelectorAll('.nav-link, .dropdown-item').forEach(link => {
 				const href = link.getAttribute('href');
-				const isCurrent =
-					href &&
-					href.includes(currentController) &&
-					(
-						href.includes(currentAction) ||
-						(currentAction === 'index' &&
-							(
-								href.endsWith('/' + currentController) ||
-								href.includes('/' + currentController + '/index')
-							)
-						)
-					);
-				if (isCurrent) {
+
+				if (!href) return;
+
+				// Use more precise matching with word boundaries
+				const controllerPattern = new RegExp('/' + currentController + '(/|$)');
+				const actionPattern = new RegExp('/' + currentAction + '(/|$)');
+
+				const hasControllerMatch = controllerPattern.test(href);
+				const hasActionMatch = actionPattern.test(href) ||
+					(currentAction === 'index' && href.endsWith('/' + currentController));
+
+				if (hasControllerMatch && hasActionMatch) {
 					link.classList.add('active');
 
 					// If it's a dropdown item, expand the parent dropdown
@@ -453,6 +464,7 @@
 					}
 				}
 			});
+
 
 			// Mobile sidebar toggle
 			const sidebarToggle = document.getElementById('sidebarToggle');

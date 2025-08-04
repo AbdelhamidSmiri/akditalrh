@@ -27,7 +27,21 @@
 	echo $this->Html->css('sidebar_styles');
 	?>
 
-
+	<style>
+		#loadingOverlay {
+			display: none;
+			position: fixed;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			background: rgba(255, 255, 255, 0.8);
+			z-index: 9999;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+		}
+	</style>
 </head>
 
 <body>
@@ -70,8 +84,7 @@
 						<div class="collapse" id="agence">
 							<div class="dropdown-menu show">
 								<?php echo $this->Html->link(
-									$billetterie_icon .
-										' Demandes de Vols',
+									'<i class="fa-regular fa-plus"></i> Demandes de Vols',
 									array('controller' => 'volreservations', 'action' => 'agence_index'),
 									array('class' => 'dropdown-item', 'escape' => false)
 								);
@@ -105,7 +118,7 @@
 						<div class="collapse" id="reservationsDropdown">
 							<div class="dropdown-menu show">
 								<?php echo $this->Html->link(
-									$demande_billet_icon . ' Demande de vol',
+									'<i class="fa-regular fa-plus me-2"></i>  Demande de vol',
 									array('controller' => 'volreservations', 'action' => 'add'),
 									array('class' => 'dropdown-item', 'escape' => false)
 
@@ -129,7 +142,7 @@
 						<div class="collapse" id="commandesDropdown">
 							<div class="dropdown-menu show">
 								<?php echo $this->Html->link(
-									$demande_hotel_icon . 'Demande d’hôtel',
+									'<i class="fa-regular fa-plus me-2"></i> Demande d’hôtel',
 									array('controller' => 'reservations', 'action' => 'add'),
 									array('class' => 'dropdown-item', 'escape' => false)
 
@@ -166,7 +179,7 @@
 						<div class="collapse" id="reservationsDropdown">
 							<div class="dropdown-menu show">
 								<?php echo $this->Html->link(
-									$billetterie_icon . 'Demande de vol',
+									'<i class="fa-regular fa-plus me-2"></i>  Demande de vol',
 									array('controller' => 'volreservations', 'action' => 'add'),
 									array('class' => 'dropdown-item', 'escape' => false)
 
@@ -193,7 +206,7 @@
 							<div class="dropdown-menu show">
 								<?php
 								echo $this->Html->link(
-									$demande_hotel_icon . 'Demande d’hôtel',
+									'<i class="fa-regular fa-plus me-2"></i> Demande d’hôtel',
 									array('controller' => 'reservations', 'action' => 'add'),
 									array('class' => 'dropdown-item', 'escape' => false)
 								);
@@ -332,7 +345,7 @@
 		<!-- Logout Button -->
 		<div class="sidebar-footer">
 			<?php echo $this->Html->link(
-				'<i class="fas fa-sign-out-alt"></i> Se déconnecter',
+				'<i class="fa-regular fa-arrow-right-from-bracket"></i> Se déconnecter',
 				array('controller' => 'users', 'action' => 'logout'),
 				array('class' => 'logout-btn', 'escape' => false)
 			); ?>
@@ -413,6 +426,11 @@
 		</button>
 	</div>
 
+	<!-- loading  -->
+	<div id="loadingOverlay" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:white; z-index:9999; justify-content:center; align-items:center;">
+		<img src="https://akdital.ma/wp-content/themes/docmet/images/loader3.svg" alt="Loading..." style="width:100px; height:100px;">
+	</div>
+
 	<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
 		integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p"
 		crossorigin="anonymous"></script>
@@ -481,6 +499,17 @@
 					}
 				});
 			}
+
+
+			// for loading svg 
+			const loader = document.getElementById('loadingOverlay');
+			if (loader) loader.style.display = 'none';
+
+		});
+
+		window.addEventListener('beforeunload', function() {
+			const loader = document.getElementById('loadingOverlay');
+			if (loader) loader.style.display = 'flex';
 		});
 	</script>
 </body>

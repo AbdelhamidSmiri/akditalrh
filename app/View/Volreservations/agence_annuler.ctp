@@ -17,7 +17,7 @@
 			<tr>
 				<th>Utilisateur</th>
 				<th>Site</th>
-				<th>depart</th>
+				
 				<th>destination</th>
 				<th>Date aller</th>
 				<th>Date retour</th>
@@ -35,14 +35,19 @@
 					<td>
 						<?php echo $volreservation['Site']['site']; ?>
 					</td>
-					<td><?php echo $volreservation['Volreservation']['depart']; ?></td>
-					<td><?php echo $volreservation['Volreservation']['destination']; ?></td>
+					<td>
+						<div>
+							<span><?php echo h($volreservation['Volreservation']['depart']); ?></span>
+							<i class="fa-solid fa-arrow-right"></i>
+							<span><?php echo h($volreservation['Volreservation']['destination']); ?></span>
+						</div>
+					</td>
 					<td><?php echo $volreservation['Volreservation']['date_aller']; ?></td>
 					<td><?php echo $volreservation['Volreservation']['date_retour']; ?></td>
 					<td><?php echo $volreservation['Volreservation']['message']; ?></td>
 					<td><?php echo $volreservation['Volreservation']['created']; ?></td>
 					<td class="actions">
-						<?php echo $this->Html->link(__('View'), array('action' => 'view', $volreservation['Volreservation']['id'])); ?>
+						<?php echo $this->Html->link(__('Voir'), array('action' => 'view', $volreservation['Volreservation']['id'])); ?>
 					</td>
 				</tr>
 			<?php endforeach; ?>

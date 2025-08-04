@@ -117,7 +117,7 @@ class HotelsController extends AppController
 			'group' => array('Hotel.ville'),
 			'recursive' => -1
 		));
-	
+
 		$this->set(compact('villes_hotel'));
 	}
 
@@ -134,7 +134,47 @@ class HotelsController extends AppController
 		if (!$this->Hotel->exists($id)) {
 			throw new NotFoundException(__('Invalid hotel'));
 		}
+
 		if ($this->request->is(array('post', 'put'))) {
+			// Get current hotel data to access existing images
+			$currentHotel = $this->Hotel->findById($id);
+			$existingImages = !empty($currentHotel['Hotel']['images']) ? $currentHotel['Hotel']['images'] : '';
+
+			// Handle deleted images
+			if (!empty($this->request->data['Hotel']['deleted_images'])) {
+				$deletedImages = explode(',', $this->request->data['Hotel']['deleted_images']);
+				$this->deleteImages($deletedImages);
+
+				// Remove deleted images from existing images list
+				if (!empty($existingImages)) {
+					$existingImagesArray = explode(',', $existingImages);
+					$existingImagesArray = array_diff($existingImagesArray, $deletedImages);
+					$existingImages = implode(',', array_filter($existingImagesArray));
+				}
+			}
+
+			// Handle new uploaded images
+			$newImages = '';
+			if (!empty($this->request->data['Hotel']['images']) && is_array($this->request->data['Hotel']['images'])) {
+				$uploadedImages = [];
+				foreach ($this->request->data['Hotel']['images'] as $file) {
+					if (is_array($file) && $file['error'] === 0) {
+						$uploadedImage = $this->uploadFile('hotels', $file);
+						if ($uploadedImage) {
+							$uploadedImages[] = $uploadedImage;
+						}
+					}
+				}
+				$newImages = implode(',', $uploadedImages);
+			}
+
+			// Combine existing and new images
+			$allImages = array_filter([$existingImages, $newImages]);
+			$this->request->data['Hotel']['images'] = implode(',', $allImages);
+
+			// Remove the deleted_images field before saving
+			unset($this->request->data['Hotel']['deleted_images']);
+
 			if ($this->Hotel->save($this->request->data)) {
 				$this->Session->setFlash(__('The hotel has been saved.'));
 				return $this->redirect(array('action' => 'index'));
@@ -145,6 +185,14 @@ class HotelsController extends AppController
 			$options = array('conditions' => array('Hotel.' . $this->Hotel->primaryKey => $id));
 			$this->request->data = $this->Hotel->find('first', $options);
 		}
+
+		$villes_hotel = $this->Hotel->find('list', array(
+			'fields' => array('Hotel.ville', 'Hotel.ville'),
+			'group' => array('Hotel.ville'),
+			'recursive' => -1
+		));
+
+		$this->set(compact('villes_hotel'));
 	}
 
 	/**
@@ -169,6 +217,20 @@ class HotelsController extends AppController
 	}
 
 
+
+	private function deleteImages($imageNames) {
+        $dir = WWW_ROOT . 'files' . DS . 'hotels' . DS;
+        
+        foreach ($imageNames as $imageName) {
+            $imageName = trim($imageName);
+            if (!empty($imageName)) {
+                $filePath = $dir . $imageName;
+                if (file_exists($filePath)) {
+                    unlink($filePath);
+                }
+            }
+        }
+    }
 
 
 	public function uploadFile($folder, $file)

@@ -1,7 +1,7 @@
 <div class="appartements form">
-	<?php echo $this->Form->create('Appartement',array("type"=>"file")); ?>
+	<?php echo $this->Form->create('Appartement', array("type" => "file")); ?>
 	<div class="page-header">
-		<h1 class="title-page">Appartement</h1>
+		<h1 class="title-page"></h1>
 		<span class="slogan"></span>
 	</div>
 	<div class="row">
@@ -13,9 +13,9 @@
 					<?php echo $this->Form->input('nom', array('placeholder' => '')); ?>
 				</div>
 				<div class='col-12'>
-					<?php 
+					<?php
 					$sexe = ["Homme" => "Homme", "Femme" => "Femme"];
-					echo $this->Form->input('sexe', array('options'=>$sexe,'placeholder' => '')); ?>
+					echo $this->Form->input('sexe', array('options' => $sexe, 'placeholder' => '')); ?>
 				</div>
 				<div class='col-12'>
 					<?php
@@ -32,13 +32,31 @@
 					echo $this->Form->input('adresse', array('placeholder' => ''));
 					?>
 				</div>
-				<?php for($i=0; $i<3; $i++): ?>
-					<div class='col-12'>
-						<?php
-						echo $this->Form->file("image.$i", array('placeholder' => ''));
-						?>
+				<div class='col-12 mb-4 input-file'>
+					<label for="img">Images</label>
+					<div class="file-upload-wrapper">
+						<div class="file-upload-area">
+							<div class="upload-text">Glissez-déposez les fichiers ici</div>
+							<div class="upload-subtext">Ou</div>
+							<button type="button" class="choose-files-btn">Choisir des fichiers <i class="fa-light fa-cloud-arrow-up"></i></button>
+
+							<?php echo $this->Form->file('images', array(
+								'name' => 'data[Appartement][images][]',
+								'class' => 'file-input',
+								'accept' => '.jpg, .jpeg, .png, .pdf', // Accept only image and PDF files
+								'multiple' => true
+							)); ?>
+						</div>
+
+						<div class="file-info">
+							<div class="files-list"></div>
+						</div>
 					</div>
-				<?php endfor; ?>
+
+					<div class="description-text">
+						Téléversez les images de l'appartement.
+					</div>
+				</div>
 				<div class='submit-section'>
 					<button type="submit" class="btn btn-submit">
 						<i class="fa-solid fa-paper-plane"></i> Envoyer
@@ -51,3 +69,6 @@
 
 	</div>
 </div>
+
+
+<?php echo $this->Html->script('input_file'); ?>

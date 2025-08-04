@@ -23,8 +23,8 @@ class ReservationsController extends AppController
 
 
 		// Actions autorisées pour "agent"
-		if ($role !== 'Admin' && $role !== 'Agence') {
-			return in_array($this->action, ['index','agent_index', "add", 'view', 'edit']);
+		if ($role !== ' Admin' && $role !== 'Agence') {
+			return in_array($this->action, ['agent_index', "add", 'view', 'edit']);
 		}
 
 		// Admin : accès à tout
@@ -43,21 +43,27 @@ class ReservationsController extends AppController
 	 */
 	public function agent_index()
 	{
+		$pageSubtitle = "Consulter les réservations hôtelières";
+		$title_for_layout = "Gestion des Réservations Hôtelières";
+
 		$reservations = $this->Reservation->find("all", array(
 			'conditions' => array('Reservation.user_id' => AuthComponent::user("id"))
 		));
 		$this->loadModel("Hotel");
 		$hotels = $this->Hotel->find("list");
-		$this->set(compact("hotels", "reservations"));
+		$this->set(compact("hotels", "reservations", "pageSubtitle", 'title_for_layout'));
 	}
 
 
 	public function index()
 	{
+		$pageSubtitle = "Consulter les réservations hôtelières";
+		$title_for_layout = "Gestion des Réservations Hôtelières";
 		$reservations = $this->Reservation->find("all");
 		$this->loadModel("Hotel");
 		$hotels = $this->Hotel->find("list");
-		$this->set(compact("hotels", "reservations"));
+				$this->set(compact("hotels", "reservations", "pageSubtitle", 'title_for_layout'));
+
 	}
 
 	/**
@@ -82,20 +88,21 @@ class ReservationsController extends AppController
 	 */
 	public function add($ville_id = 1)
 	{
+$title_for_layout = "Demande d’hôtel";
+		$pageSubtitle = "Soumettez une nouvelle demande de réservation d’hôtel.";
 
 		$this->loadModel('Hotel');
 		$this->Hotel->recursive = -1;
 
 		if ($this->request->is('post')) {
-			$image = $this->request->data['Reservation']['cin'];
+			$cinFiles = $this->request->data['Reservation']['cin'];
 			$outils = new OutilsController;
-			$uploadedImage = $outils->uploadFile('reservations', $image);
-			$this->request->data['Reservation']['cin'] = $uploadedImage;
+			$uploadedCin = $outils->uploadFiles('reservations', $cinFiles);
+			$this->request->data['Reservation']['cin'] = json_encode($uploadedCin);
 
-			$image = $this->request->data['Reservation']['ordre_mission'];
-			$outils = new OutilsController;
-			$uploadedImage = $outils->uploadFile('reservations', $image);
-			$this->request->data['Reservation']['ordre_mission'] = $uploadedImage;
+			$ordreFiles = $this->request->data['Reservation']['ordre_mission'];
+			$uploadedOrdre = $outils->uploadFiles('reservations', $ordreFiles);
+			$this->request->data['Reservation']['ordre_mission'] = json_encode($uploadedOrdre);
 
 			$this->Reservation->create();
 			$this->request->data['Reservation']['user_id'] = $this->Auth->user('id');
@@ -118,7 +125,7 @@ class ReservationsController extends AppController
 				// Pièce jointe : CIN
 				$Email->attachments(array(
 					'CIN.jpg' => array(
-						'file' => WWW_ROOT . 'files' . DS . 'reservations' . DS . $this->request->data['Reservation']['cin']
+						'file' => WWW_ROOT . 'files' . DS . 'reservations' . DS . json_decode($this->request->data['Reservation']['cin'], true)[0]
 					)
 				));
 				$Email->send();
@@ -186,6 +193,8 @@ class ReservationsController extends AppController
 		$this->loadModel('Ville');
 		$villes = $this->Ville->find('list');
 		$this->set(compact('chambres', 'sites', "villes"));
+				$this->set(compact("pageSubtitle", 'title_for_layout'));
+
 	}
 
 	/**
@@ -240,7 +249,7 @@ class ReservationsController extends AppController
 
 	public function accepte($encryptedId = null)
 	{
-		$this->layout="vide";
+		$this->layout = "vide";
 		$id = base64_decode(urldecode($encryptedId)) ^ 19051983;
 
 		if ($this->request->is('post')) {
@@ -252,7 +261,7 @@ class ReservationsController extends AppController
 					'confirmation' => $this->request->data['Reservation']['confirmation'],
 					'reponse' => $this->request->data['Reservation']['reponse']
 				));
-			
+
 				$reservation = $this->Reservation->findById($id);
 				$this->loadModel('Hotel');
 				$this->Hotel->recursive = -1;
@@ -278,13 +287,12 @@ class ReservationsController extends AppController
 
 	public function reject($encryptedId = null)
 	{
-		$this->layout="vide";
+		$this->layout = "vide";
 		$id = base64_decode(urldecode($encryptedId)) ^ 19051983;
 
 		if ($this->request->is('post')) {
 			$this->Reservation->id = $id;
-			if ($this->Reservation->exists()) 
-			{
+			if ($this->Reservation->exists()) {
 				$this->Reservation->save(array(
 					'etat' => 'refusée',
 					'date_reponse' => date('Y-m-d H:i:s'),

@@ -19,9 +19,7 @@ class VolreservationsController extends AppController
 		}
 
 		// Actions autorisées pour "agent"
-		if ($role !== 'Admin' && $role !== 'Agence') 
-		{
-			//echo "koko";exit();
+		if ($role !== ' Admin' && $role !== 'Agence') {
 			return in_array($this->action, ['agent_index', "add", 'view', 'edit']);
 		}
 
@@ -35,31 +33,53 @@ class VolreservationsController extends AppController
 
 	function agent_index()
 	{
+		$title_for_layout = "Gestion des Réservations de Vols";
+		$pageSubtitle = "Consultez les détails des réservations de vols";
+
+
 		$this->set('volreservations', $this->Volreservation->find("all", array(
-			'conditions' => array('Volreservation.user_id' => AuthComponent::user("id"))
+			'conditions' => array('Volreservation.user_id' => AuthComponent::user("id")),
+			'order' => array('Volreservation.created' => 'DESC')
 		)));
+
+
+		$this->set(compact("pageSubtitle", 'title_for_layout'));
 	}
 
 	function agence_index()
 	{
-		$this->set('volreservations', $this->Volreservation->find("all", array(
-			'conditions' => array('Volreservation.etat' => "En cours")
-		)));
+		$title_for_layout = "Demandes de Vols";
+		$pageSubtitle = "Consultez les demandes de vols en cours de traitement";
+		$volreservations = $this->Volreservation->find("all", array(
+			'conditions' => array('Volreservation.etat' => "En cours"),
+			'order' => array('Volreservation.created' => 'DESC') // or any other field you want to sort by
+		));
+
+		$this->set('title_for_layout', 'Réservations d\'hôtel'); // for <h2>
+		$this->set('pageSubtitle', 'Consulter les réservations des hôtels'); // for <p>
+		$this->set(compact('volreservations'));
+		$this->set(compact("pageSubtitle", 'title_for_layout'));
 	}
 
 
 
 	function agence_valider()
 	{
+		$title_for_layout = "Vols Terminés";
+		$pageSubtitle = "Consultez l’historique des vols effectués";
 		$this->set('volreservations', $this->Volreservation->find("all", array(
 			'conditions' => array('Volreservation.etat' => "Validé")
 		)));
+		$this->set(compact("pageSubtitle", 'title_for_layout'));
 	}
 	function agence_annuler()
 	{
+		$title_for_layout = "Vols Annulés";
+		$pageSubtitle = "Consultez les réservations de vols annulées.";
 		$this->set('volreservations', $this->Volreservation->find("all", array(
 			'conditions' => array('Volreservation.etat' => "Annulé")
 		)));
+		$this->set(compact("pageSubtitle", 'title_for_layout'));
 	}
 	public function agence_view($id = null)
 	{
@@ -76,11 +96,16 @@ class VolreservationsController extends AppController
 			$this->Volreservation->id = $id;
 			$this->request->data['Volreservation']['date_reponse'] = date("Y-m-d H:i:s");
 			$this->request->data['Volreservation']['etat'] = "Validé";
-			$this->request->data['Volreservation']['file_aller'] = $this->uploadFile('volreservations', $this->request->data['Volreservation']['file_aller']);
-			$this->request->data['Volreservation']['file_retour'] = $this->uploadFile('volreservations', $this->request->data['Volreservation']['file_retour']);
-			$this->request->data['Volreservation']['documents'] = $this->uploadFile('volreservations', $this->request->data['Volreservation']['documents']);
+			$this->request->data['Volreservation']['file_aller'] = json_encode($this->uploadFiles('volreservations', $this->request->data['Volreservation']['file_aller']));
+			$this->request->data['Volreservation']['file_retour'] = json_encode($this->uploadFiles('volreservations', $this->request->data['Volreservation']['file_retour']));
+			$this->request->data['Volreservation']['documents'] = json_encode($this->uploadFiles('volreservations',  $this->request->data['Volreservation']['documents']));
 			$this->Volreservation->save($this->request->data);
-			$this->Session->setFlash(__('La réservation a été validée.'));
+			$this->Session->setFlash(
+				'La réservation a été validée.',
+				'Flash/success',
+				array(),
+				'success'
+			);
 			return $this->redirect(array('action' => 'agence_index'));
 		}
 		$vol = $this->Volreservation->findById($id);
@@ -118,6 +143,9 @@ class VolreservationsController extends AppController
 			throw new NotFoundException(__('Invalid volreservation'));
 		}
 		$options = array('conditions' => array('Volreservation.' . $this->Volreservation->primaryKey => $id));
+
+		$this->set('title_for_layout', 'Réservations d\'hôtel'); // for <h2>
+		$this->set('pageSubtitle', 'Consulter les réservations des hôtels'); // for <p>
 		$this->set('volreservation', $this->Volreservation->find('first', $options));
 	}
 
@@ -125,11 +153,15 @@ class VolreservationsController extends AppController
 
 	/**
 	 * add method
-	 *
+	 *demandes de vols
+
 	 * @return void
 	 */
 	public function add()
 	{
+		$title_for_layout = "Demandes de vols";
+		$pageSubtitle = "Complétez ce formulaire pour enregistrer une nouvelle demande de vol";
+
 		if ($this->request->is('post')) {
 			$this->Volreservation->create();
 			$this->Volreservation->data["Volreservation"]["user_id"] = AuthComponent::user("id");
@@ -157,6 +189,7 @@ class VolreservationsController extends AppController
 		}
 		$sites = $this->Volreservation->Site->find('list');
 		$this->set(compact('sites'));
+		$this->set(compact("pageSubtitle", 'title_for_layout'));
 	}
 
 	/**

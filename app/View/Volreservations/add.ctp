@@ -17,7 +17,7 @@
 
 	<div class="row">
 		<div class="col"></div>
-		<div class="col-8">
+		<div class="col-md-8 col-sm-9 p-4">
 
 			<div class="row">
 				<div class="step_1">
@@ -84,7 +84,8 @@
 					</div>
 					<div class='col-12 mt-5'>
 						<label class="control control--checkbox">Je veux un transfert
-							<input type="checkbox" name="data[Volreservation][transfer]" />
+							<input type="hidden" name="data[Volreservation][transfer]" id="transferValue" value="" />
+							<input type="checkbox" id="transferCheckbox" />
 							<div class="control__indicator"></div>
 						</label>
 					</div>
@@ -222,7 +223,8 @@
 		flatpickr("#date_aller_input, #date_retour_input", {
 			dateFormat: "Y-m-d",
 			locale: "fr",
-			allowInput: true
+			allowInput: false,
+			disableMobile: true
 		});
 	});
 
@@ -288,6 +290,12 @@
 			behavior: 'smooth'
 		});
 	});
+
+
+	document.getElementById('transferCheckbox').addEventListener('change', function() {
+		document.getElementById('transferValue').value = this.checked ? '1' : '';
+	});
+
 	// Handle the form submission
 	document.querySelector('.volreservations form').addEventListener('submit', function(event) {
 		event.preventDefault(); // Prevent the default form submission

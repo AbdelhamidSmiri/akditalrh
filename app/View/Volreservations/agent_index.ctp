@@ -17,7 +17,6 @@
 			<tr>
 				<th>Utilisateur</th>
 				<th>Site</th>
-				<th>depart</th>
 				<th>destination</th>
 				<th>Date aller</th>
 				<th>Date retour</th>
@@ -37,14 +36,43 @@
 					<td>
 						<?php echo $volreservation['Site']['site']; ?>
 					</td>
-					<td><?php echo $volreservation['Volreservation']['depart']; ?></td>
-					<td><?php echo $volreservation['Volreservation']['destination']; ?></td>
+					<td>
+						<div>
+							<span><?php echo h($volreservation['Volreservation']['depart']); ?></span>
+							<i class="fa-solid fa-arrow-right"></i>
+							<span><?php echo h($volreservation['Volreservation']['destination']); ?></span>
+						</div>
+					</td>
 					<td><?php echo $volreservation['Volreservation']['date_aller']; ?></td>
 					<td><?php echo $volreservation['Volreservation']['date_retour']; ?></td>
 					<td><?php echo $volreservation['Volreservation']['message']; ?></td>
 					<td><?php echo $volreservation['Volreservation']['created']; ?></td>
-					<td><?php echo $volreservation['Volreservation']['etat']; ?></td>
-					<td><?php echo $volreservation['Volreservation']['transfer']; ?></td>
+					<td><?php
+
+						switch ($volreservation['Volreservation']['etat']) {
+
+							case 'En cours':
+								echo '<span class="status-btn in-progress"><i class="fas fa-clock"></i> En cours</span>';
+								break;
+							case 'Validé':
+								echo '<span class="status-btn confirmed"><i class="fas fa-check-circle"></i> Validé</span>';
+								break;
+							case 'refusée':
+								echo '<span class="status-btn refused"><i class="fas fa-times-circle"></i> Refusée</span>';
+								break;
+							case 'passe':
+								echo '<span class="status-btn passe"><i class="fas fa-calendar-times"></i> Passé</span>';
+								break;
+							default:
+								echo '<span class="status-btn passe"><i class="fas fa-question-circle"></i> ' . htmlspecialchars($volreservation['Volreservation']['etat']) . '</span>';
+						}
+						?></td>
+					<td>
+						<span class="badge badge-transfer">
+							<?php echo ($volreservation['Volreservation']['transfer'] == "1") ? 'Oui' : 'Non';
+						?>
+						</span>
+					</td>
 					<td class="actions">
 						<?php echo $this->Html->link(__('Voir'), array('action' => 'view', $volreservation['Volreservation']['id'])); ?>
 					</td>
@@ -55,4 +83,3 @@
 </div>
 
 </div>
-

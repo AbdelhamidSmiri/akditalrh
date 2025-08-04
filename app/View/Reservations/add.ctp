@@ -18,7 +18,7 @@
 
 	<div class="row">
 		<div class="col"></div>
-		<div class="col-8">
+		<div class="col-md-8 col-sm-9 p-4">
 
 			<div class="row">
 				<div class="step_1">

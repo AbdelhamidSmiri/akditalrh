@@ -11,7 +11,46 @@
 
   font-style: normal;
 }
+.status-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 12px;
+  border-radius: 7px;
+  font-size: 12px !important;
+  color: #fff !important;
+  white-space: nowrap;
+  font-weight: 300 !important;
+  width: fit-content;
+}
 
+.status-btn i {
+  font-size: 11px;
+}
+
+/* Each status must have its own class defined */
+.status-btn.confirmed {
+  background-color: #2e7d32e6;
+}
+
+.status-btn.in-progress {
+  background-color: #1e40aff0;
+}
+
+.status-btn.refused {
+  background-color: #dc3545;
+  /* Red */
+}
+
+.status-btn.passe {
+  background-color: #6c757d;
+  /* Gray */
+}
+
+.status-btn.other {
+  background-color: #6c757d;
+  /* Default gray */
+}
 .poppins-extralight {
   font-family: "Poppins", sans-serif;
 
@@ -223,6 +262,36 @@
   color: #ffffff;
 }
 
+.btn-success-rounded {
+  background-color: #3e875e;
+
+  border-color: #3e875e;
+
+  color: #ffffff;
+
+  font-weight: 400;
+
+  font-size: 14px;
+
+  padding: 8px 16px;
+
+  border-radius: 25px;
+
+  margin-left: 12px !important;
+
+  border-bottom-left-radius: 25px !important;
+
+  border-top-left-radius: 25px !important;
+}
+
+.btn-success-rounded:hover {
+  background-color: #000000;
+
+  border-color: #000000;
+
+  color: #ffffff;
+}
+
 .rounded_icon {
   border-radius: 50%;
 
@@ -290,7 +359,7 @@
 }
 
 .title-page {
-  font-size: 32px;
+  font-size: 22px;
 
   font-weight: 500;
 
@@ -300,7 +369,7 @@
 }
 
 .slogan {
-  font-size: 18px;
+  font-size: 15px;
 
   font-weight: 400;
 
@@ -400,13 +469,13 @@
 .info label {
   font-size: 16px;
 
-  font-weight: 400;
+  font-weight: 700;
 
   color: #1e2c5a;
 }
 
 .info span {
-  font-size: 16px;
+  font-size: 14px;
 
   font-weight: 500;
 
@@ -489,7 +558,7 @@ select {
 
   background: transparent;
 
-  height: 48px;
+  height: 48px !important;
 
   border-radius: 8px;
   z-index: 2;
@@ -1012,7 +1081,21 @@ textarea {
 .input.text.has-calendar-icon input.flatpickr-input {
   padding-right: 30px;
 }
+td {
+  white-space: nowrap;
+}
 
+.badge-transfer {
+  background-color: #e9f3ff;
+  color: #1b84ff !important;
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 14px;
+  border-radius: 7px;
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  width: fit-content;
+}
 /* start badge-primary style  */
 
 .badge-primary-rounded {
@@ -1046,3 +1129,37 @@ textarea {
 }
 
 /* end card */
+
+.btn-orange-rounded {
+  background-color: #e48731;
+  border: #e48731;
+  color: #ffffff;
+  font-weight: 400;
+  font-size: 12px;
+  padding: 4px 8px;
+  border-radius: 25px;
+}
+.btn-orange-rounded:hover {
+  background-color: #000000;
+
+  border-color: #000000;
+
+  color: #ffffff;
+}
+
+.btn-edit-price {
+  font-size: 12px;
+  padding: 4px 8px;
+  margin-left: 0px !important;
+}
+
+.img_deactive {
+  display: none;
+}
+
+.lightgallery a {
+  text-decoration: none;
+  color: #1e2c5a;
+  font-weight: 500;
+  font-size: 16px;
+}

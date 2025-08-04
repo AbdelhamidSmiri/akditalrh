@@ -31,7 +31,7 @@
 					<td><?php echo h($item['dates']); ?></td>
 					<td><?php echo h($item['status']); ?></td>
 					<td class="actions">
-						<?php echo $this->Html->link('<i class="fa-solid fa-eye"></i>', ['controller' => $item['controller'], 'action' => 'view', $item['id']], ['escape' => false, 'title' => 'Voir']); ?>
+						<?php echo $this->Html->link('Voir détails', ['controller' => $item['controller'], 'action' => 'view', $item['id']], ['escape' => false, 'title' => 'Voir']); ?>
 			<?php endforeach; ?>
 		</tbody>
 	</table>

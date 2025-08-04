@@ -8,12 +8,17 @@ App::uses('AppController', 'Controller');
  */
 class RolesController extends AppController {
 
-/**
- * Components
- *
- * @var array
- */
-	public $components = array('Paginator');
+
+	public function isAuthorized($user)
+	{
+		// Exemples de rôle : agent, agence, admin
+		$role = AuthComponent::user('Role.role');
+		if ($role === 'Admin') {
+			return true;
+		}
+		// Refus par défaut
+		return false;
+	}
 
 /**
  * index method
@@ -22,7 +27,7 @@ class RolesController extends AppController {
  */
 	public function index() {
 		$this->Role->recursive = 0;
-		$this->set('roles', $this->Paginator->paginate());
+		$this->set('roles', $this->Role->find("all"));
 	}
 
 /**

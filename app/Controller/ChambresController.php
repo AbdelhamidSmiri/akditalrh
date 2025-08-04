@@ -9,7 +9,16 @@ App::uses('AppController', 'Controller');
 class ChambresController extends AppController
 {
 
-
+	public function isAuthorized($user)
+	{
+		// Exemples de rôle : agent, agence, admin
+		$role = AuthComponent::user('Role.role');
+		if ($role === 'Admin') {
+			return true;
+		}
+		// Refus par défaut
+		return false;
+	}
 	public function index()
 	{
 		$this->Chambre->recursive = 1;

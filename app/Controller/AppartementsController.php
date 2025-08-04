@@ -10,17 +10,17 @@ App::import('Controller', 'Outils');
 class AppartementsController extends AppController
 {
 
-	/**
-	 * Components
-	 *
-	 * @var array
-	 */
-
-	/**
-	 * index method
-	 *
-	 * @return void
-	 */
+	public function isAuthorized($user)
+	{
+		// Exemples de rôle : agent, agence, admin
+		$role = AuthComponent::user('Role.role');
+		// Admin : accès à tout
+		if ($role === 'Admin') {
+			return true;
+		}
+		// Refus par défaut
+		return false;
+	}
 	public function index()
 	{
 		$appartements = $this->Appartement->find('all', [

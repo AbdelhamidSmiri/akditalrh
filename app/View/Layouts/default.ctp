@@ -111,6 +111,23 @@
 				if (!in_array(AuthComponent::user("Role.role"), ['Agence', 'Admin'])): ?>
 					<li class="nav-item dropdown">
 						<button class="nav-link dropdown-toggle" type="button" data-bs-toggle="collapse"
+							data-bs-target="#commandesDropdown" aria-expanded="false">
+							<?php echo $bons_commande_icon; ?>
+							Dashboard
+						</button>
+						<div class="collapse" id="commandesDropdown">
+							<div class="dropdown-menu show">
+								<?php echo $this->Html->link(
+									$billetterie_icon .
+										'Dashboard',
+									array('controller' => 'users', 'action' => 'dashboard'),
+									array('class' => 'dropdown-item', 'escape' => false)
+								); ?>
+							</div>
+						</div>
+					</li>
+					<li class="nav-item dropdown">
+						<button class="nav-link dropdown-toggle" type="button" data-bs-toggle="collapse"
 							data-bs-target="#reservationsDropdown" aria-expanded="false">
 							<?php echo $reservations_icon; ?>
 							Réservations de Vols
@@ -124,7 +141,7 @@
 
 								); ?>
 								<?php echo $this->Html->link(
-									$reservations_icon . 'Mes demandes de vols',
+									$demande_hotel_icon . 'Mes demandes',
 									array('controller' => 'volreservations', 'action' => 'agent_index'),
 									array('class' => 'dropdown-item', 'escape' => false)
 								); ?>
@@ -148,7 +165,7 @@
 
 								);
 								echo $this->Html->link(
-									$bons_commande_icon . 'Mes demandes d’hôtels',
+									$demande_hotel_icon . 'Mes demandes d\'hôtel',
 									array('controller' => 'reservations', 'action' => 'agent_index'),
 									array('class' => 'dropdown-item', 'escape' => false)
 								); ?>
@@ -200,7 +217,7 @@
 						<button class="nav-link dropdown-toggle" type="button" data-bs-toggle="collapse"
 							data-bs-target="#commandesDropdown" aria-expanded="false">
 							<?php echo $bons_commande_icon; ?>
-							Réservations d’Hôtels
+							Résirvations Hôtels
 						</button>
 						<div class="collapse" id="commandesDropdown">
 							<div class="dropdown-menu show">

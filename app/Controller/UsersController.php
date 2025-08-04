@@ -10,22 +10,76 @@ App::uses('CakeEmail', 'Network/Email');
 class UsersController extends AppController
 {
 
-	/**
-	 * Components
-	 *
-	 * @var array
-	 */
-	public $components = array('Paginator');
+	
 
-	/**
-	 * index method
-	 *
-	 * @return void
-	 */
+	public function isAuthorized($user)
+	{
+		// Exemples de rôle : agent, agence, admin
+		$role = AuthComponent::user('Role.role');
+		// Actions autorisées pour "agent"
+		if (in_array($this->action, ['view',"login", 'logout', 'forgot_password',"dashboard"])) {
+			return true;
+		}
+
+		// Admin : accès à tout
+		if ($role === 'Admin') {
+			return true;
+		}
+		// Refus par défaut
+		return false;
+	}
+
+
+	function dashboard($user_id=0)
+	{
+		if ($user_id==0 || AuthComponent::user('Role.role') !== 'Admin') {
+			$user_id=AuthComponent::user('id');
+		}
+		$vols=$this->User->Volreservation->find("all",["conditions"=>["Volreservation.user_id"=>$user_id]]);
+		$hotels=$this->User->Reservation->find("all",["conditions"=>["Reservation.user_id"=>$user_id]]);
+		$data=[];
+		foreach($vols as $vol) {
+			$data[]=[
+				"category"=>"Voyage",
+				"type"=>"Billet avion",
+				"detail"=>$vol['Volreservation']['depart']." -> ".$vol['Volreservation']['destination'],
+				"dates"=>$vol['Volreservation']['date_aller']." -> ".$vol['Volreservation']['date_retour'],
+				"status"=>$vol['Volreservation']['etat'],
+				"controller"=>"volreservations",
+				"id"=>$vol['Volreservation']['id'],
+				"created"=>$vol['Volreservation']['created']
+			];
+		}
+		$this->loadModel("Hotel");
+		$allhotels=$this->Hotel->find("list");
+		$this->Hotel->Chambre->recursive=-1;
+		foreach($hotels as $hotel) 
+		{
+			$chambre=$this->Hotel->Chambre->findById($hotel['Reservation']['chambre_id']);
+			$chambre=$allhotels[$chambre['Chambre']['hotel_id']];
+			$data[]=[
+				"category"=>"Hébergement",
+				"type"=>"Hôtel",
+				"detail"=>$chambre,
+				"dates"=>$hotel['Reservation']['checkin']." -> ".$hotel['Reservation']['checkout'],
+				"status"=>$hotel['Reservation']['etat'],
+				"controller"=>"reservations",
+				"id"=>$hotel['Reservation']['id'],
+				"created"=>$hotel['Reservation']['created']
+			];
+		}
+		// Sort by created date in descending order
+		usort($data, function($a, $b) {
+			return strtotime($b['created']) - strtotime($a['created']);
+		});
+		//debug($data);exit();
+		$this->set(compact("data"));
+	}
+
 	public function index()
 	{
 		$this->User->recursive = 0;
-		$this->set('users', $this->Paginator->paginate());
+		$this->set('users', $this->User->find("all"));
 	}
 
 	/**

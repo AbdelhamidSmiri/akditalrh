@@ -24,11 +24,11 @@ class ReservationsController extends AppController
 
 		// Actions autorisées pour "agent"
 		if ($role !== ' Admin' && $role !== 'Agence') {
-			return in_array($this->action, ['index', 'agent_index', "add", 'view', 'edit']);
+			return in_array($this->action, ['agent_index', "add", 'view', 'edit']);
 		}
 
 		// Admin : accès à tout
-		if ($role === 'admin') {
+		if ($role === 'Admin') {
 			return true;
 		}
 		// Refus par défaut

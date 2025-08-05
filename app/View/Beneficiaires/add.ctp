@@ -95,7 +95,7 @@
 			<h1 class="title-step mb-4">Recherche d'appartements</h1>
 
 
-			<label class="title-section">Période d’hébergement</label>
+			<label class="title-section-form">Période d’hébergement</label>
 			<div class="row">
 				<div class='col-md-6 col-sm-12'>
 

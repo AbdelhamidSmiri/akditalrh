@@ -60,7 +60,7 @@
 
 </style>
 
-<h1 class="main-title">Tableau de bord des Appartements
+<h1 class="little-title">Tableau de bord des Appartements
 </h1>
 <div class="row">
     <div class="col-md-4">
@@ -105,8 +105,8 @@
 </div>
 
 
-<h1 class="main-title">Statistiques par Ville et Sexe</h1>
-<table class="table table-akdital">
+<h1 class="little-title">Statistiques par Ville et Sexe</h1>
+<table class="table table-akdital mb-lg-5">
 	<thead>
 		<tr>
 			<th>Ville</th>
@@ -133,9 +133,9 @@
 
 
 
-<h1 class="main-title">Détails par Appartement
+<h1 class="little-title">Détails par Appartement
 </h1>
-<table class="table table-akdital">
+<table class="table table-akdital mb-lg-5">
 	<thead>
 		<tr>
 			<th>Nom</th>
@@ -157,7 +157,7 @@
 				<td><?= $a['ocupants'] ?></td>
 				<td><?= $a['places_dispo'] ?></td>
 				<td class="actions">
-					<?php echo $this->Html->link(__('View'), array('action' => 'view', $a['id'])); ?>
+					<?php echo $this->Html->link(__('Voir'), array('action' => 'view', $a['id'])); ?>
 					/
 					<?php echo $this->Html->link(__('Edit'), array('action' => 'edit', $a['id'])); ?>
 					/

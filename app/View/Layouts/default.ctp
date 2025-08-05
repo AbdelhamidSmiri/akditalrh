@@ -523,6 +523,14 @@
 			const loader = document.getElementById('loadingOverlay');
 			if (loader) loader.style.display = 'flex';
 		});
+
+		// Handle browser back/forward cache
+		window.addEventListener('pageshow', function(event) {
+			const loader = document.getElementById('loadingOverlay');
+			if (event.persisted && loader) {
+				loader.style.display = 'none';
+			}
+		});
 	</script>
 </body>
 

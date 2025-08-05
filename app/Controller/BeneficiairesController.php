@@ -151,6 +151,7 @@ class BeneficiairesController extends AppController
 		$this->set('beneficiaire', $this->Beneficiaire->findById($id));
 	}
 
+
 	/**
 	 * add method
 	 *
@@ -183,7 +184,7 @@ class BeneficiairesController extends AppController
 					array(),
 					'success'
 				);
-				return $this->redirect(array("controller" => "appartements", 'action' => 'view', $this->request->data["Beneficiaire"]["appartement_id"]));
+				return $this->redirect(array("controller" => "appartements", 'action' => 'success', $this->request->data["Beneficiaire"]["appartement_id"]));
 			} else {
 				$this->Session->setFlash(
 					"La demenade de affectation n'a pas été ajoutée.",

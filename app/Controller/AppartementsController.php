@@ -84,8 +84,7 @@ class AppartementsController extends AppController
 		}
 
 		$this->set(compact('stats', 'appart_info', 'global'));
-				$this->set(compact("pageSubtitle", 'title_for_layout'));
-
+		$this->set(compact("pageSubtitle", 'title_for_layout'));
 	}
 
 	/**
@@ -95,7 +94,7 @@ class AppartementsController extends AppController
 	 * @param string $id
 	 * @return void
 	 */
-	public function view($id = null)
+	public function success($id = null)
 	{
 			$title_for_layout = "Détails de l’appartement";
 		$pageSubtitle = "Consultez les informations générales, l’historique et les affectations liées à ce logement.";
@@ -150,6 +149,8 @@ class AppartementsController extends AppController
 		$villes = $this->Appartement->Ville->find('list');
 		$this->set(compact("villes"));
 	}
+
+
 
 	/**
 	 * edit method

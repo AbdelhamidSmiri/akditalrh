@@ -341,7 +341,7 @@ function dureeSejour($checkin_date, $checkout_date)
     </div>
 </div>
 
-<!-- JavaScript simple pour la recherche -->
+<!-- JavaScript no simple pour la recherche -->
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         // Fonction de recherche simple

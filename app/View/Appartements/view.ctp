@@ -347,58 +347,69 @@ function calculerDureeTotal($dateDebut, $dateFin)
 
 <div class="users view">
 
-	<div class="col-md-12 little-title-section">
-		<span class="little-title">Informations générales</span>
-		<div class="actions">
-		</div>
-	</div>
+    <div class="col-md-12 little-title-section">
+        <span class="little-title">Informations générales</span>
+        <div class="actions">
+        </div>
+    </div>
 
 
-	<div class="card view-card">
-		<div class="card-body">
-			<div class="col-12">
-				<div class="row row-gap-3">
-					<div class="col-md-3">
-						<div class="info">
-							<label>Nom ou identifiant de l’appartement</label>
-							<span>
+    <div class="card view-card">
+        <div class="card-body">
+            <div class="col-12">
+                <div class="row row-gap-3">
+                    <div class="col-md-4">
+                        <div class="info">
+                            <label>Nom ou identifiant de l’appartement</label>
+                            <div class="little-title">
                                 <?php echo h($appartement['Appartement']['nom']); ?>
-							</span>
-						</div>
-					</div>
-					<div class="col-md-3">
-						<div class="info">
-							<label>Capacité totale</label>
-							<span><?php echo h($appartement['Appartement']['capacite']); ?> personnes</span>
-						</div>
-					</div>
-					<div class="col-md-3">
-						<div class="info">
-							<label>Occupants actuels</label>
-							<span><?php echo $taux_occupation; ?>%</span>
-						</div>
-					</div>
-					<div class="col-md-3">
-						<div class="info">
-							<label>Chambres libres</label>
-							<span></span>
-						</div>
-					</div>
-					<div class="col-md-3">
-						<div class="info">
-							<label>Adresse / Ville</label>
-							<span><?php echo h($appartement['Appartement']['adresse']); ?> / <?php echo h($appartement['Appartement']['adresse']); ?></span>
-						</div>
-					</div>
-					
-				</div>
-			</div>
-		</div>
-	</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="info">
+                            <label>Capacité totale</label>
+                            <span><?php echo h($appartement['Appartement']['capacite']); ?> personnes</span>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="info">
+                            <label>Occupants actuels</label>
+                            <span><?php echo $stats['occupation_actuelle']; ?></span>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="info">
+                            <label>Chambres libres</label>
+                            <span>
+                                <?php
+                                $disponible = $stats['capacite'] - $stats['occupation_actuelle'];
+                                echo $disponible;
+                                ?>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="info">
+                            <label>Adresse / Ville</label>
+                            <span>
+                                <?php echo h(ucwords(strtolower($appartement['Appartement']['adresse']))); ?> , <?php echo h(ucwords(strtolower($appartement['Ville']['ville']))); ?>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="affecter">  <button class="btn btn-primary-rounded affecter-btn" type="button">
+                            Affecter ce logement
+                        </button></div>
+                      
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
 </div>
 <div class="dashboard-container">
-   
+
 
     <!-- Statistiques principales -->
     <div class="stats-grid">
@@ -441,38 +452,6 @@ function calculerDureeTotal($dateDebut, $dateFin)
             <small>Non réalisés</small>
         </div>
     </div>
-
-    <!-- Informations de l'appartement -->
-    <div class="appartement-info">
-        <h2>Informations de l'Appartement</h2>
-        <div class="info-grid">
-            <div class="info-item">
-                <div class="info-label">Nom</div>
-                <div class="info-value"><?php echo h($appartement['Appartement']['nom']); ?></div>
-            </div>
-            <div class="info-item">
-                <div class="info-label">Sexe</div>
-                <div class="info-value"><?php echo h($appartement['Appartement']['sexe']); ?></div>
-            </div>
-            <div class="info-item">
-                <div class="info-label">Capacité</div>
-                <div class="info-value"><?php echo h($appartement['Appartement']['capacite']); ?> personnes</div>
-            </div>
-            <div class="info-item">
-                <div class="info-label">Ville</div>
-                <div class="info-value"><?php echo h($appartement['Ville']['ville']); ?></div>
-            </div>
-            <div class="info-item">
-                <div class="info-label">Adresse</div>
-                <div class="info-value"><?php echo h($appartement['Appartement']['adresse']); ?></div>
-            </div>
-            <div class="info-item">
-                <div class="info-label">Créé le</div>
-                <div class="info-value"><?php echo h($appartement['Appartement']['created']); ?></div>
-            </div>
-        </div>
-    </div>
-
     <!-- Tableau des bénéficiaires actifs -->
     <div class="table-container">
         <div class="table-header">

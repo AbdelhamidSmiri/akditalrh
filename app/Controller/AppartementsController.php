@@ -23,8 +23,8 @@ class AppartementsController extends AppController
 	}
 	public function index()
 	{
-		$title_for_layout = "Nouvelle demande de logement";
-		$pageSubtitle = "Complétez les informations pour loger un collaborateur.";
+		$title_for_layout = "Disponibilités des logements";
+		$pageSubtitle = "Consultez la capacité et le taux d’occupation de chaque appartement.";
 
 		$appartements = $this->Appartement->find('all', [
 			'contain' => ['Ville', 'Beneficiaire']
@@ -96,6 +96,9 @@ class AppartementsController extends AppController
 	 */
 	public function success($id = null)
 	{
+			$title_for_layout = "Détails de l’appartement";
+		$pageSubtitle = "Consultez les informations générales, l’historique et les affectations liées à ce logement.";
+
 		if (!$this->Appartement->exists($id)) {
 			throw new NotFoundException(__('Invalid appartement'));
 		}
@@ -106,7 +109,9 @@ class AppartementsController extends AppController
 		$sites = $this->Site->find('list');
 		$users = $this->User->find('list');
 		$villes = $this->Appartement->Ville->find('list');
-		$this->set(compact('sites', 'users', 'appartement', "villes"));
+		$this->set(compact('sites', 'users', 'appartement', "ville"));
+						$this->set(compact("pageSubtitle", 'title_for_layout'));
+
 	}
 
 	/**

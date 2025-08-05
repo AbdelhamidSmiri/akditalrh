@@ -41,7 +41,14 @@
 	background-color: #dc3545;
 	/* Red */
 }
-
+.affecter{
+	display: flex
+;
+    justify-content: flex-end;
+    align-content: flex-end;
+    flex-wrap: wrap;
+    height: 90%;
+}
 .status-btn.passe {
 	background-color: #6c757d;
 	/* Gray */
@@ -467,21 +474,14 @@
 }
 
 .info label {
-	font-size: 16px;
-
-	font-weight: 700;
-
-	color: #1e2c5a;
+    font-size: 15px;
+    color: #1e2c5a;
 }
-
 .info span {
-	font-size: 14px;
-
-	font-weight: 500;
-
-	color: #1e2c5a;
-
-	margin-bottom: 4px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #1e2c5a;
+    margin-bottom: 4px;
 }
 
 .view-card {

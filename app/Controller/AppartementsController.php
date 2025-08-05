@@ -23,6 +23,9 @@ class AppartementsController extends AppController
 	}
 	public function index()
 	{
+		$title_for_layout = "Nouvelle demande de logement";
+		$pageSubtitle = "Complétez les informations pour loger un collaborateur.";
+
 		$appartements = $this->Appartement->find('all', [
 			'contain' => ['Ville', 'Beneficiaire']
 		]);
@@ -81,6 +84,8 @@ class AppartementsController extends AppController
 		}
 
 		$this->set(compact('stats', 'appart_info', 'global'));
+				$this->set(compact("pageSubtitle", 'title_for_layout'));
+
 	}
 
 	/**

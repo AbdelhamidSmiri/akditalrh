@@ -84,8 +84,7 @@ class AppartementsController extends AppController
 		}
 
 		$this->set(compact('stats', 'appart_info', 'global'));
-				$this->set(compact("pageSubtitle", 'title_for_layout'));
-
+		$this->set(compact("pageSubtitle", 'title_for_layout'));
 	}
 
 	/**
@@ -95,7 +94,7 @@ class AppartementsController extends AppController
 	 * @param string $id
 	 * @return void
 	 */
-	public function view($id = null)
+	public function success($id = null)
 	{
 		if (!$this->Appartement->exists($id)) {
 			throw new NotFoundException(__('Invalid appartement'));
@@ -107,7 +106,7 @@ class AppartementsController extends AppController
 		$sites = $this->Site->find('list');
 		$users = $this->User->find('list');
 		$villes = $this->Appartement->Ville->find('list');
-		$this->set(compact('sites', 'users', 'appartement', "ville"));
+		$this->set(compact('sites', 'users', 'appartement', "villes"));
 	}
 
 	/**
@@ -145,6 +144,8 @@ class AppartementsController extends AppController
 		$villes = $this->Appartement->Ville->find('list');
 		$this->set(compact("villes"));
 	}
+
+
 
 	/**
 	 * edit method

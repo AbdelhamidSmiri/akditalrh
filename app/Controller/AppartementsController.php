@@ -23,8 +23,8 @@ class AppartementsController extends AppController
 	}
 	public function index()
 	{
-		$title_for_layout = "Nouvelle demande de logement";
-		$pageSubtitle = "Complétez les informations pour loger un collaborateur.";
+		$title_for_layout = "Disponibilités des logements";
+		$pageSubtitle = "Consultez la capacité et le taux d’occupation de chaque appartement.";
 
 		$appartements = $this->Appartement->find('all', [
 			'contain' => ['Ville', 'Beneficiaire']

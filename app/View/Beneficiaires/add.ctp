@@ -10,7 +10,7 @@
 <style>
 	.title-step {
 		font-size: 22px;
-		font-weight: 800;
+		font-weight: 600;
 		color: #1e2c5a;
 		margin-bottom: 4px;
 	}
@@ -34,7 +34,7 @@
 	.appartement-card {
 		margin-bottom: 20px;
 		border: 2px solid #D0D9FF;
-		border-radius: 8px;
+		border-radius: 15px;
 		transition: all 0.3s ease;
 	}
 
@@ -95,38 +95,47 @@
 			<h1 class="title-step mb-4">Recherche d'appartements</h1>
 
 
+			<label class="title-section">Période d’hébergement</label>
+			<div class="row">
+				<div class='col-md-6 col-sm-12'>
 
-			<div class='col-12'>
-				<div class="has-calendar-icon input text">
-					<?php
-					echo $this->Form->input('date_debut', array(
-						'label' => 'Date début',
-						'type' => 'text',
-						'id' => 'date_debut_input',
-						'placeholder' => '',
-						'div' => false,
-					));
-					?>
+					<div class="has-calendar-icon input text">
+						<?php
+						echo $this->Form->input('date_debut', array(
+							'label' => 'Date d’arrivée prévue',
+							'type' => 'text',
+							'id' => 'date_debut_input',
+							'placeholder' => '',
+							'div' => false,
+						));
+						?>
+					</div>
+					<div class="message">
+						Date estimée de début d’occupation du logement.
+					</div>
+					<div class="message-error date-debut-error">
+						Veuillez choisir une date début d’occupation du logement.
+					</div>
 				</div>
-				<div class="message-error date-debut-error">
-					Veuillez choisir une date début.
-				</div>
-			</div>
 
-			<div class='col-12'>
-				<div class="has-calendar-icon input text">
-					<?php
-					echo $this->Form->input('date_fin', array(
-						'label' => 'Date fin',
-						'type' => 'text',
-						'id' => 'date_fin_input',
-						'placeholder' => '',
-						'div' => false,
-					));
-					?>
-				</div>
-				<div class="message-error date-fin-error">
-					Veuillez choisir une date fin.
+				<div class='col-md-6 col-sm-12'>
+					<div class="has-calendar-icon input text">
+						<?php
+						echo $this->Form->input('date_fin', array(
+							'label' => 'Date de départ prévue',
+							'type' => 'text',
+							'id' => 'date_fin_input',
+							'placeholder' => '',
+							'div' => false,
+						));
+						?>
+					</div>
+					<div class="message">
+						Date estimée de fin de l’hébergement.
+					</div>
+					<div class="message-error date-fin-error">
+						Veuillez choisir une date fin.
+					</div>
 				</div>
 			</div>
 
@@ -139,8 +148,11 @@
 					'empty' => 'Choisissez le sexe'
 				));
 				?>
+				<div class="message">
+					Sélectionnez le sexe de la personne à loger.
+				</div>
 				<div class="message-error sexe-error">
-					Veuillez choisir le sexe.
+					Veuillez sélectionnez le sexe.
 				</div>
 			</div>
 
@@ -153,6 +165,9 @@
 					'label' => 'Ville'
 				));
 				?>
+				<div class="message">
+					Sélectionnez la ville où loger.
+				</div>
 				<div class="message-error ville-error">
 					Veuillez choisir une ville.
 				</div>
@@ -195,9 +210,12 @@
 				echo $this->Form->input('site_id', array(
 					'placeholder' => '',
 					'label' => 'Site',
-					'empty' => 'Choisissez le site'
+					'empty' => 'Site d’affectation'
 				));
 				?>
+				<div class="message">
+					Indiquez le site Akdital auquel le bénéficiaire est rattaché.
+				</div>
 				<div class="message-error site-error">
 					Veuillez choisir un site.
 				</div>
@@ -206,9 +224,12 @@
 				<?php
 				echo $this->Form->input('nom', array(
 					'placeholder' => '',
-					'label' => 'Nom complet'
+					'label' => 'Nom et prénom du bénéficiaire'
 				));
 				?>
+				<div class="message">
+					Saisissez le nom complet de la personne à loger.
+				</div>
 				<div class="message-error nom-error">
 					Veuillez entrer le nom.
 				</div>
@@ -218,9 +239,12 @@
 				<?php
 				echo $this->Form->input('mail', array(
 					'placeholder' => '',
-					'label' => 'Email'
+					'label' => 'L’adresse email du bénéficiaire'
 				));
 				?>
+				<div class="message">
+					Saisissez l’adresse email de la personne à loger.
+				</div>
 				<div class="message-error mail-error">
 					Veuillez entrer un email valide.
 				</div>
@@ -230,9 +254,12 @@
 				<?php
 				echo $this->Form->input('telephone', array(
 					'placeholder' => '',
-					'label' => 'Téléphone'
+					'label' => 'Numéro WhatsApp du bénéficiaire'
 				));
 				?>
+				<div class="message">
+					Saisissez le Numéro WhatsApp de la personne à loger.
+				</div>
 				<div class="message-error telephone-error">
 					Veuillez entrer le numéro de téléphone.
 				</div>
@@ -251,9 +278,12 @@
 					'placeholder' => '',
 					"options" => $status,
 					'empty' => 'Choisissez le statut',
-					'label' => 'Statut'
+					'label' => 'Statut du bénéficiaire'
 				));
 				?>
+				<div class="message">
+					Sélectionnez le type de profil concerné (stagiaire, nouvelle recrue, etc.).
+				</div>
 				<div class="message-error status-error">
 					Veuillez choisir le statut.
 				</div>
@@ -264,9 +294,12 @@
 				echo $this->Form->input('note', array(
 					'placeholder' => 'Notes supplémentaires...',
 					'type' => 'textarea',
-					'label' => 'Notes'
+					'label' => 'Notes / Contraintes particulières (facultatif)'
 				));
 				?>
+				<div class="message" style="margin-top: 1px;">
+					Ajoutez toute information utile pour l’affectation (préférences, conditions spécifiques, etc.).
+				</div>
 			</div>
 
 			<div class='submit-section mt-4'>

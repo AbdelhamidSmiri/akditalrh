@@ -97,6 +97,9 @@ class AppartementsController extends AppController
 	 */
 	public function view($id = null)
 	{
+			$title_for_layout = "Détails de l’appartement";
+		$pageSubtitle = "Consultez les informations générales, l’historique et les affectations liées à ce logement.";
+
 		if (!$this->Appartement->exists($id)) {
 			throw new NotFoundException(__('Invalid appartement'));
 		}
@@ -108,6 +111,8 @@ class AppartementsController extends AppController
 		$users = $this->User->find('list');
 		$villes = $this->Appartement->Ville->find('list');
 		$this->set(compact('sites', 'users', 'appartement', "ville"));
+						$this->set(compact("pageSubtitle", 'title_for_layout'));
+
 	}
 
 	/**

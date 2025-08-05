@@ -21,7 +21,7 @@ class ReservationsController extends AppController
 		// Exemples de rôle : agent, agence, admin
 		$role = AuthComponent::user('Role.role');
 
-
+		// Actions autorisées pour "agence"
 		// Actions autorisées pour "agent"
 		if ($role !== ' Admin' && $role !== 'Agence') {
 			return in_array($this->action, ['agent_index', "add", 'view', 'edit']);
@@ -62,8 +62,7 @@ class ReservationsController extends AppController
 		$reservations = $this->Reservation->find("all");
 		$this->loadModel("Hotel");
 		$hotels = $this->Hotel->find("list");
-				$this->set(compact("hotels", "reservations", "pageSubtitle", 'title_for_layout'));
-
+		$this->set(compact("hotels", "reservations", "pageSubtitle", 'title_for_layout'));
 	}
 
 	/**
@@ -88,7 +87,7 @@ class ReservationsController extends AppController
 	 */
 	public function add($ville_id = 1)
 	{
-$title_for_layout = "Demande d’hôtel";
+		$title_for_layout = "Demande d’hôtel";
 		$pageSubtitle = "Soumettez une nouvelle demande de réservation d’hôtel.";
 
 		$this->loadModel('Hotel');
@@ -193,8 +192,7 @@ $title_for_layout = "Demande d’hôtel";
 		$this->loadModel('Ville');
 		$villes = $this->Ville->find('list');
 		$this->set(compact('chambres', 'sites', "villes"));
-				$this->set(compact("pageSubtitle", 'title_for_layout'));
-
+		$this->set(compact("pageSubtitle", 'title_for_layout'));
 	}
 
 	/**

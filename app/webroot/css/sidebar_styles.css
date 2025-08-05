@@ -118,6 +118,9 @@
   border-radius: 0.5rem;
   transform: translateX(0);
 }
+.nav-link:focus{
+  color: #ffffff;
+}
 
 .nav-link i {
   width: 20px;

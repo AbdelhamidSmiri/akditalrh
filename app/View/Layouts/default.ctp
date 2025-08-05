@@ -130,7 +130,7 @@
 						<button class="nav-link dropdown-toggle" type="button" data-bs-toggle="collapse"
 							data-bs-target="#reservationsDropdown" aria-expanded="false">
 							<?php echo $reservations_icon; ?>
-							Réservations de Vols
+							Réservations de vols
 						</button>
 						<div class="collapse" id="reservationsDropdown">
 							<div class="dropdown-menu show">
@@ -141,7 +141,7 @@
 
 								); ?>
 								<?php echo $this->Html->link(
-									$demande_hotel_icon . 'Mes demandes',
+									$demande_hotel_icon . 'Mes demandes de vols',
 									array('controller' => 'volreservations', 'action' => 'agent_index'),
 									array('class' => 'dropdown-item', 'escape' => false)
 								); ?>
@@ -154,7 +154,7 @@
 						<button class="nav-link dropdown-toggle" type="button" data-bs-toggle="collapse"
 							data-bs-target="#commandesDropdown" aria-expanded="false">
 							<?php echo $bons_commande_icon; ?>
-							Réservations d’Hôtels
+							Réservations d’hôtels
 						</button>
 						<div class="collapse" id="commandesDropdown">
 							<div class="dropdown-menu show">
@@ -191,7 +191,7 @@
 						<button class="nav-link dropdown-toggle" type="button" data-bs-toggle="collapse"
 							data-bs-target="#reservationsDropdown" aria-expanded="false">
 							<?php echo $reservations_icon; ?>
-							Réservations de Vols
+							Réservations de vols
 						</button>
 						<div class="collapse" id="reservationsDropdown">
 							<div class="dropdown-menu show">
@@ -217,7 +217,7 @@
 						<button class="nav-link dropdown-toggle" type="button" data-bs-toggle="collapse"
 							data-bs-target="#commandesDropdown" aria-expanded="false">
 							<?php echo $bons_commande_icon; ?>
-							Résirvations Hôtels
+							Réservations d’hôtels
 						</button>
 						<div class="collapse" id="commandesDropdown">
 							<div class="dropdown-menu show">
@@ -229,7 +229,7 @@
 								);
 								echo $this->Html->link(
 									$demande_hotel_icon .
-										' Réservations hôtel',
+										' Réservations d’hôtels',
 									array('controller' => 'reservations', 'action' => 'index'),
 									array('class' => 'dropdown-item', 'escape' => false)
 								);
@@ -298,17 +298,12 @@
 									array('class' => 'dropdown-item')
 								);
 								echo $this->Html->link(
-									'Recheche (asupprimer abdhamid)',
-									array('controller' => 'beneficiaires', 'action' => 'recherche'),
-									array('class' => 'dropdown-item')
-								);
-								echo $this->Html->link(
 									'Affectations',
 									array('controller' => 'beneficiaires', 'action' => 'add'),
 									array('class' => 'dropdown-item')
 								);
 								echo $this->Html->link(
-									'Liste des affectations',
+									'Historique logements',
 									array('controller' => 'beneficiaires', 'action' => 'index'),
 									array('class' => 'dropdown-item')
 								); ?>

@@ -6,7 +6,8 @@ App::uses('AppController', 'Controller');
  * @property Beneficiaire $Beneficiaire
  * @property PaginatorComponent $Paginator
  */
-class BeneficiairesController extends AppController {
+class BeneficiairesController extends AppController
+{
 
 
 	public function isAuthorized($user)
@@ -21,17 +22,18 @@ class BeneficiairesController extends AppController {
 	}
 
 	function beforeFilter()
-    {
-        parent::beforeFilter();
-        $this->Auth->allow('conditions');
-    }
+	{
+		parent::beforeFilter();
+		$this->Auth->allow('conditions');
+	}
 
-/**
- * index method
- *
- * @return void
- */
-	public function index() {
+	/**
+	 * index method
+	 *
+	 * @return void
+	 */
+	public function index()
+	{
 		$this->Beneficiaire->recursive = 0;
 		$this->set('beneficiaires', $this->Beneficiaire->find("all"));
 	}
@@ -40,81 +42,130 @@ class BeneficiairesController extends AppController {
 
 	function recherche()
 	{
-		if ($this->request->is('post')) {
-			//debug($this->request->data);exit();
-			$date_debut = $this->request->data["Beneficiaire"]["date_debut"];
-			$date_fin = $this->request->data["Beneficiaire"]["date_fin"];
-			$sexe =  $this->request->data["Beneficiaire"]["sexe"];
-			$ville = $this->request->data["Beneficiaire"]["ville_id"];
-			
-			// Tous les appartements du sexe et ville demandés
-			$appartements = $this->Beneficiaire->Appartement->find('all', array(
-				'conditions' => array(
-					'sexe' => $sexe,
-					'ville_id' => $ville
-				)
-			));
-			
-			$disponibles = array();
-			
-			// Vérifier chaque appartement
-			foreach ($appartements as $app) {
-				
-				// Compter les occupants pendant cette période
-				$occupants = $this->Beneficiaire->find('count', array(
+		try {
+			if ($this->request->is('post')) {
+				// Handle AJAX requests
+				if ($this->request->is('ajax')) {
+					$this->autoRender = false; // Disable automatic view rendering
+
+					// Use regular POST data for AJAX requests too
+					if (!isset($this->request->data['Beneficiaire'])) {
+						throw new Exception('No beneficiaire data received');
+					}
+
+					$data = $this->request->data['Beneficiaire'];
+
+					// Validate required fields
+					if (empty($data["date_debut"]) || empty($data["date_fin"]) || empty($data["sexe"]) || empty($data["ville_id"])) {
+						throw new Exception('Missing required fields');
+					}
+
+					$date_debut = $data["date_debut"];
+					$date_fin = $data["date_fin"];
+					$sexe = $data["sexe"];
+					$ville = $data["ville_id"];
+				} else {
+					// Handle regular form submission
+					$date_debut = $this->request->data["Beneficiaire"]["date_debut"];
+					$date_fin = $this->request->data["Beneficiaire"]["date_fin"];
+					$sexe = $this->request->data["Beneficiaire"]["sexe"];
+					$ville = $this->request->data["Beneficiaire"]["ville_id"];
+				}
+
+				// Tous les appartements du sexe et ville demandés
+				$appartements = $this->Beneficiaire->Appartement->find('all', array(
 					'conditions' => array(
-						'appartement_id' => $app['Appartement']['id'],
-						'date_debut <=' => $date_fin,
-						'date_fin >=' => $date_debut,
-						'etat'!='Annuler'
-					)
+						'sexe' => $sexe,
+						'ville_id' => $ville
+					),
+					'contain' => array('Ville') // Include Ville data for the response
 				));
-				
-				// Si pas plein, ajouter aux disponibles
-				if ($occupants < $app['Appartement']['capacite']) 
-				{
-					$app["Appartement"]["nb_occupants"]=$occupants;
-					$disponibles[] = $app;
+
+				$disponibles = array();
+
+				// Vérifier chaque appartement
+				foreach ($appartements as $app) {
+
+					// Compter les occupants pendant cette période
+					$occupants = $this->Beneficiaire->find('count', array(
+						'conditions' => array(
+							'Beneficiaire.appartement_id' => $app['Appartement']['id'],
+							'Beneficiaire.date_debut <=' => $date_fin,
+							'Beneficiaire.date_fin >=' => $date_debut,
+							'Beneficiaire.etat !=' => 'Annuler'
+						)
+					));
+
+					// Si pas plein, ajouter aux disponibles
+					if ($occupants < $app['Appartement']['capacite']) {
+						$app["Appartement"]["nb_occupants"] = $occupants;
+						$disponibles[] = $app;
+					}
+				}
+
+				// Return JSON for AJAX requests
+				if ($this->request->is('ajax')) {
+					$this->response->type('json');
+					echo json_encode($disponibles);
+					return;
+				} else {
+					// For regular requests, set data for view
+					$this->set('appartements', $disponibles);
 				}
 			}
-			debug($disponibles);exit();
-			$this->set('appartements', $disponibles);
-		}
-		$this->loadModel("Ville");
-		$villes = $this->Ville->find('list');
-		$this->set('villes', $villes);
 
-		
+			// Only load villes if not an AJAX request
+			if (!$this->request->is('ajax')) {
+				$this->loadModel("Ville");
+				$villes = $this->Ville->find('list');
+				$this->set('villes', $villes);
+			}
+		} catch (Exception $e) {
+			if ($this->request->is('ajax')) {
+				$this->autoRender = false;
+				$this->response->statusCode(500);
+				$this->response->type('json');
+				echo json_encode(array('error' => $e->getMessage()));
+				return;
+			} else {
+				// For debugging, you can uncomment this line:
+				// debug($e->getMessage()); exit();
+				throw $e; // Re-throw for regular requests
+			}
+		}
 	}
 
-/**
- * view method
- *
- * @throws NotFoundException
- * @param string $id
- * @return void
- */
-	public function view($id = null) {
+	/**
+	 * view method
+	 *
+	 * @throws NotFoundException
+	 * @param string $id
+	 * @return void
+	 */
+	public function view($id = null)
+	{
 		if (!$this->Beneficiaire->exists($id)) {
 			throw new NotFoundException(__('Invalid beneficiaire'));
 		}
-		
+
 		$this->set('beneficiaire', $this->Beneficiaire->findById($id));
 	}
 
-/**
- * add method
- *
- * @return void
- */
-	public function add() {
+	/**
+	 * add method
+	 *
+	 * @return void
+	 */
+	public function add()
+	{
+		$title_for_layout = "Nouvelle demande de logement";
+		$pageSubtitle = "Complétez les informations pour loger un collaborateur.";
 		if ($this->request->is('post')) {
 			$this->Beneficiaire->create();
 			$this->request->data["Beneficiaire"]["user_id"] = $this->Auth->user("id");
-			if ($this->Beneficiaire->save($this->request->data)) 
-			{
-				$this->Beneficiaire->Appartement->recursive=-1;
-				$appt=$this->Beneficiaire->Appartement->findById($this->request->data["Beneficiaire"]["appartement_id"]);
+			if ($this->Beneficiaire->save($this->request->data)) {
+				$this->Beneficiaire->Appartement->recursive = -1;
+				$appt = $this->Beneficiaire->Appartement->findById($this->request->data["Beneficiaire"]["appartement_id"]);
 				App::uses('CakeEmail', 'Network/Email');
 				$Email = new CakeEmail();
 				$Email->template('default', 'appartements_affectation');
@@ -132,7 +183,7 @@ class BeneficiairesController extends AppController {
 					array(),
 					'success'
 				);
-				return $this->redirect(array("controller"=>"appartements",'action' => 'view', $this->request->data["Beneficiaire"]["appartement_id"]));
+				return $this->redirect(array("controller" => "appartements", 'action' => 'view', $this->request->data["Beneficiaire"]["appartement_id"]));
 			} else {
 				$this->Session->setFlash(
 					"La demenade de affectation n'a pas été ajoutée.",
@@ -147,17 +198,18 @@ class BeneficiairesController extends AppController {
 		$villes = $this->Ville->find('list');
 		// a suuper il faut passer par systeme de recherche abdhamid
 		$appartements = $this->Beneficiaire->Appartement->find('list');
-		$this->set(compact('sites',"villes", 'appartements'));
+		$this->set(compact('sites', "villes", 'appartements','pageSubtitle','title_for_layout'));
 	}
 
-/**
- * edit method
- *
- * @throws NotFoundException
- * @param string $id
- * @return void
- */
-	public function edit($id = null) {
+	/**
+	 * edit method
+	 *
+	 * @throws NotFoundException
+	 * @param string $id
+	 * @return void
+	 */
+	public function edit($id = null)
+	{
 		if (!$this->Beneficiaire->exists($id)) {
 			throw new NotFoundException(__('Invalid beneficiaire'));
 		}
@@ -178,14 +230,15 @@ class BeneficiairesController extends AppController {
 		$this->set(compact('sites', 'users', 'appartements'));
 	}
 
-/**
- * delete method
- *
- * @throws NotFoundException
- * @param string $id
- * @return void
- */
-	public function delete($id = null) {
+	/**
+	 * delete method
+	 *
+	 * @throws NotFoundException
+	 * @param string $id
+	 * @return void
+	 */
+	public function delete($id = null)
+	{
 		if (!$this->Beneficiaire->exists($id)) {
 			throw new NotFoundException(__('Invalid beneficiaire'));
 		}
@@ -204,25 +257,24 @@ class BeneficiairesController extends AppController {
 	{
 		$this->set('token', $token);
 		$token = base64_decode(urldecode($token)) ^ 19051983;
-		$this->layout="vide";
-		if ($this->request->is('post')) 
-		{
+		$this->layout = "vide";
+		if ($this->request->is('post')) {
 			$this->Beneficiaire->id = $token;
 			$this->Beneficiaire->saveField("etat", "Valider");
-			echo $token;exit();
+			echo $token;
+			exit();
 			$this->Session->setFlash(
 				'Votre engagement a été validé avec succès.',
 				'Flash/success',
 				array(),
 				'success'
 			);
-				
-			
-			$fin="ok";
-			$this->set('fin',$fin);
+
+
+			$fin = "ok";
+			$this->set('fin', $fin);
 			echo "abdhamid chouf f view dial conditions wach jayak fin= ok si oui affiche dak message dial figma votre....";
 			exit();
 		}
-		
 	}
 }

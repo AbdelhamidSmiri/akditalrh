@@ -159,9 +159,9 @@
 				<td class="actions">
 					<?php echo $this->Html->link(__('Voir'), array('action' => 'view', $a['id'])); ?>
 					/
-					<?php echo $this->Html->link(__('Edit'), array('action' => 'edit', $a['id'])); ?>
+					<?php echo $this->Html->link(__('Modifier'), array('action' => 'edit', $a['id'])); ?>
 					/
-					<?php echo $this->Form->postLink(__('Delete'), array('action' => 'delete', $a['id']), array('confirm' => __('Are you sure you want to delete # %s?', $a['id']))); ?>
+					<?php echo $this->Form->postLink(__('Supprimer'), array('action' => 'delete', $a['id']), array('confirm' => __('Are you sure you want to delete # %s?', $a['id']))); ?>
 				</td>
 			</tr>
 		<?php endforeach; ?>

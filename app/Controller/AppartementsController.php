@@ -122,7 +122,7 @@ class AppartementsController extends AppController
 		$sites = $this->Site->find('list');
 		$users = $this->User->find('list');
 		$villes = $this->Appartement->Ville->find('list');
-		$this->set(compact('sites', 'users', 'appartement', "ville"));
+		$this->set(compact('sites', 'users', 'appartement', "villes"));
 						$this->set(compact("pageSubtitle", 'title_for_layout'));
 
 	}

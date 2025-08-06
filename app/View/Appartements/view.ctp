@@ -344,7 +344,47 @@ function calculerDureeTotal($dateDebut, $dateFin)
         }
     }
 </style>
+ <!-- Statistiques principales -->
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-number stat-occupation"><?php echo $stats['occupation_actuelle']; ?>/<?php echo $stats['capacite']; ?></div>
+            <div class="stat-label">Occupation Actuelle</div>
+            <div class="progress-container">
+                <div class="progress-bar" style="width: <?php echo $taux_occupation; ?>%"></div>
+            </div>
+            <small><?php echo $taux_occupation; ?>% occupé</small>
+        </div>
 
+        <div class="stat-card">
+            <div class="stat-number stat-en-cours"><?php echo $stats['en_cours']; ?></div>
+            <div class="stat-label">En Cours</div>
+            <small>Nouveaux dossiers</small>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-number stat-valider"><?php echo $stats['valider']; ?></div>
+            <div class="stat-label">Validés</div>
+            <small>Conditions OK</small>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-number stat-checkin"><?php echo $stats['checkin']; ?></div>
+            <div class="stat-label">Check-in</div>
+            <small>Dans l'appartement</small>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-number stat-checkout"><?php echo $stats['checkout']; ?></div>
+            <div class="stat-label">Check-out</div>
+            <small>Séjours terminés</small>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-number stat-annuler"><?php echo $stats['annuler']; ?></div>
+            <div class="stat-label">Annulés</div>
+            <small>Non réalisés</small>
+        </div>
+    </div>
 <div class="users view">
 
     <div class="col-md-12 little-title-section">
@@ -397,10 +437,10 @@ function calculerDureeTotal($dateDebut, $dateFin)
                         </div>
                     </div>
                     <div class="col-md-4">
-                        <div class="affecter">  <button class="btn btn-primary-rounded affecter-btn" type="button">
-                            Affecter ce logement
-                        </button></div>
-                      
+                        <div class="affecter"> <button class="btn btn-primary-rounded affecter-btn" type="button">
+                                Affecter ce logement
+                            </button></div>
+
                     </div>
                 </div>
             </div>
@@ -411,47 +451,7 @@ function calculerDureeTotal($dateDebut, $dateFin)
 <div class="dashboard-container">
 
 
-    <!-- Statistiques principales -->
-    <div class="stats-grid">
-        <div class="stat-card">
-            <div class="stat-number stat-occupation"><?php echo $stats['occupation_actuelle']; ?>/<?php echo $stats['capacite']; ?></div>
-            <div class="stat-label">Occupation Actuelle</div>
-            <div class="progress-container">
-                <div class="progress-bar" style="width: <?php echo $taux_occupation; ?>%"></div>
-            </div>
-            <small><?php echo $taux_occupation; ?>% occupé</small>
-        </div>
-
-        <div class="stat-card">
-            <div class="stat-number stat-en-cours"><?php echo $stats['en_cours']; ?></div>
-            <div class="stat-label">En Cours</div>
-            <small>Nouveaux dossiers</small>
-        </div>
-
-        <div class="stat-card">
-            <div class="stat-number stat-valider"><?php echo $stats['valider']; ?></div>
-            <div class="stat-label">Validés</div>
-            <small>Conditions OK</small>
-        </div>
-
-        <div class="stat-card">
-            <div class="stat-number stat-checkin"><?php echo $stats['checkin']; ?></div>
-            <div class="stat-label">Check-in</div>
-            <small>Dans l'appartement</small>
-        </div>
-
-        <div class="stat-card">
-            <div class="stat-number stat-checkout"><?php echo $stats['checkout']; ?></div>
-            <div class="stat-label">Check-out</div>
-            <small>Séjours terminés</small>
-        </div>
-
-        <div class="stat-card">
-            <div class="stat-number stat-annuler"><?php echo $stats['annuler']; ?></div>
-            <div class="stat-label">Annulés</div>
-            <small>Non réalisés</small>
-        </div>
-    </div>
+   
     <!-- Tableau des bénéficiaires actifs -->
     <div class="table-container">
         <div class="table-header">

@@ -54,78 +54,73 @@ function dureeSejour($checkin_date, $checkout_date)
 }
 ?>
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard Réservations</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <style>
-        .stat-card {
-            border-radius: 12px;
-            height: 120px;
-        }
 
-        .stat-card.dark {
-            background-color: #2d3748;
-            color: white;
-        }
+<style>
+    .stat-card {
+        border-radius: 12px;
+        height: 120px;
+    }
 
-        .stat-number {
-            font-size: 2.5rem;
-            font-weight: 600;
-            line-height: 1;
-        }
+    .stat-card.dark {
+        background-color: #2d3748;
+        color: white;
+    }
 
-        .stat-label {
-            font-size: 0.95rem;
-            font-weight: 400;
-            line-height: 1.3;
-        }
+    .stat-number {
+        font-size: 2.5rem;
+        font-weight: 600;
+        line-height: 1;
+    }
 
-        .stat-icon {
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
-            font-size: 1.2rem;
-            background-color: rgb(214 234 248);
-            color: #3498db;
-        }
+    .stat-label {
+        font-size: 0.95rem;
+        font-weight: 400;
+        line-height: 1.3;
+    }
 
-        .table-akdital td {
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
+    .stat-icon {
+        width: 45px;
+        height: 45px;
+        border-radius: 50%;
+        font-size: 1.2rem;
+        background-color: rgb(214 234 248);
+        color: #3498db;
+    }
 
+    .table-akdital td {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .main-title {
+        color: #2c3e50;
+        font-size: 22px;
+        font-weight: 500;
+        margin-bottom: 0.75rem;
+        line-height: 1.2;
+    }
+
+    .subtitle {
+        color: #6c757d;
+        font-size: 1rem;
+        font-weight: 400;
+        margin-bottom: 0;
+        line-height: 1.5;
+    }
+
+    @media (max-width: 768px) {
         .main-title {
-            color: #2c3e50;
-            font-size: 22px;
-            font-weight: 500;
-            margin-bottom: 0.75rem;
-            line-height: 1.2;
+            font-size: 1.5rem;
         }
 
-        .subtitle {
-            color: #6c757d;
-            font-size: 1rem;
-            font-weight: 400;
-            margin-bottom: 0;
-            line-height: 1.5;
-        }
 
-        @media (max-width: 768px) {
-            .main-title {
-                font-size: 1.5rem;
-            }
+    }
 
-
-        }
-
-        .bg-info {
-            background-color: rgb(214 234 248) !important;
-        }
-    </style>
-</head>
+    .bg-info {
+        background-color: rgb(214 234 248) !important;
+    }
+</style>
 
 
 <div class="container-fluid py-4">

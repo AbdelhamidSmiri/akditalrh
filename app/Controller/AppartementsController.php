@@ -21,6 +21,19 @@ class AppartementsController extends AppController
 		// Refus par défaut
 		return false;
 	}
+	/**
+	 * view method
+	 *
+	 * @throws NotFoundException
+	 * @param string $id
+	 * @return void
+	 */
+	
+	public function success()
+	{
+		
+	}
+
 	public function index()
 	{
 		$title_for_layout = "Disponibilités des logements";
@@ -94,7 +107,7 @@ class AppartementsController extends AppController
 	 * @param string $id
 	 * @return void
 	 */
-	public function success($id = null)
+	public function view($id = null)
 	{
 			$title_for_layout = "Détails de l’appartement";
 		$pageSubtitle = "Consultez les informations générales, l’historique et les affectations liées à ce logement.";

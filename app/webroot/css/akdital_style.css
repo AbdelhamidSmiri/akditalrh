@@ -41,13 +41,12 @@
 	background-color: #dc3545;
 	/* Red */
 }
-.affecter{
-	display: flex
-;
-    justify-content: flex-end;
-    align-content: flex-end;
-    flex-wrap: wrap;
-    height: 90%;
+.affecter {
+	display: flex;
+	justify-content: flex-end;
+	align-content: flex-end;
+	flex-wrap: wrap;
+	height: 90%;
 }
 .status-btn.passe {
 	background-color: #6c757d;
@@ -239,7 +238,7 @@
 	color: #ffffff;
 }
 
-.btn-primary-rounded {
+.btn-primary-rounded, .redirect-btn-rounded {
 	background-color: #3780cb;
 
 	border-color: #3780cb;
@@ -261,7 +260,7 @@
 	border-top-left-radius: 25px !important;
 }
 
-.btn-primary-rounded:hover {
+.btn-primary-rounded:hover, .redirect-btn-rounded:hover{
 	background-color: #000000;
 
 	border-color: #000000;
@@ -474,14 +473,14 @@
 }
 
 .info label {
-    font-size: 15px;
-    color: #1e2c5a;
+	font-size: 15px;
+	color: #1e2c5a;
 }
 .info span {
-    font-size: 14px;
-    font-weight: 600;
-    color: #1e2c5a;
-    margin-bottom: 4px;
+	font-size: 14px;
+	font-weight: 600;
+	color: #1e2c5a;
+	margin-bottom: 4px;
 }
 
 .view-card {
@@ -1177,4 +1176,10 @@ td {
 	color: #1e2c5a;
 	font-weight: 500;
 	font-size: 16px;
+}
+
+/* rederect button  */
+.redirect-btn-rounded {
+	background-color: #3498DB;
+	border-color: #3498DB;
 }

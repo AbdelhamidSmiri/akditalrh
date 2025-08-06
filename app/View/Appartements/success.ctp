@@ -9,7 +9,18 @@
         </h3>
         <p>Le collaborateur a été affecté à un appartement existant.</p>
 
+<<<<<<< HEAD
         <?php echo $this->Html->link(__('Ajouter une nouvelle demande'), array('controller'=>'beneficiares','action' => 'view', $a['id'])); ?>
+=======
+        <?php
+        echo $this->Html->link(
+            '<i class="fa-solid fa-paper-plane"></i> ' . __('Ajouter une nouvelle demande'),
+            ['controller' => 'beneficiares', 'action' => 'add'],
+            ['class' => 'btn redirect-btn-rounded', 'escape' => false]
+        );
+        ?>
+
+>>>>>>> b19afdb26ce85059d849872bb26c5df95c76d1ff
 
     </div>
 </div>

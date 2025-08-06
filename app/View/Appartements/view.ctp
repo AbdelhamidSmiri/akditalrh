@@ -397,10 +397,10 @@ function calculerDureeTotal($dateDebut, $dateFin)
                         </div>
                     </div>
                     <div class="col-md-4">
-                        <div class="affecter">  <button class="btn btn-primary-rounded affecter-btn" type="button">
-                            Affecter ce logement
-                        </button></div>
-                      
+                        <div class="affecter"> <button class="btn btn-primary-rounded affecter-btn" type="button">
+                                Affecter ce logement
+                            </button></div>
+
                     </div>
                 </div>
             </div>

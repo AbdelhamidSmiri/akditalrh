@@ -344,47 +344,115 @@ function calculerDureeTotal($dateDebut, $dateFin)
         }
     }
 </style>
- <!-- Statistiques principales -->
-    <div class="stats-grid">
-        <div class="stat-card">
-            <div class="stat-number stat-occupation"><?php echo $stats['occupation_actuelle']; ?>/<?php echo $stats['capacite']; ?></div>
-            <div class="stat-label">Occupation Actuelle</div>
-            <div class="progress-container">
-                <div class="progress-bar" style="width: <?php echo $taux_occupation; ?>%"></div>
+<div class="row g-3 mb-5">
+    <div class="col-12 col-md-4 col-lg-3">
+        <div class="card view-card border-1 h-100">
+            <div class="stats-card card-body d-flex align-items-center justify-content-between p-3">
+                <div class="d-flex flex-column">
+                    <div class="stats-number mb-1" style="font-size: 2.5rem; font-weight: 600; line-height: 1;">
+                        <?php echo $stats['occupation_actuelle']; ?>/<?php echo $stats['capacite']; ?>
+                    </div>
+                    <div class="stats-label mb-0 text-muted" style="font-size: 0.95rem; font-weight: 400; line-height: 1.3;">
+                        Occupation Actuelle
+                    </div>
+                </div>
+                <div class="stat-icon d-flex align-items-center justify-content-center flex-shrink-0">
+                    <i class="fas fa-users"></i>
+                </div>
             </div>
-            <small><?php echo $taux_occupation; ?>% occupé</small>
-        </div>
-
-        <div class="stat-card">
-            <div class="stat-number stat-en-cours"><?php echo $stats['en_cours']; ?></div>
-            <div class="stat-label">En Cours</div>
-            <small>Nouveaux dossiers</small>
-        </div>
-
-        <div class="stat-card">
-            <div class="stat-number stat-valider"><?php echo $stats['valider']; ?></div>
-            <div class="stat-label">Validés</div>
-            <small>Conditions OK</small>
-        </div>
-
-        <div class="stat-card">
-            <div class="stat-number stat-checkin"><?php echo $stats['checkin']; ?></div>
-            <div class="stat-label">Check-in</div>
-            <small>Dans l'appartement</small>
-        </div>
-
-        <div class="stat-card">
-            <div class="stat-number stat-checkout"><?php echo $stats['checkout']; ?></div>
-            <div class="stat-label">Check-out</div>
-            <small>Séjours terminés</small>
-        </div>
-
-        <div class="stat-card">
-            <div class="stat-number stat-annuler"><?php echo $stats['annuler']; ?></div>
-            <div class="stat-label">Annulés</div>
-            <small>Non réalisés</small>
         </div>
     </div>
+    <div class="col-12 col-md-4 col-lg-3">
+        <div class="card view-card border-1 h-100">
+            <div class="stats-card card-body d-flex align-items-center justify-content-between p-3">
+                <div class="d-flex flex-column">
+                    <div class="stats-number mb-1" style="font-size: 2.5rem; font-weight: 600; line-height: 1;">
+                        <?php echo $stats['en_cours']; ?>
+                    </div>
+                    <div class="stats-label mb-0 text-muted" style="font-size: 0.95rem; font-weight: 400; line-height: 1.3;">
+                        En Cours
+                    </div>
+                </div>
+                <div class="stat-icon d-flex align-items-center justify-content-center flex-shrink-0">
+                    <i class="fas fa-clock"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Card 6 - Validées -->
+    <div class="col-12 col-md-4 col-lg-3">
+        <div class="card view-card border-1 h-100">
+            <div class="stats-card card-body d-flex align-items-center justify-content-between p-3">
+                <div class="d-flex flex-column">
+                    <div class="stats-number mb-1" style="font-size: 2.5rem; font-weight: 600; line-height: 1;">
+                        <?php echo $stats['valider']; ?>
+                    </div>
+                    <div class="stats-label mb-0 text-muted" style="font-size: 0.95rem; font-weight: 400; line-height: 1.3;">
+                        Validés
+                    </div>
+                </div>
+                <div class="stat-icon d-flex align-items-center justify-content-center flex-shrink-0">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-12 col-md-4 col-lg-3">
+        <div class="card view-card border-1 h-100">
+            <div class="stats-card card-body d-flex align-items-center justify-content-between p-3">
+                <div class="d-flex flex-column">
+                    <div class="stats-number  mb-1" style="font-size: 2.5rem; font-weight: 600; line-height: 1;">
+                        <?php echo $stats['checkin']; ?>
+                    </div>
+                    <div class="stats-label mb-0 text-muted" style="font-size: 0.95rem; font-weight: 400; line-height: 1.3;">
+                        Check-in
+                    </div>
+                </div>
+                <div class="stat-icon d-flex align-items-center justify-content-center flex-shrink-0">
+                    <i class="fas fa-sign-in-alt"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 col-md-4 col-lg-3">
+        <div class="card view-card border-1 h-100">
+            <div class="stats-card card-body d-flex align-items-center justify-content-between p-3">
+                <div class="d-flex flex-column">
+                    <div class="stats-number  mb-1" style="font-size: 2.5rem; font-weight: 600; line-height: 1;">
+                        <?php echo $stats['checkout']; ?>
+                    </div>
+                    <div class="stats-label mb-0 text-muted" style="font-size: 0.95rem; font-weight: 400; line-height: 1.3;">
+                        Check-out </div>
+                </div>
+                <div class="stat-icon d-flex align-items-center justify-content-center flex-shrink-0">
+                    <i class="fas fa-sign-out-alt"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-12 col-md-4 col-lg-3">
+        <div class="card view-card border-1 h-100">
+            <div class="stats-card card-body d-flex align-items-center justify-content-between p-3">
+                <div class="d-flex flex-column">
+                    <div class="stats-number  mb-1" style="font-size: 2.5rem; font-weight: 600; line-height: 1;">
+                        <?php echo $stats['annuler']; ?>
+                    </div>
+                    <div class="stats-label mb-0 text-muted" style="font-size: 0.95rem; font-weight: 400; line-height: 1.3;">
+                        Annulés </div>
+                </div>
+                <div class="stat-icon d-flex align-items-center justify-content-center flex-shrink-0">
+                    <i class="fas fa-ban"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<!-- Statistiques principales -->
+
 <div class="users view">
 
     <div class="col-md-12 little-title-section">
@@ -451,7 +519,7 @@ function calculerDureeTotal($dateDebut, $dateFin)
 <div class="dashboard-container">
 
 
-   
+
     <!-- Tableau des bénéficiaires actifs -->
     <div class="table-container">
         <div class="table-header">

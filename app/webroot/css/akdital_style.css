@@ -48,6 +48,15 @@
 	flex-wrap: wrap;
 	height: 90%;
 }
+  .stat-icon {
+        width: 45px;
+        height: 45px;
+        border-radius: 50%;
+        font-size: 1.2rem;
+        background-color: rgb(214 234 248);
+        color: #3498db;
+    }
+
 .status-btn.passe {
 	background-color: #6c757d;
 	/* Gray */

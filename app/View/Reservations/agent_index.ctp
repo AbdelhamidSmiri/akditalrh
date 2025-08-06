@@ -79,15 +79,7 @@ function dureeSejour($checkin_date, $checkout_date)
         line-height: 1.3;
     }
 
-    .stat-icon {
-        width: 45px;
-        height: 45px;
-        border-radius: 50%;
-        font-size: 1.2rem;
-        background-color: rgb(214 234 248);
-        color: #3498db;
-    }
-
+  
     .table-akdital td {
         white-space: nowrap;
         overflow: hidden;

@@ -34,8 +34,11 @@ class BeneficiairesController extends AppController
 	 */
 	public function index()
 	{
+		$pageSubtitle = "Consultez, modifiez ou terminez les affectations de logement des collaborateurs.";
+		$title_for_layout = "Affectations des logements";
 		$this->Beneficiaire->recursive = 0;
 		$this->set('beneficiaires', $this->Beneficiaire->find("all"));
+		$this->set(compact("pageSubtitle", 'title_for_layout'));
 	}
 
 
@@ -144,11 +147,15 @@ class BeneficiairesController extends AppController
 	 */
 	public function view($id = null)
 	{
+		$title_for_layout = "Affectations des logements";
+		$pageSubtitle = " ";
+
 		if (!$this->Beneficiaire->exists($id)) {
 			throw new NotFoundException(__('Invalid beneficiaire'));
 		}
 
 		$this->set('beneficiaire', $this->Beneficiaire->findById($id));
+		$this->set(compact("pageSubtitle", 'title_for_layout'));
 	}
 
 
@@ -199,7 +206,7 @@ class BeneficiairesController extends AppController
 		$villes = $this->Ville->find('list');
 		// a suuper il faut passer par systeme de recherche abdhamid
 		$appartements = $this->Beneficiaire->Appartement->find('list');
-		$this->set(compact('sites', "villes", 'appartements','pageSubtitle','title_for_layout'));
+		$this->set(compact('sites', "villes", 'appartements', 'pageSubtitle', 'title_for_layout'));
 	}
 
 	/**

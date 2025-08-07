@@ -39,7 +39,9 @@
 	color: #19161D !important;
 	font-weight: 400 !important;
 }
-
+.add-index-button{
+	padding: 12px 12px !important;
+}
 .status-btn.in-progress {
 	background-color: #1e40aff0;
 }

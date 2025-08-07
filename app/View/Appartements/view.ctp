@@ -363,13 +363,13 @@ function calculerDureeTotal($dateDebut, $dateFin)
                                 echo '<span class="status-btn in-progress"><i class="fas fa-clock"></i> En cours</span>';
                                 break;
                             case 'Checkin':
-                                echo '<span class="status-btn checked"><i class="fa-regular fa-right-to-bracket"></i> Checkin</span>';
+                                echo '<span class="status-btn checked"><i class="fa-regular fa-right-to-bracket"></i>Arrivée</span>';
                                 break;
                             case 'Valider':
-                                echo '<span class="status-btn confirmed"><i class="fa-solid fa-circle-check"></i> Valider</span>';
+                                echo '<span class="status-btn confirmed"><i class="fa-solid fa-circle-check"></i>Confirmée</span>';
                                 break;
                             case 'Checkout':
-                                echo '<span class="status-btn refused"><i class="fas fa-sign-out-alt"></i> Checkout	</span>';
+                                echo '<span class="status-btn refused"><i class="fas fa-sign-out-alt"></i>Départ</span>';
                                 break;
 
                             default:
@@ -457,13 +457,13 @@ function calculerDureeTotal($dateDebut, $dateFin)
                                 echo '<span class="status-btn in-progress"><i class="fas fa-clock"></i> En cours</span>';
                                 break;
                             case 'Checkin':
-                                echo '<span class="status-btn checked"><i class="fa-regular fa-right-to-bracket"></i> Checkin</span>';
+                                echo '<span class="status-btn checked"><i class="fa-regular fa-right-to-bracket"></i>Arrivée</span>';
                                 break;
                             case 'Valider':
-                                echo '<span class="status-btn confirmed"><i class="fa-solid fa-circle-check"></i> Valider</span>';
+                                echo '<span class="status-btn confirmed"><i class="fa-solid fa-circle-check"></i> Confirmée</span>';
                                 break;
                             case 'Checkout':
-                                echo '<span class="status-btn refused"><i class="fas fa-sign-out-alt"></i> Checkout	</span>';
+                                echo '<span class="status-btn refused"><i class="fas fa-sign-out-alt"></i>Départ</span>';
                                 break;
 
                             default:

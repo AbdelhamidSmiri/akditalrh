@@ -18,8 +18,7 @@
 				<th>Utilisateur</th>
 				<th>site</th>
 				<th>destination</th>
-				<th>date_aller</th>
-				<th>date_retour</th>
+				<th>date</th>
 				<th>num_odm</th>
 				<th>message</th>
 				<th>etat</th>
@@ -50,11 +49,35 @@
 							<span><?php echo h($volreservation['Volreservation']['destination']); ?></span>
 						</div>
 					</td>
-					<td><?php echo $volreservation['Volreservation']['date_aller']; ?></td>
-					<td><?php echo $volreservation['Volreservation']['date_retour']; ?></td>
+					<td>
+						<div>
+							<span><?php echo h($volreservation['Volreservation']['date_aller']); ?></span>
+							<i class="fa-solid fa-arrow-right"></i>
+							<span><?php echo h($volreservation['Volreservation']['date_retour']); ?></span>
+						</div>
+					</td>
 					<td><?php echo $volreservation['Volreservation']['num_odm']; ?></td>
 					<td><?php echo $volreservation['Volreservation']['message']; ?></td>
 					<td><?php echo $volreservation['Volreservation']['etat']; ?></td>
+					<td>
+                        <?php
+                        switch ($volreservation['Volreservation']['etat']) {
+
+                            case 'En cours':
+                                echo '<span class="status-btn in-progress"><i class="fas fa-clock"></i> En cours</span>';
+                                break;
+                            case 'Validé':
+                                echo '<span class="status-btn confirmed"><i class="fa-solid fa-circle-check"></i>Confirmée</span>';
+                                break;
+                            case 'Annulé':
+                                echo '<span class="status-btn refused"><i class="fa-solid fa-ban"></i>Annulé</span>';
+                                break;
+
+                            default:
+                                echo '<span class="status-btn passe"><i class="fas fa-question-circle"></i> ' . htmlspecialchars($beneficiaire['etat']) . '</span>';
+                        }
+                        ?>
+                    </td>
 					<td><?php echo $volreservation['Volreservation']['reponse']; ?></td>
 					<td><?php echo $volreservation['Volreservation']['date_reponse']; ?></td>
 					<td><?php echo $volreservation['Volreservation']['num_vol']; ?></td>

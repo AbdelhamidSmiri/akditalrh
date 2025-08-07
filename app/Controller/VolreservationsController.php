@@ -133,8 +133,12 @@ class VolreservationsController extends AppController
 
 	public function index()
 	{
+		$title_for_layout = "Demandes de billets d’avion";
+		$pageSubtitle = "Consultez et traitez les demandes reçues de la part des collaborateurs.";
+
 		$this->Volreservation->recursive = 0;
 		$this->set('volreservations', $this->Volreservation->find("all"));
+		$this->set(compact("pageSubtitle", 'title_for_layout'));
 	}
 
 	public function view($id = null)

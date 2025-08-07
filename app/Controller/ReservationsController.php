@@ -74,10 +74,13 @@ class ReservationsController extends AppController
 	 */
 	public function view($id = null)
 	{
+		$title_for_layout= "Détail de la réservation";
+		$pageSubtitle = " Informations complètes sur la demande de réservation";
 		if (!$this->Reservation->exists($id)) {
 			throw new NotFoundException(__('Invalid reservation'));
 		}
 		$this->set('reservation', $this->Reservation->findById($id));
+		$this->set(compact("pageSubtitle", 'title_for_layout'));
 	}
 
 	/**

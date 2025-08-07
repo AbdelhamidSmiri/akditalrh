@@ -26,7 +26,7 @@
 					<?php if (!empty($reservation['Chambre']['nom'])): ?>
 						<div class="col-md-3">
 							<div class="info">
-								<label>Hotel</label>
+								<label>Hôtel</label>
 								<span><?php echo $reservation['Chambre']['nom']; ?></span>
 							</div>
 						</div>
@@ -44,7 +44,7 @@
 					<?php if (!empty($reservation['Reservation']['checkin'])): ?>
 						<div class="col-md-3">
 							<div class="info">
-								<label><?php echo __('Checkin'); ?></label>
+								<label><?php echo __('Arrivée'); ?></label>
 								<span><?php echo h($reservation['Reservation']['checkin']); ?></span>
 							</div>
 						</div>
@@ -53,7 +53,7 @@
 					<?php if (!empty($reservation['Reservation']['checkout'])): ?>
 						<div class="col-md-3">
 							<div class="info">
-								<label><?php echo __('Checkout'); ?></label>
+								<label><?php echo __('Départ'); ?></label>
 								<span><?php echo h($reservation['Reservation']['checkout']); ?></span>
 							</div>
 						</div>
@@ -62,7 +62,7 @@
 					<?php if (!empty($reservation['Reservation']['num_odm'])): ?>
 						<div class="col-md-3">
 							<div class="info">
-								<label><?php echo __('Num Odm'); ?></label>
+								<label><?php echo __('N° ODM'); ?></label>
 								<span><?php echo h($reservation['Reservation']['num_odm']); ?></span>
 							</div>
 						</div>
@@ -124,7 +124,7 @@
 					<?php if (!empty($reservation['Reservation']['created'])): ?>
 						<div class="col-md-3">
 							<div class="info">
-								<label><?php echo __('Date création'); ?></label>
+								<label><?php echo __('Date de création'); ?></label>
 								<span><?php echo h($reservation['Reservation']['created']); ?></span>
 							</div>
 						</div>
@@ -142,7 +142,7 @@
 					<?php if (!empty($reservation['Reservation']['etat'])): ?>
 						<div class="col-md-3">
 							<div class="info">
-								<label><?php echo __('Etat'); ?></label>
+								<label><?php echo __('État'); ?></label>
 								<?php
 
 								switch ($reservation['Reservation']['etat']) {
@@ -170,7 +170,7 @@
 					<?php if (!empty($reservation['Reservation']['reponse'])): ?>
 						<div class="col-md-3">
 							<div class="info">
-								<label><?php echo __('Reponse'); ?></label>
+								<label><?php echo __('Réponse'); ?></label>
 								<span><?php echo h($reservation['Reservation']['reponse']); ?></span>
 							</div>
 						</div>
@@ -179,7 +179,7 @@
 					<?php if (!empty($reservation['Reservation']['date_reponse'])): ?>
 						<div class="col-md-3">
 							<div class="info">
-								<label><?php echo __('Date Reponse'); ?></label>
+								<label><?php echo __('Date de réponse'); ?></label>
 								<span><?php echo h($reservation['Reservation']['date_reponse']); ?></span>
 							</div>
 						</div>

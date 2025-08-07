@@ -250,17 +250,18 @@ function dureeSejour($checkin_date, $checkout_date)
             <thead>
                 <tr>
                     <th>Demandeur</th>
-                    <th>Hotel</th>
+                    <th>Hôtel</th>
                     <th>Chambre</th>
                     <th>Site</th>
-                    <th>Check-in</th>
-                    <th>Check-out</th>
-                    <th>Jours Restants</th>
-                    <th>Durée Séjour</th>
+                    <th>Arrivée</th>
+                    <th>Départ</th>
+                    <th>Jours restants</th>
+                    <th>Durée du séjour</th>
                     <th>N° ODM</th>
-                    <th>Etat</th>
+                    <th>État</th>
                     <th>Date de demande</th>
                     <th class="actions">Actions</th>
+
                 </tr>
             </thead>
             <tbody>
@@ -305,7 +306,7 @@ function dureeSejour($checkin_date, $checkout_date)
                                     echo '<span class="status-btn in-progress"><i class="fas fa-clock"></i> En cours</span>';
                                     break;
                                 case 'acceptée':
-                                    echo '<span class="status-btn confirmed"><i class="fas fa-check-circle"></i> Confirmé</span>';
+                                    echo '<span class="status-btn confirmed"><i class="fas fa-check-circle"></i>Confirmée</span>';
                                     break;
                                 case 'refusée':
                                     echo '<span class="status-btn refused"><i class="fas fa-times-circle"></i> Refusée</span>';
@@ -322,9 +323,9 @@ function dureeSejour($checkin_date, $checkout_date)
                         <td class="actions">
                             <?php echo $this->Html->link(__('Voir'), array('action' => 'view', $reservation['Reservation']['id'])); ?>
                             /
-                            <?php echo $this->Html->link(__('Edit'), array('action' => 'edit', $reservation['Reservation']['id'])); ?>
+                            <?php echo $this->Html->link(__('Modifier'), array('action' => 'edit', $reservation['Reservation']['id'])); ?>
                             /
-                            <?php echo $this->Form->postLink(__('Delete'), array('action' => 'delete', $reservation['Reservation']['id']), array('confirm' => __('Êtes-vous sûr de vouloir supprimer # %s?', $reservation['Reservation']['id']))); ?>
+                            <?php echo $this->Form->postLink(__('Supprimer'), array('action' => 'delete', $reservation['Reservation']['id']), array('confirm' => __('Êtes-vous sûr de vouloir supprimer # %s?', $reservation['Reservation']['id']))); ?>
                         </td>
                     </tr>
                 <?php endforeach; ?>

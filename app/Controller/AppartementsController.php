@@ -29,8 +29,9 @@ class AppartementsController extends AppController
 	 * @return void
 	 */
 	
-	public function success()
+	public function success($id =null)
 	{
+		
 		
 	}
 

@@ -118,7 +118,7 @@ class ReservationsController extends AppController
 				$Email->viewVars(array("id" => $this->Reservation->id));
 				$Email->viewVars(array("reservation" => $resivation));
 				$Email->emailFormat('html');
-				$Email->to("godsneek@hotmail.com"); //$hotel["Hotel"]["mail"]
+				$Email->to("eljazouly.abdessamad2003@gmail.com"); //$hotel["Hotel"]["mail"]
 				$Email->from('no-repley@icoz.ma');
 				$Email->subject('[AKDITAL] Demande de séjour – Validation requise');
 				// Pièce jointe : CIN
@@ -268,7 +268,7 @@ class ReservationsController extends AppController
 				$email = new CakeEmail();
 				$email->template('default', 'hotel_accepte');
 				$email->emailFormat('html');
-				$email->to("godsneek@hotmail.com"); // $reservation['User']['email']
+				$email->to("eljazouly.abdessamad2003@gmail.com"); // $reservation['User']['email']
 				$email->from('no-reply@icoz.ma');
 				$email->subject('✅ Votre réservation a été acceptée');
 
@@ -305,7 +305,7 @@ class ReservationsController extends AppController
 				$email = new CakeEmail();
 				$email->template('default', 'hotels_refus');
 				$email->emailFormat('html');
-				$email->to("godsneek@hotmail.com"); // $reservation['User']['email']
+				$email->to("eljazouly.abdessamad2003@gmail.com"); // $reservation['User']['email']
 				$email->from('no-reply@icoz.ma');
 				$email->subject('❌ Votre réservation a été refusée');
 

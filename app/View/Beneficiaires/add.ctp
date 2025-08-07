@@ -441,7 +441,7 @@
 
 			return isValid;
 		}
-
+		const mainurl = getMainUrlSimple();
 		function searchAppartements() {
 			const formData = new FormData();
 			formData.append('data[Beneficiaire][date_debut]', document.querySelector('input[name="data[Beneficiaire][date_debut]"]').value);
@@ -456,7 +456,7 @@
 			showStep(2);
 
 			// AJAX call to search apartments
-			fetch('/akditalrh/beneficiaires/recherche', {
+			fetch(`${mainurl}//beneficiaires/recherche`, {
 					method: 'POST',
 					headers: {
 						'X-Requested-With': 'XMLHttpRequest'
@@ -483,6 +483,7 @@
 		function displayAppartements(appartements) {
 			const container = document.getElementById('appartements-container');
 
+
 			if (!appartements || appartements.length === 0) {
 				container.innerHTML = '<div class="no-results">Aucun appartement disponible pour ces critères.</div>';
 				return;
@@ -506,7 +507,7 @@
 									</div>
 									<div class="block-content">
 										<div class="actions">
-											<a href="#" class="go_to_id">Voir les détails</a>
+											<a href="${mainurl}/appartements/view/${appartement.id}" class="go_to_id">Voir les détails</a>
 										</div>
 									</div>
 								</div>
@@ -600,6 +601,23 @@
 		function isValidEmail(email) {
 			const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 			return emailRegex.test(email);
+		}
+
+
+		// Alternative simpler approach if you know the pattern
+		function getMainUrlSimple() {
+			const currentUrl = window.location.href;
+			const url = new URL(currentUrl);
+
+			// Extract the controller/subdomain part from the path
+			const pathParts = url.pathname.split('/').filter(part => part !== '');
+			const controller = pathParts[0] || '';
+
+			if (url.hostname === 'localhost' || url.hostname === '127.0.0.1') {
+				return `${url.protocol}//${url.host}/${controller}`;
+			} else {
+				return `https://akditalrh.icozdev.com`;
+			}
 		}
 	});
 </script>

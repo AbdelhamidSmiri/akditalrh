@@ -1,15 +1,61 @@
+<style>
+    .title-text {
+        color: #1E2C5A;
+    }
+
+    .sub-text {
+        color: #878787;
+        margin: 35px;
+    }
+
+    .link-icon svg path {
+        fill: #19161D;
+        /* default color */
+        transition: fill 0.3s ease;
+    }
+
+    .link-icon:hover svg path {
+        fill: #ffffffff;
+        /* hover color */
+    }
+
+    .btns {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        row-gap: 15px;
+    }
+</style>
 <div class="row justify-content-center">
     <div class="col-md-8 text-center">
         <svg width="97" height="113" viewBox="0 0 97 113" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M71.0156 30.9141V24.7734C71.0156 24.2105 70.5551 23.75 69.9922 23.75H20.8672C20.3043 23.75 19.8438 24.2105 19.8438 24.7734V30.9141C19.8438 31.477 20.3043 31.9375 20.8672 31.9375H69.9922C70.5551 31.9375 71.0156 31.477 71.0156 30.9141ZM20.8672 42.1719C20.3043 42.1719 19.8438 42.6324 19.8438 43.1953V49.3359C19.8438 49.8988 20.3043 50.3594 20.8672 50.3594H44.4062C44.9691 50.3594 45.4297 49.8988 45.4297 49.3359V43.1953C45.4297 42.6324 44.9691 42.1719 44.4062 42.1719H20.8672ZM68.9688 57.0117C53.7067 57.0117 41.3359 69.3825 41.3359 84.6445C41.3359 99.9065 53.7067 112.277 68.9688 112.277C84.2308 112.277 96.6016 99.9065 96.6016 84.6445C96.6016 69.3825 84.2308 57.0117 68.9688 57.0117ZM82.7212 98.397C79.0496 102.069 74.1627 104.09 68.9688 104.09C63.7748 104.09 58.8879 102.069 55.2163 98.397C51.5447 94.7254 49.5234 89.8385 49.5234 84.6445C49.5234 79.4506 51.5447 74.5637 55.2163 70.8921C58.8879 67.2205 63.7748 65.1992 68.9688 65.1992C74.1627 65.1992 79.0496 67.2205 82.7212 70.8921C86.3928 74.5637 88.4141 79.4506 88.4141 84.6445C88.4141 89.8385 86.3928 94.7254 82.7212 98.397ZM80.3545 74.9219H74.6872C74.3546 74.9219 74.0476 75.0754 73.8557 75.344L65.7321 86.5763L62.777 82.4953C62.6823 82.3635 62.5574 82.2563 62.4126 82.1829C62.2679 82.1094 62.1077 82.0718 61.9454 82.0732H56.3037C55.4722 82.0732 54.986 83.0198 55.4722 83.6978L64.9134 96.7595C65.3228 97.3224 66.1543 97.3224 66.5637 96.7595L81.1732 76.5466C81.6722 75.8686 81.186 74.9219 80.3545 74.9219ZM39.2891 99.9961H9.60938V9.93359H81.25V53.9414C81.25 54.5043 81.7105 54.9648 82.2734 54.9648H89.4375C90.0004 54.9648 90.4609 54.5043 90.4609 53.9414V4.81641C90.4609 2.55205 88.6315 0.722656 86.3672 0.722656H4.49219C2.22783 0.722656 0.398438 2.55205 0.398438 4.81641V105.113C0.398438 107.378 2.22783 109.207 4.49219 109.207H39.2891C39.852 109.207 40.3125 108.746 40.3125 108.184V101.02C40.3125 100.457 39.852 99.9961 39.2891 99.9961Z" fill="#3498DB" />
         </svg>
-        <h3>
+        <h3 class="title-text mt-lg-5">
             La demande a bien été ajoutée. Vous pouvez
             la suivre depuis la section “Affectations”.
         </h3>
-        <p>Le collaborateur a été affecté à un appartement existant.</p>
+        <p class="sub-text">Le collaborateur a été affecté à un appartement existant.</p>
+        <div class="btns">
+            <?php
+            echo $this->Html->link(
+                '<i class="fa-solid fa-paper-plane"></i> ' . __(' Ajouter une nouvelle demande'),
+                ['controller' => 'beneficiaires', 'action' => 'add'],
+                ['class' => 'btn redirect-btn-rounded', 'escape' => false]
+            );
+            ?>
 
-        <?php echo $this->Html->link(__('Ajouter une nouvelle demande'), array('controller'=>'beneficiares','action' => 'view', $a['id'])); ?>
+            <?php
+            echo $this->Html->link(
+                '<svg class="icon" width="11" height="10" viewBox="0 0 11 10" xmlns="http://www.w3.org/2000/svg">
+        <path d="M8.5 0V1H2.205L10.5 9.295L9.795 10L1.5 1.705V8H0.5V0H8.5Z"/>
+    </svg>
+    ' . __(' Retour aux demandes'),
+                ['controller' => 'beneficiaires', 'action' => 'index'],
+                ['class' => 'btn btn-secondary-rounded link-icon', 'escape' => false]
+            );
+            ?>
+        </div>
 
     </div>
 </div>

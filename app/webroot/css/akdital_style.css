@@ -268,6 +268,10 @@
 	color: #ffffff;
 }
 
+
+.redirect-btn-rounded i{
+	margin-right: 12px;
+}
 .btn-success-rounded {
 	background-color: #3e875e;
 

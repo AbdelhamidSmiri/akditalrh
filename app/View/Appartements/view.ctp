@@ -355,7 +355,7 @@ function calculerDureeTotal($dateDebut, $dateFin)
                     <td><?php echo isset($users[$beneficiaire['user_id']]) ? $users[$beneficiaire['user_id']] : 'N/A'; ?></td>
                     <td><strong><?php echo h($beneficiaire['nom']); ?></strong></td>
 
-                    <td>
+                  <td>
                         <?php
                         switch ($beneficiaire['etat']) {
 
@@ -363,11 +363,13 @@ function calculerDureeTotal($dateDebut, $dateFin)
                                 echo '<span class="status-btn in-progress"><i class="fas fa-clock"></i> En cours</span>';
                                 break;
                             case 'Checkin':
-                                echo '<span class="status-btn confirmed"><i class="fas fa-sign-in-alt"></i> Checkin</span>';
+                                echo '<span class="status-btn checked"><i class="fa-regular fa-right-to-bracket"></i> Checkin</span>';
+                                break;
+                            case 'Valider':
+                                echo '<span class="status-btn confirmed"><i class="fa-solid fa-circle-check"></i> Valider</span>';
                                 break;
                             case 'Checkout':
-                                echo '<span class="status-btn refused"><i class="fas fa-sign-out-alt"></i> Checkout	
-                    </span>';
+                                echo '<span class="status-btn refused"><i class="fas fa-sign-out-alt"></i> Checkout	</span>';
                                 break;
 
                             default:
@@ -455,7 +457,10 @@ function calculerDureeTotal($dateDebut, $dateFin)
                                 echo '<span class="status-btn in-progress"><i class="fas fa-clock"></i> En cours</span>';
                                 break;
                             case 'Checkin':
-                                echo '<span class="status-btn confirmed"><i class="fas fa-sign-in-alt"></i> Checkin</span>';
+                                echo '<span class="status-btn checked"><i class="fa-regular fa-right-to-bracket"></i> Checkin</span>';
+                                break;
+                            case 'Valider':
+                                echo '<span class="status-btn confirmed"><i class="fa-solid fa-circle-check"></i> Valider</span>';
                                 break;
                             case 'Checkout':
                                 echo '<span class="status-btn refused"><i class="fas fa-sign-out-alt"></i> Checkout	</span>';
@@ -479,9 +484,9 @@ function calculerDureeTotal($dateDebut, $dateFin)
                     </td>
                     <td><?php echo h($beneficiaire['note']); ?></td>
                     <td class="actions">
-                        <?php echo $this->Html->link('Voir', array('action' => 'view', $beneficiaire['id']), array('class' => 'btn-view')); ?>
-                        /<?php echo $this->Html->link('Modifier', array('action' => 'edit', $beneficiaire['id']), array('class' => 'btn-edit')); ?>
-                        /<?php echo $this->Form->postLink('Supprimer', array('action' => 'delete', $beneficiaire['id']), array('class' => 'btn-delete', 'confirm' => 'Êtes-vous sûr de vouloir supprimer ce bénéficiaire ?')); ?>
+                        <?php echo $this->Html->link('Voir', array('controller' => 'beneficiaires','action' => 'view', $beneficiaire['id']), array('class' => 'btn-view')); ?>
+                        /<?php echo $this->Html->link('Modifier', array('controller' => 'beneficiaires','action' => 'edit', $beneficiaire['id']), array('class' => 'btn-edit')); ?>
+                        /<?php echo $this->Form->postLink('Supprimer', array('controller' => 'beneficiaires','action' => 'delete', $beneficiaire['id']), array('class' => 'btn-delete', 'confirm' => 'Êtes-vous sûr de vouloir supprimer ce bénéficiaire ?')); ?>
                     </td>
                 </tr>
             <?php endforeach; ?>

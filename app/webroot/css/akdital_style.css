@@ -11,6 +11,7 @@
 
 	font-style: normal;
 }
+
 .status-btn {
 	display: inline-flex;
 	align-items: center;
@@ -33,6 +34,12 @@
 	background-color: #2e7d32e6;
 }
 
+.status-btn.checked {
+	background-color: #F2F2F2;
+	color: #19161D !important;
+	font-weight: 400 !important;
+}
+
 .status-btn.in-progress {
 	background-color: #1e40aff0;
 }
@@ -41,6 +48,7 @@
 	background-color: #D5393C;
 	/* Red */
 }
+
 .affecter {
 	display: flex;
 	justify-content: flex-end;
@@ -48,14 +56,15 @@
 	flex-wrap: wrap;
 	height: 90%;
 }
-  .stat-icon {
-        width: 45px;
-        height: 45px;
-        border-radius: 50%;
-        font-size: 1.2rem;
-        background-color: rgb(214 234 248);
-        color: #3498db;
-    }
+
+.stat-icon {
+	width: 45px;
+	height: 45px;
+	border-radius: 50%;
+	font-size: 1.2rem;
+	background-color: rgb(214 234 248);
+	color: #3498db;
+}
 
 .status-btn.passe {
 	background-color: #6c757d;
@@ -66,6 +75,7 @@
 	background-color: #6c757d;
 	/* Default gray */
 }
+
 .poppins-extralight {
 	font-family: "Poppins", sans-serif;
 
@@ -247,7 +257,8 @@
 	color: #ffffff;
 }
 
-.btn-primary-rounded, .redirect-btn-rounded {
+.btn-primary-rounded,
+.redirect-btn-rounded {
 	background-color: #3780cb;
 
 	border-color: #3780cb;
@@ -269,7 +280,8 @@
 	border-top-left-radius: 25px !important;
 }
 
-.btn-primary-rounded:hover, .redirect-btn-rounded:hover{
+.btn-primary-rounded:hover,
+.redirect-btn-rounded:hover {
 	background-color: #000000;
 
 	border-color: #000000;
@@ -485,6 +497,7 @@
 	font-size: 15px;
 	color: #1e2c5a;
 }
+
 .info span {
 	font-size: 14px;
 	font-weight: 600;
@@ -551,7 +564,9 @@ input[type="password"] {
 	margin-bottom: 20px;
 
 	overflow: hidden;
-} /* necessary to give position: relative to parent. */
+}
+
+/* necessary to give position: relative to parent. */
 
 input[type="text"],
 input[type="password"],
@@ -623,7 +638,8 @@ select {
 .tel:has(input[type="tel"]:not(:placeholder-shown)) label {
 	top: 3px;
 
-	left: 14px; /* Changed from 1px to 14px to match original left position */
+	left: 14px;
+	/* Changed from 1px to 14px to match original left position */
 
 	font-size: 12px;
 
@@ -764,21 +780,21 @@ textarea {
 	border-radius: 4px;
 }
 
-.control:hover input ~ .control__indicator,
-.control input:focus ~ .control__indicator {
+.control:hover input~.control__indicator,
+.control input:focus~.control__indicator {
 	background: #ccc;
 }
 
-.control input:checked ~ .control__indicator {
+.control input:checked~.control__indicator {
 	background: #f1f1f1;
 }
 
-.control:hover input:not([disabled]):checked ~ .control__indicator,
-.control input:checked:focus ~ .control__indicator {
+.control:hover input:not([disabled]):checked~.control__indicator,
+.control input:checked:focus~.control__indicator {
 	background: #f1f1f1;
 }
 
-.control input:disabled ~ .control__indicator {
+.control input:disabled~.control__indicator {
 	background: #e6e6e6;
 
 	opacity: 0.9;
@@ -804,7 +820,7 @@ textarea {
 	transition: 0.3s all ease;
 }
 
-.control input:checked ~ .control__indicator:after {
+.control input:checked~.control__indicator:after {
 	display: block;
 
 	color: #00548d;
@@ -1082,7 +1098,8 @@ textarea {
 }
 
 .input.text.has-calendar-icon::before {
-	content: "\f073"; /* icône calendrier FontAwesome */
+	content: "\f073";
+	/* icône calendrier FontAwesome */
 
 	font-family: "Font Awesome 6 Pro";
 
@@ -1104,6 +1121,7 @@ textarea {
 .input.text.has-calendar-icon input.flatpickr-input {
 	padding-right: 30px;
 }
+
 td {
 	white-space: nowrap;
 }
@@ -1119,6 +1137,7 @@ td {
 	font-weight: 700 !important;
 	width: fit-content;
 }
+
 /* start badge-primary style  */
 
 .badge-primary-rounded {
@@ -1162,6 +1181,7 @@ td {
 	padding: 4px 8px;
 	border-radius: 25px;
 }
+
 .btn-orange-rounded:hover {
 	background-color: #000000;
 

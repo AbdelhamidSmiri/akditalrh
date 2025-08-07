@@ -263,14 +263,15 @@ class BeneficiairesController extends AppController
 
 	function conditions($token)
 	{
+		$fin = "";
 		$this->set('token', $token);
 		$token = base64_decode(urldecode($token)) ^ 19051983;
 		$this->layout = "vide";
 		if ($this->request->is('post')) {
 			$this->Beneficiaire->id = $token;
 			$this->Beneficiaire->saveField("etat", "Valider");
-			echo $token;
-			exit();
+			// echo $token;
+			// exit();
 			$this->Session->setFlash(
 				'Votre engagement a été validé avec succès.',
 				'Flash/success',
@@ -280,9 +281,8 @@ class BeneficiairesController extends AppController
 
 
 			$fin = "ok";
-			$this->set('fin', $fin);
-			echo "abdhamid chouf f view dial conditions wach jayak fin= ok si oui affiche dak message dial figma votre....";
-			exit();
+			
 		}
+		$this->set('fin', $fin);
 	}
 }

@@ -9,10 +9,10 @@
 <p>👉 Cliquez sur le lien ci-dessous pour lire les conditions :</p>
 
 <p>
-    <a
-        href="<?php 
-        $encryptedId = urlencode(base64_encode($id ^ 19051983));
-        echo Router::url(array('controller' => 'beneficiaires', 'action' => 'conditions',$encryptedId ), true); ?>">
+    <a style="background-color: #3E875E;border-color: #3E875E;color: #ffffff;font-weight: 400;font-size: 16px;padding: 8px 16px;border-radius: 25px;margin-left: 12px;"
+        href="<?php
+                $encryptedId = urlencode(base64_encode($id ^ 19051983));
+                echo Router::url(array('controller' => 'beneficiaires', 'action' => 'conditions', $encryptedId), true); ?>">
         Lire les conditions et signer
     </a>
 </p>

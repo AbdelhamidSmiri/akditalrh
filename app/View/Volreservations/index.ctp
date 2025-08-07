@@ -19,17 +19,17 @@
 				<th>site</th>
 				<th>destination</th>
 				<th>date</th>
-				<th>num_odm</th>
-				<th>message</th>
-				<th>etat</th>
-				<th>reponse</th>
-				<th>date_reponse</th>
-				<th>num_vol</th>
-				<th>transfer</th>
-				<th>nom_transfer</th>
-				<th>date_transfer</th>
-				<th>tel_transfer</th>
-				<th>description_transfer</th>
+				<th>num odm</th>
+				<th>Message</th>
+				<th>État</th>
+				<th>Réponse</th>
+				<th>Réponse</th>
+				<th>Numéro de vol</th>
+				<th>Transfert</th>
+				<th>Nom du transfert</th>
+				<th>Date du transfert</th>
+				<th>Téléphone du transfert</th>
+				<th>Description du transfert</th>
 				<th class="actions">Actions</th>
 			</tr>
 		</thead>
@@ -58,7 +58,6 @@
 					</td>
 					<td><?php echo $volreservation['Volreservation']['num_odm']; ?></td>
 					<td><?php echo $volreservation['Volreservation']['message']; ?></td>
-					<td><?php echo $volreservation['Volreservation']['etat']; ?></td>
 					<td>
                         <?php
                         switch ($volreservation['Volreservation']['etat']) {
@@ -94,9 +93,9 @@
 					<td class="actions">
 						<?php echo $this->Html->link(__('Voir'), array('action' => 'view', $volreservation['Volreservation']['id'])); ?>
 						/
-						<?php echo $this->Html->link(__('Edit'), array('action' => 'edit', $volreservation['Volreservation']['id'])); ?>
+						<?php echo $this->Html->link(__('Modifier'), array('action' => 'edit', $volreservation['Volreservation']['id'])); ?>
 						/
-						<?php echo $this->Form->postLink(__('Delete'), array('action' => 'delete', $volreservation['Volreservation']['id']), array('confirm' => __('Are you sure you want to delete # %s?', $volreservation['Volreservation']['id']))); ?>
+						<?php echo $this->Form->postLink(__('Supprimer'), array('action' => 'delete', $volreservation['Volreservation']['id']), array('confirm' => __('Are you sure you want to delete # %s?', $volreservation['Volreservation']['id']))); ?>
 					</td>
 				</tr>
 			<?php endforeach; ?>

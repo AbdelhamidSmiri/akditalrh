@@ -270,7 +270,7 @@
 								); ?>
 								<?php echo $this->Html->link(
 									'Suivi des Tag Jawaz',
-									array('controller' => 'parc', 'action' => 'suivi_tag_jawaz'),
+									array('controller' => 'tagjawazs', 'action' => 'index'),
 									array('class' => 'dropdown-item')
 								); ?>
 								<?php echo $this->Html->link(

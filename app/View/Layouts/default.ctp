@@ -265,7 +265,7 @@
 								); ?>
 								<?php echo $this->Html->link(
 									'Suivi des cartes carburant',
-									array('controller' => 'parc', 'action' => 'suivi_cartes_carburant'),
+									array('controller' => 'cartecarburants', 'action' => 'index'),
 									array('class' => 'dropdown-item')
 								); ?>
 								<?php echo $this->Html->link(

@@ -13,17 +13,17 @@
 				</div>
 				<div class='col-12'>
 					<?php
-					echo $this->Form->input('hotel', array('placeholder' => ''));
+					echo $this->Form->input('hotel', array('placeholder' => '','label' => 'Nom de l’hôtel'));
 					?>
 				</div>
 				<div class='col-12'>
 					<?php
-					echo $this->Form->input('etoile', array('placeholder' => ''));
+					echo $this->Form->input('etoile', array('placeholder' => '','label' => 'Étoile'));
 					?>
 				</div>
 				<div class='col-12'>
 					<?php
-					echo $this->Form->input('region', array('placeholder' => ''));
+					echo $this->Form->input('region', array('placeholder' => '','label' => 'Région'));
 					?>
 				</div>
 				<div class='col-12'>
@@ -105,22 +105,24 @@
 						'type' => 'textarea',
 						'placeholder' => '',
 						'rows' => 5,
+						'label' => 'Email(s)'
+
 					));
 					?>
 				</div>
 				<div class='col-12'>
 					<?php
-					echo $this->Form->input('telephone', array('placeholder' => ''));
+					echo $this->Form->input('telephone', array('placeholder' => '', 'label' => 'Téléphone'));
 					?>
 				</div>
 				<div class='col-12'>
 					<?php
-					echo $this->Form->input('nom_responsable', array('placeholder' => ''));
+					echo $this->Form->input('nom_responsable', array('placeholder' => '', 'label' => 'Nom du responsable'));
 					?>
 				</div>
 				<div class='col-12'>
 					<?php
-					echo $this->Form->input('reglement', array('placeholder' => ''));
+					echo $this->Form->input('reglement', array('placeholder' => '', 'label' => 'Règlement'));
 					?>
 				</div>
 				<div class='submit-section'>

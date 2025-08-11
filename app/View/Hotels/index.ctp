@@ -125,7 +125,7 @@
 			<!-- Button trigger modal -->
 			<?php
 			echo $this->Html->link(
-				__('<i class="fa-regular fa-plus"></i> Nouveau hotel'),
+				__('<i class="fa-regular fa-plus"></i> Nouveau hôtel'),
 				array('action' => 'add'),
 				array(
 					'escape' => false,
@@ -211,8 +211,8 @@
 				<div class="actions text-end">
 
 					<?php echo $this->Html->link(__('Voir'), array('action' => 'view', $hotel['Hotel']['id'])); ?> /
-					<?php echo $this->Html->link(__('Edit'), array('action' => 'edit', $hotel['Hotel']['id'])); ?> /
-					<?php echo $this->Form->postLink(__('Delete'), array('action' => 'delete', $hotel['Hotel']['id']), array('confirm' => __('Are you sure you want to delete # %s?', $hotel['Hotel']['id']))); ?>
+					<?php echo $this->Html->link(__('modifier'), array('action' => 'edit', $hotel['Hotel']['id'])); ?> /
+					<?php echo $this->Form->postLink(__('Supprimer'), array('action' => 'delete', $hotel['Hotel']['id']), array('confirm' => __('Voulez-vous vraiment supprimer cet hôtel ?', $hotel['Hotel']['id']))); ?>
 
 				</div>
 

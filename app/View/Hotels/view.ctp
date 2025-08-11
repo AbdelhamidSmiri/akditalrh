@@ -372,7 +372,7 @@
 					<?php if (!empty($hotel['Hotel']['etoile'])) { ?>
 						<div class="col-md-4">
 							<div class="info">
-								<label><?php echo __('Etoile'); ?></label>
+								<label><?php echo __('Étoile'); ?></label>
 								<div class="starts">
 									<?php for ($i = 0; $i < $hotel['Hotel']['etoile']; $i++) { ?>
 										<i class="fa-solid fa-star yellow m--3"></i>
@@ -385,7 +385,7 @@
 					<?php if (!empty($hotel['Hotel']['mail'])) { ?>
 						<div class="col-md-4">
 							<div class="info">
-								<label><?php echo __('Mail'); ?></label>
+								<label><?php echo __('Email'); ?></label>
 								<span class="mails">
 									<?php
 									$mailArray = explode(';', $hotel['Hotel']['mail']);
@@ -400,7 +400,7 @@
 					<?php if (!empty($hotel['Hotel']['telephone'])) { ?>
 						<div class="col-md-4">
 							<div class="info">
-								<label><?php echo __('Telephone'); ?></label>
+								<label><?php echo __('Téléphone'); ?></label>
 								<span><?php echo h($hotel['Hotel']['telephone']); ?></span>
 							</div>
 						</div>
@@ -409,7 +409,7 @@
 					<?php if (!empty($hotel['Hotel']['nom_responsable'])) { ?>
 						<div class="col-md-4">
 							<div class="info">
-								<label><?php echo __('Nom Responsable'); ?></label>
+								<label><?php echo __('Nom du responsable'); ?></label>
 								<span><?php echo h($hotel['Hotel']['nom_responsable']); ?></span>
 							</div>
 						</div>
@@ -418,7 +418,7 @@
 					<?php if (!empty($hotel['Hotel']['created'])) { ?>
 						<div class="col-md-4">
 							<div class="info">
-								<label><?php echo __('Date Création'); ?></label>
+								<label><?php echo __('Date de création'); ?></label>
 								<span><?php echo h($hotel['Hotel']['created']); ?></span>
 							</div>
 						</div>
@@ -427,7 +427,7 @@
 					<?php if (!empty($hotel['Hotel']['reglement'])) { ?>
 						<div class="col-md-4">
 							<div class="info">
-								<label><?php echo __('Reglement'); ?></label>
+								<label><?php echo __('Règlement'); ?></label>
 								<span><?php echo h($hotel['Hotel']['reglement']); ?></span>
 							</div>
 						</div>

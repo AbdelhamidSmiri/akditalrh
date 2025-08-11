@@ -7,12 +7,12 @@
 			<div class="row">
 				<div class='col-12'>
 					<?php
-					echo $this->Form->input('hotel', array('placeholder' => ''));
+					echo $this->Form->input('hotel', array('placeholder' => '','label' => 'Nom de l’hôtel'));
 					?>
 				</div>
 				<div class='col-12'>
 					<?php
-					echo $this->Form->input('etoile', array('placeholder' => ''));
+					echo $this->Form->input('etoile', array('placeholder' => '','label' => 'Étoile'));
 					?>
 				</div>
 				<div class='col-12'>

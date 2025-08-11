@@ -17,7 +17,6 @@
 				</div>
 				<div class='col-12'>
 					<?php
-					// Add 'Autre' option at the end of villes
 					$villes_hotel['__autre__'] = 'Autre';
 
 					echo $this->Form->input('ville_select', array(
@@ -29,8 +28,7 @@
 						'id' => 'ville-select'
 					));
 
-					// Hidden input shown only when "Autre" is selected
-					echo $this->Form->input('ville', array(
+					echo $this->Form->input('ville_autre', array(
 						'label' => 'Autre ville',
 						'type' => 'text',
 						'id' => 'ville-autre',
@@ -39,6 +37,7 @@
 					));
 					?>
 				</div>
+
 				<div class='col-12'>
 					<?php
 					echo $this->Form->input('adresse', array('placeholder' => ''));
@@ -124,15 +123,16 @@
 
 		// for ville autre
 
-		var select = document.getElementById('ville-select');
-		var inputAutre = document.getElementById('ville-autre');
+		const select = document.getElementById('ville-select');
+		const inputAutre = document.getElementById('ville-autre');
 
 		select.addEventListener('change', function() {
 			if (this.value === '__autre__') {
 				inputAutre.style.display = 'block';
+				inputAutre.name = 'Hotel[ville_autre]';
 			} else {
 				inputAutre.style.display = 'none';
-				inputAutre.value = this.value; // Auto-fill hidden input with selected value
+				inputAutre.name = '';
 			}
 		});
 	});

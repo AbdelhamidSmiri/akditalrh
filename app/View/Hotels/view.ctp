@@ -342,11 +342,11 @@
 						</div>
 					<?php } ?>
 
-					<?php if (!empty($hotel['Hotel']['ville'])) { ?>
+					<?php if (!empty($hotel['Ville']['ville'])) { ?>
 						<div class="col-md-4">
 							<div class="info">
 								<label><?php echo __('Ville'); ?></label>
-								<span><?php echo h($hotel['Hotel']['ville']); ?></span>
+								<span><?php echo h($hotel['Ville']['ville']); ?></span>
 							</div>
 						</div>
 					<?php } ?>

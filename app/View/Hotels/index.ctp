@@ -159,8 +159,8 @@
 
 							<span> <?php echo $hotel['Hotel']['hotel']; ?></span>
 							<div class="ville">
-								<?php if (!empty($hotel['Hotel']['ville'])): ?>
-									<span><i class="fa-regular fa-location-dot"></i> <?php echo $hotel['Hotel']['ville']; ?></span>
+								<?php if (!empty($hotel['Ville']['ville'])): ?>
+									<span><i class="fa-regular fa-location-dot"></i> <?php echo $hotel['Ville']['ville']; ?></span>
 								<?php endif; ?>
 								<div class="starts">
 									<?php for ($i = 0; $i < $hotel['Hotel']['etoile']; $i++) {

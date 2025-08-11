@@ -74,7 +74,7 @@ class ReservationsController extends AppController
 	 */
 	public function view($id = null)
 	{
-		$title_for_layout= "Détail de la réservation";
+		$title_for_layout = "Détail de la réservation";
 		$pageSubtitle = " Informations complètes sur la demande de réservation";
 		if (!$this->Reservation->exists($id)) {
 			throw new NotFoundException(__('Invalid reservation'));
@@ -150,52 +150,133 @@ class ReservationsController extends AppController
 			}
 		}
 
-
-		//a supprimer apres matsali rajae f t3mrar dial fichier excel
-		$ville = $this->Reservation->Site->Ville->findById($ville_id);
-		$ville = $ville["Ville"]["ville"];
-		//-------------fin superession
-
-		$hotels = $this->Hotel->find('all', array('conditions' => array('Hotel.ville' => $ville)));
-		$ids = 0;
-		foreach ($hotels as $hotel) {
-			$ids = "$ids," . $hotel['Hotel']['id'];
-		}
-		$chambres = $this->Reservation->Chambre->find('all', array(
-			'conditions' => array("Chambre.hotel_id IN ($ids)"),
-			'contain' => array('Hotel', 'Hotelprice') // on exclut Reservation ici
-		));
-		$data = array();
-		$today = date('Y-m-d');
-		$this->loadModel("Role");
-		$role = $this->Role->findById($this->Auth->user('role_id'));
-
-		foreach ($chambres as $chambre) {
-			foreach ($chambre['Hotelprice'] as $prix) {
-				if ($today >= $prix['date_debut'] && $today <= $prix['date_fin']) {
-					if ($role["Role"]["plafond_hotel"] < $prix['prix']) {
-						continue; // on ignore les prix supérieurs au plafond
-					}
-					$chambre['Chambre']['prix'] = $prix['prix'];
-					unset($chambre['Hotelprice']);
-					$chambre['Chambre']['hotel'] = $chambre['Hotel']['hotel'];
-					$chambre['Chambre']['etoile'] = $chambre['Hotel']['etoile'];
-					$chambre['Chambre']['images'] = $chambre['Hotel']['images'];
-					$chambre['Chambre']['adresse'] = $chambre['Hotel']['adresse'];
-					$chambre['Chambre']['reglement'] = $chambre['Hotel']['reglement'];
-					unset($chambre['Hotel']);
-					$data[] = $chambre;
-					break; // on sort de la boucle dès qu'on trouve le bon prix
-				}
-			}
-		}
-		$chambres = $data;
 		$chambres = $this->Reservation->Chambre->find('list');
 		$sites = $this->Reservation->Site->find('list', ["conditions" => ["Site.ville_id" => $ville_id]]);
 		$this->loadModel('Ville');
 		$villes = $this->Ville->find('list');
 		$this->set(compact('chambres', 'sites', "villes"));
 		$this->set(compact("pageSubtitle", 'title_for_layout'));
+	}
+
+
+	/**
+	 * Fetch hotels with full details by ville_id via AJAX
+	 */
+	public function fetch_hotels_with_details()
+	{
+		$this->autoRender = false;
+
+		if ($this->request->is('ajax') && $this->request->is('post')) {
+			$villeId = $this->request->data['ville_id'];
+
+			if (!empty($villeId)) {
+				$this->loadModel('Hotel');
+				$this->Hotel->recursive = 0; // Get related data
+
+				$hotels = $this->Hotel->find('all', array(
+					'conditions' => array('Hotel.ville_id' => $villeId),
+					'contain' => array('Ville'), // Get ville data
+					'order' => array('Hotel.hotel' => 'ASC')
+				));
+
+				$hotelData = array();
+				foreach ($hotels as $hotel) {
+					$hotelData[] = array(
+						'id' => $hotel['Hotel']['id'],
+						'hotel' => $hotel['Hotel']['hotel'],
+						'etoile' => $hotel['Hotel']['etoile'],
+						'images' => $hotel['Hotel']['images'],
+						'mail' => $hotel['Hotel']['mail'],
+						'telephone' => $hotel['Hotel']['telephone'],
+						'nom_responsable' => $hotel['Hotel']['nom_responsable'],
+						'adresse' => $hotel['Hotel']['adresse'],
+						'reglement' => $hotel['Hotel']['reglement'],
+						'ville' => isset($hotel['Ville']['ville']) ? $hotel['Ville']['ville'] : ''
+					);
+				}
+
+				echo json_encode(array(
+					'success' => true,
+					'hotels' => $hotelData
+				));
+			} else {
+				echo json_encode(array(
+					'success' => false,
+					'message' => 'Ville ID manquant'
+				));
+			}
+		} else {
+			echo json_encode(array(
+				'success' => false,
+				'message' => 'Requête invalide'
+			));
+		}
+	}
+
+	/**
+	 * Fetch chambres by hotel_id via AJAX (updated for new format)
+	 */
+	public function fetch_chambres()
+	{
+		$this->autoRender = false;
+
+		if ($this->request->is('ajax') && $this->request->is('post')) {
+			$hotelId = $this->request->data['hotel_id'];
+
+			if (!empty($hotelId)) {
+				$chambres = $this->Reservation->Chambre->find('all', array(
+					'conditions' => array("Chambre.hotel_id" => $hotelId),
+					'contain' => array('Hotel', 'Hotelprice'),
+					'order' => array('Chambre.nom' => 'ASC')
+				));
+
+				$chambreData = array();
+				$today = date('Y-m-d');
+				$this->loadModel("Role");
+				$role = $this->Role->findById($this->Auth->user('role_id'));
+
+				foreach ($chambres as $chambre) {
+					$prix = null;
+
+					// Find current price
+					foreach ($chambre['Hotelprice'] as $price) {
+						if ($today >= $price['date_debut'] && $today <= $price['date_fin']) {
+							if ($role["Role"]["plafond_hotel"] >= $price['prix']) {
+								$prix = $price['prix'];
+								break;
+							}
+						}
+					}
+
+					// Only include rooms within budget
+					if ($prix !== null) {
+						$chambreData[] = array(
+							'id' => $chambre['Chambre']['id'],
+							'nom' => $chambre['Chambre']['nom'],
+							'prix' => $prix,
+							'type' => isset($chambre['Chambre']['type']) ? $chambre['Chambre']['type'] : 'Standard',
+							'capacite' => isset($chambre['Chambre']['capacite']) ? $chambre['Chambre']['capacite'] : 'N/A',
+							'description' => isset($chambre['Chambre']['description']) ? $chambre['Chambre']['description'] : 'Chambre confortable'
+						);
+					}
+				}
+
+				echo json_encode(array(
+					'success' => true,
+					'chambres' => $chambreData
+				));
+			} else {
+				echo json_encode(array(
+					'success' => false,
+					'message' => 'Hotel ID manquant'
+				));
+			}
+		} else {
+			echo json_encode(array(
+				'success' => false,
+				'message' => 'Requête invalide'
+			));
+		}
 	}
 
 	/**

@@ -250,7 +250,7 @@
 							<div class="dropdown-menu show">
 								<?php echo $this->Html->link(
 									'Liste des véhicules',
-									array('controller' => 'parc', 'action' => 'liste_vehicules'),
+									array('controller' => 'voitures', 'action' => 'index'),
 									array('class' => 'dropdown-item')
 								); ?>
 								<?php echo $this->Html->link(
@@ -259,18 +259,18 @@
 									array('class' => 'dropdown-item')
 								); ?>
 								<?php echo $this->Html->link(
-									'Contrats',
-									array('controller' => 'parc', 'action' => 'contrats'),
+									'Calendrier contrats',
+									array('controller' => 'voitures', 'action' => 'calendrier'),
 									array('class' => 'dropdown-item')
 								); ?>
 								<?php echo $this->Html->link(
 									'Suivi des cartes carburant',
-									array('controller' => 'parc', 'action' => 'suivi_cartes_carburant'),
+									array('controller' => 'cartecarburants', 'action' => 'index'),
 									array('class' => 'dropdown-item')
 								); ?>
 								<?php echo $this->Html->link(
 									'Suivi des Tag Jawaz',
-									array('controller' => 'parc', 'action' => 'suivi_tag_jawaz'),
+									array('controller' => 'tagjawazs', 'action' => 'index'),
 									array('class' => 'dropdown-item')
 								); ?>
 								<?php echo $this->Html->link(

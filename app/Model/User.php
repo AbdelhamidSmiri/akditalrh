@@ -41,6 +41,13 @@ class User extends AppModel
 			'conditions' => '',
 			'fields' => '',
 			'order' => ''
+		),
+		'Site' => array(
+			'className' => 'Site',
+			'foreignKey' => 'site_id',
+			'conditions' => '',
+			'fields' => '',
+			'order' => ''
 		)
 	);
 

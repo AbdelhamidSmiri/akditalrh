@@ -14,20 +14,21 @@
 	<table class="table table-akdital">
 		<thead>
 			<tr>
-				<th>Role</th>
-				<th>Nom d'utlisateur</th>
-				<th>etat</th>
-				<th>nom</th>
-				<th>prenom</th>
+				<th>Rôle</th>
+				<th>Nom d'utilisateur</th>
+				<th>État</th>
+				<th>Nom</th>
+				<th>Prénom</th>
 				<th>Date de création</th>
 				<th class="actions">Actions</th>
+
 			</tr>
 		</thead>
 		<tbody>
 			<?php foreach ($users as $user): ?>
 				<tr>
 					<td>
-						<?php echo $this->Html->link($user['Role']['role'], array('controller' => 'roles', 'action' => 'view', $user['Role']['id'])); ?>
+<?php echo h($user['Role']['role']); ?>
 					</td>
 					<td><?php echo $user['User']['username']; ?></td>
 					<td><?php echo $user['User']['etat']; ?></td>
@@ -36,8 +37,8 @@
 					<td><?php echo $user['User']['created']; ?></td>
 					<td class="actions">
 						<?php echo $this->Html->link(__('Voir'), array('action' => 'view', $user['User']['id'])); ?> /
-						<?php echo $this->Html->link(__('Edit'), array('action' => 'edit', $user['User']['id'])); ?> /
-						<?php echo $this->Form->postLink(__('Delete'), array('action' => 'delete', $user['User']['id']), array('confirm' => __('Are you sure you want to delete # %s?', $user['User']['id']))); ?>
+						<?php echo $this->Html->link(__('Modifier'), array('action' => 'edit', $user['User']['id'])); ?> /
+						<?php echo $this->Form->postLink(__('Supprimer'), array('action' => 'delete', $user['User']['id']), array('confirm' => __('Are you sure you want to delete # %s?', $user['User']['id']))); ?>
 					</td>
 				</tr>
 			<?php endforeach; ?>

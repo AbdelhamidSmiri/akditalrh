@@ -14,7 +14,7 @@ class ReservationsController extends AppController
 	function beforeFilter()
 	{
 		parent::beforeFilter();
-		$this->Auth->allow('accepte', 'reject');
+		$this->Auth->allow('index','accepte', 'reject','fetch_hotels_with_details','fetch_chambres');
 	}
 	public function isAuthorized($user)
 	{

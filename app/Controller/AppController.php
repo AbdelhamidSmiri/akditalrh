@@ -21,8 +21,8 @@ class AppController extends Controller
     public function beforeFilter()
     {
         // Allow login page without authentication
-        // $this->Auth->allow('login');
-        $this->Auth->allow(); // allow access without login
+        $this->Auth->allow('login');
+        // $this->Auth->allow(); // allow access without login
     }
 
     public function isAuthorized($user)

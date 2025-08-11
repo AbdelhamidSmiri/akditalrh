@@ -10,14 +10,14 @@ App::uses('CakeEmail', 'Network/Email');
 class UsersController extends AppController
 {
 
-	
+
 
 	public function isAuthorized($user)
 	{
 		// Exemples de rôle : agent, agence, admin
 		$role = AuthComponent::user('Role.role');
 		// Actions autorisées pour "agent"
-		if (in_array($this->action, ['view',"login", 'logout', 'forgot_password',"dashboard"])) {
+		if (in_array($this->action, ['view', "login", 'logout', 'forgot_password', "dashboard"])) {
 			return true;
 		}
 
@@ -30,46 +30,45 @@ class UsersController extends AppController
 	}
 
 
-	function dashboard($user_id=0)
+	function dashboard($user_id = 0)
 	{
-		if ($user_id==0 || AuthComponent::user('Role.role') !== 'Admin') {
-			$user_id=AuthComponent::user('id');
+		if ($user_id == 0 || AuthComponent::user('Role.role') !== 'Admin') {
+			$user_id = AuthComponent::user('id');
 		}
-		$vols=$this->User->Volreservation->find("all",["conditions"=>["Volreservation.user_id"=>$user_id]]);
-		$hotels=$this->User->Reservation->find("all",["conditions"=>["Reservation.user_id"=>$user_id]]);
-		$data=[];
-		foreach($vols as $vol) {
-			$data[]=[
-				"category"=>"Voyage",
-				"type"=>"Billet avion",
-				"detail"=>$vol['Volreservation']['depart']." -> ".$vol['Volreservation']['destination'],
-				"dates"=>$vol['Volreservation']['date_aller']." -> ".$vol['Volreservation']['date_retour'],
-				"status"=>$vol['Volreservation']['etat'],
-				"controller"=>"volreservations",
-				"id"=>$vol['Volreservation']['id'],
-				"created"=>$vol['Volreservation']['created']
+		$vols = $this->User->Volreservation->find("all", ["conditions" => ["Volreservation.user_id" => $user_id]]);
+		$hotels = $this->User->Reservation->find("all", ["conditions" => ["Reservation.user_id" => $user_id]]);
+		$data = [];
+		foreach ($vols as $vol) {
+			$data[] = [
+				"category" => "Voyage",
+				"type" => "Billet avion",
+				"detail" => $vol['Volreservation']['depart'] . " -> " . $vol['Volreservation']['destination'],
+				"dates" => $vol['Volreservation']['date_aller'] . " -> " . $vol['Volreservation']['date_retour'],
+				"status" => $vol['Volreservation']['etat'],
+				"controller" => "volreservations",
+				"id" => $vol['Volreservation']['id'],
+				"created" => $vol['Volreservation']['created']
 			];
 		}
 		$this->loadModel("Hotel");
-		$allhotels=$this->Hotel->find("list");
-		$this->Hotel->Chambre->recursive=-1;
-		foreach($hotels as $hotel) 
-		{
-			$chambre=$this->Hotel->Chambre->findById($hotel['Reservation']['chambre_id']);
-			$chambre=$allhotels[$chambre['Chambre']['hotel_id']];
-			$data[]=[
-				"category"=>"Hébergement",
-				"type"=>"Hôtel",
-				"detail"=>$chambre,
-				"dates"=>$hotel['Reservation']['checkin']." -> ".$hotel['Reservation']['checkout'],
-				"status"=>$hotel['Reservation']['etat'],
-				"controller"=>"reservations",
-				"id"=>$hotel['Reservation']['id'],
-				"created"=>$hotel['Reservation']['created']
+		$allhotels = $this->Hotel->find("list");
+		$this->Hotel->Chambre->recursive = -1;
+		foreach ($hotels as $hotel) {
+			$chambre = $this->Hotel->Chambre->findById($hotel['Reservation']['chambre_id']);
+			$chambre = $allhotels[$chambre['Chambre']['hotel_id']];
+			$data[] = [
+				"category" => "Hébergement",
+				"type" => "Hôtel",
+				"detail" => $chambre,
+				"dates" => $hotel['Reservation']['checkin'] . " -> " . $hotel['Reservation']['checkout'],
+				"status" => $hotel['Reservation']['etat'],
+				"controller" => "reservations",
+				"id" => $hotel['Reservation']['id'],
+				"created" => $hotel['Reservation']['created']
 			];
 		}
 		// Sort by created date in descending order
-		usort($data, function($a, $b) {
+		usort($data, function ($a, $b) {
 			return strtotime($b['created']) - strtotime($a['created']);
 		});
 		//debug($data);exit();
@@ -91,11 +90,27 @@ class UsersController extends AppController
 	 */
 	public function view($id = null)
 	{
-		if($id== null || AuthComponent::user('Role.role') !== 'Admin') 
-			$id=AuthComponent::user('id');
+		// If user is not logged in → go to login
+		if (!AuthComponent::user()) {
+			return $this->redirect(array('action' => 'login'));
+		}
+
+		// If no ID or current user is not Admin → show own profile
+		if ($id === null || AuthComponent::user('Role.role') !== 'Admin') {
+			$id = AuthComponent::user('id');
+		}
+
+		// Check if user exists
 		$options = array('conditions' => array('User.id' => $id));
-		$this->set('user', $this->User->find('first', $options));
+		$user = $this->User->find('first', $options);
+
+		if (empty($user)) {
+			throw new NotFoundException(__('User not found'));
+		}
+
+		$this->set('user', $user);
 	}
+
 
 	/**
 	 * add method
@@ -175,10 +190,8 @@ class UsersController extends AppController
 		if ($this->Auth->user()) {
 			return $this->redirect($this->Auth->loginRedirect); // or Auth->redirect()
 		}
-		if ($this->request->is('post')) 
-		{
-			if ($this->Auth->login()) 
-			{
+		if ($this->request->is('post')) {
+			if ($this->Auth->login()) {
 				$this->Session->setFlash(
 					'Bonjour ' . $this->Auth->user('nom') . ', vous êtes connecté avec succès.',
 					'Flash/success',
@@ -186,14 +199,14 @@ class UsersController extends AppController
 					'success'
 				);
 				$role = AuthComponent::user('Role.role');
-				if($role== "Admin") {
+				if ($role == "Admin") {
 					$this->Auth->redirectUrl(array('controller' => 'users', 'action' => 'index'));
 				} elseif ($role == "Agence") {
 					$this->Auth->redirectUrl(array('controller' => 'volreservations', 'action' => 'agence_index'));
-				} elseif ($role !==' Admin' && $role !== 'Agence') 
+				} elseif ($role !== ' Admin' && $role !== 'Agence')
 					$this->Auth->redirectUrl(array('controller' => 'volreservations', 'action' => 'agent_index'));
-				
-				
+
+
 				return $this->redirect($this->Auth->redirect());
 			} else {
 				$this->Session->setFlash(

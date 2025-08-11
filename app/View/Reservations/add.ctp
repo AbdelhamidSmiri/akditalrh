@@ -9,10 +9,12 @@
 <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/fr.js"></script>
 
 <style>
-	.step_2, .step_3, .step_4 {
+	.step_2,
+	.step_3,
+	.step_4 {
 		display: none;
 	}
-	
+
 	/* Hotel Cards Styles */
 	.content-table {
 		padding: 20px;
@@ -67,7 +69,7 @@
 	}
 
 	.hotel-card {
-		border: 1px solid #D9D9D9;
+		border: 2px solid #D9D9D9;
 		box-shadow: 0px 0px 9px 0px #d9d9d9b0;
 		border-radius: 16px;
 		transition: 0.2s;
@@ -76,11 +78,11 @@
 	}
 
 	.hotel-card:hover {
-		border-color: #007bff;
+		border: 2px solid #152259;
 	}
 
 	.hotel-card.selected {
-		border-color: #007bff;
+		border: 2px solid #152259;
 		background-color: #f8f9ff;
 	}
 
@@ -96,6 +98,17 @@
 		display: flex;
 		flex-wrap: wrap;
 		flex-direction: row;
+	}
+
+	.info {
+		display: flex;
+		flex-direction: column;
+		flex-wrap: wrap;
+		flex-direction: row;
+		word-break: break-all;
+		/* Forces breaking inside words */
+		overflow-wrap: anywhere;
+		/* Modern way for breaking long strings */
 	}
 
 	.info .email,
@@ -131,7 +144,7 @@
 
 	/* Chambre Cards Styles */
 	.view-card {
-		border: 1px solid #D9D9D9;
+		border: 2px solid #D9D9D9;
 		box-shadow: 0px 0px 9px 0px #d9d9d9b0;
 		border-radius: 16px;
 		transition: 0.2s;
@@ -140,11 +153,11 @@
 	}
 
 	.view-card:hover {
-		border-color: #007bff;
+		border: 2px solid #152259;
 	}
 
 	.view-card.selected {
-		border-color: #007bff;
+		border: 2px solid #152259;
 		background-color: #f8f9ff;
 	}
 
@@ -223,10 +236,58 @@
 		color: #666;
 		font-size: 14px;
 	}
-	@media screen {
-		.title-card{
+
+	.content-card-chambre {
+		width: 100%;
+	}
+
+	.view-card .card-body {
+		padding: 27px 18px;
+	}
+
+	.form-check-input:checked {
+		background-color: #3780CB;
+		border-color: #3780CB;
+	}
+
+	@media only screen and (max-width: 600px) {
+		.hotel-card .radio-selection {
+			display: none;
+		}
+
+		.image {
+			width: 40%;
+			align-items: center;
 
 		}
+
+		.title-card {
+			font-size: 16px;
+		}
+
+		.ville span {
+			font-size: 12px;
+		}
+
+		.starts i {
+			font-size: 12px;
+		}
+
+		.info .email,
+		.info .tel {
+			font-size: 12px;
+		}
+
+		.content-card {
+			padding: 10px 14px;
+			width: 60% !important;
+			padding-bottom: 11px;
+		}
+
+		.content-card-chambre {
+			width: 100% !important;
+		}
+
 	}
 </style>
 
@@ -254,6 +315,9 @@
 							'id' => 'ville-select'
 						));
 						?>
+						<div class="message">
+							Veuillez sélectionner la ville 
+						</div>
 						<div class="message-error ville-error" style="display: none;">
 							Veuillez choisir une ville.
 						</div>
@@ -267,22 +331,29 @@
 							'empty' => 'Choisissez le site de la réservation',
 						));
 						?>
+						<div class="message">
+							Sélectionnez le site Akdital qui prendra en charge votre mission.
+						</div>
 						<div class="message-error site-error" style="display: none;">
 							Veuillez choisir un site.
 						</div>
+
 					</div>
 
 					<div class='col-md-6'>
 						<div class="has-calendar-icon input text">
 							<?php
 							echo $this->Form->input('checkin', array(
-								'label' => 'Check-in',
+								'label' => 'Date d’arrivée',
 								'type' => 'text',
 								'id' => 'date_checkin',
 								'placeholder' => '',
 								'div' => false,
 							));
 							?>
+						</div>
+						<div class="message">
+							Sélectionnez la date prévue d’arrivée
 						</div>
 						<div class="message-error checkin-error" style="display: none;">
 							Veuillez sélectionner la date de check-in.
@@ -293,13 +364,16 @@
 						<div class="has-calendar-icon input text">
 							<?php
 							echo $this->Form->input('checkout', array(
-								'label' => 'Check-out',
+								'label' => 'Date de départ',
 								'type' => 'text',
 								'id' => 'date_checkout',
 								'placeholder' => '',
 								'div' => false,
 							));
 							?>
+						</div>
+						<div class="message">
+							Sélectionnez la date prévue de départ.
 						</div>
 						<div class="message-error checkout-error" style="display: none;">
 							Veuillez sélectionner la date de check-out.
@@ -329,7 +403,7 @@
 				</div>
 
 				<div class='text-center mt-4'>
-					<button type="button" id="btn-step2-back" class="btn btn-secondary-rounded me-3">
+					<button type="button" id="btn-step2-back" class="btn btn-secondary-rounded">
 						<i class="fa-solid fa-arrow-left"></i> Retour
 					</button>
 					<button type="button" id="btn-step2-next" class="btn btn-primary-rounded btn-lg" disabled>
@@ -357,7 +431,7 @@
 				</div>
 
 				<div class='text-center mt-4'>
-					<button type="button" id="btn-step3-back" class="btn btn-secondary me-3">
+					<button type="button" id="btn-step3-back" class="btn btn-secondary-rounded">
 						<i class="fa-solid fa-arrow-left"></i> Retour
 					</button>
 					<button type="button" id="btn-step3-next" class="btn btn-primary-rounded btn-lg" disabled>
@@ -377,7 +451,7 @@
 				</div>
 
 				<div class="row">
-					<div class='col-md-6'>
+					<div class='col-md-12'>
 						<?php
 						echo $this->Form->input('num_odm', array('placeholder' => '', 'label' => 'Numéro d\'ODM'));
 						?>
@@ -448,10 +522,10 @@
 				</div>
 
 				<div class='text-center mt-4'>
-					<button type="button" id="btn-step4-back" class="btn btn-secondary me-3">
+					<button type="button" id="btn-step4-back" class="btn btn-secondary-rounded">
 						<i class="fa-solid fa-arrow-left"></i> Retour
 					</button>
-					<button type="submit" class="btn btn-success btn-lg">
+					<button type="submit" class="btn btn-success-rounded btn-lg">
 						<i class="fa-solid fa-paper-plane"></i> Envoyer la réservation
 					</button>
 				</div>
@@ -483,6 +557,7 @@
 
 		// Step 1: Search hotels
 		$('#btn-step1-next').click(function() {
+			console.log('clicked')
 			const villeId = $('#ville-select').val();
 			const siteId = $('select[name="data[Reservation][site_id]"]').val();
 			const checkin = $('#date_checkin').val();
@@ -490,7 +565,7 @@
 
 			// Validate inputs
 			let hasError = false;
-			
+
 			if (!villeId) {
 				$('#ville-select').css('border', '1px solid #b80000');
 				$('.ville-error').show();
@@ -535,23 +610,26 @@
 
 		// Load hotels function
 		function loadHotels(villeId) {
+			console.log('coco');
 			$('#hotels-container').addClass('loading').html('<div class="text-center p-5">Chargement des hôtels...</div>');
 
 			$.ajax({
 				url: '<?php echo $this->Html->url(array("controller" => "reservations", "action" => "fetch_hotels_with_details")); ?>',
 				type: 'POST',
-				data: { ville_id: villeId },
+				data: {
+					ville_id: villeId
+				},
 				dataType: 'json',
 				success: function(response) {
 					$('#hotels-container').removeClass('loading');
-					
+
 					if (response.success && response.hotels.length > 0) {
 						let hotelsHtml = '';
-						
+
 						response.hotels.forEach(function(hotel) {
 							let imageHtml = '';
 							let contentWidth = '100%';
-							
+
 							if (hotel.images) {
 								imageHtml = `<div class="image" style="background-image: url('<?php echo Router::url('/files/hotels/', true); ?>${hotel.images}');"></div>`;
 								contentWidth = '58%';
@@ -592,16 +670,20 @@
 													<div class="emails">
 														${emailsHtml}
 													</div>
+													${hotel.telephone && hotel.telephone.trim() ? `
 													<div>
 														<span class="tel"><i class="fa-regular fa-phone"></i> ${hotel.telephone}</span>
 													</div>
+												` : ''}
 												</div>
 											</div>
 										</div>
 										<div class="sub-content">
+										${hotel.adresse && hotel.adresse.trim() ? `
 											<div class="adress">
 												<span><i class="fa-regular fa-location-dot"></i> ${hotel.adresse}</span>
 											</div>
+											` : ''}
 											<div class="reglement">
 												${hotel.reglement}
 											</div>
@@ -624,7 +706,10 @@
 						// Show step 2
 						$('.step_1').hide();
 						$('.step_2').show();
-						window.scrollTo({ top: 0, behavior: 'smooth' });
+						window.scrollTo({
+							top: 0,
+							behavior: 'smooth'
+						});
 
 					} else {
 						$('#hotels-container').html('<div class="text-center p-5"><p>Aucun hôtel disponible pour cette ville.</p></div>');
@@ -633,6 +718,7 @@
 					}
 				},
 				error: function() {
+					console.log('coco error');
 					$('#hotels-container').removeClass('loading').html('<div class="text-center p-5 text-danger"><p>Erreur lors du chargement des hôtels.</p></div>');
 				}
 			});
@@ -642,10 +728,10 @@
 		$('#btn-step2-next').click(function() {
 			const selectedHotelId = $('input[name="selected_hotel"]:checked').val();
 			const selectedHotelName = $(`.hotel-card[data-hotel-id="${selectedHotelId}"]`).data('hotel-name');
-			
+
 			if (selectedHotelId) {
 				$('#selected-hotel-id').val(selectedHotelId);
-				console.log(selectedHotelId)
+				console.log(selectedHotelId);
 				loadChambres(selectedHotelId, selectedHotelName);
 			}
 		});
@@ -655,18 +741,20 @@
 			$('#selected-hotel-info').html(`<div class="alert alert-info"><strong>Hôtel sélectionné:</strong> ${hotelName}</div>`);
 			$('#chambres-container').addClass('loading').html('<div class="text-center p-5">Chargement des chambres...</div>');
 
+
 			$.ajax({
 				url: '<?php echo $this->Html->url(array("controller" => "reservations", "action" => "fetch_chambres")); ?>',
 				type: 'POST',
-				data: { hotel_id: hotelId },
+				data: {
+					hotel_id: hotelId
+				},
 				dataType: 'json',
 				success: function(response) {
-					console.log(response);
 					$('#chambres-container').removeClass('loading');
-					
+
 					if (response.success && response.chambres.length > 0) {
 						let chambresHtml = '';
-						
+
 						response.chambres.forEach(function(chambre) {
 							chambresHtml += `
 								<div class="col-md-6">
@@ -675,8 +763,8 @@
 											<div class="radio-selection">
 												<input type="radio" name="selected_chambre" value="${chambre.id}" class="form-check-input">
 											</div>
-											<div class="content-card">
-												<div class="flex justify-content-between">
+											<div class="content-card content-card-chambre">
+												<div class="flex justify-content-between col-gap-2">
 													<div class="block-content">
 														<label>Nom de la chambre</label>
 														<span><b class="nom_chambre">${chambre.nom}</b></span>
@@ -687,8 +775,8 @@
 													</div>
 												</div>
 											</div>
-											<div class="content-card">
-												<div class="flex justify-content-between">
+											<div class="content-card content-card-chambre">
+												<div class="flex justify-content-between col-gap-2">
 													<div class="block-content">
 														<label>Type de chambre</label>
 														<span><b class="type_chambre">${chambre.type || 'Standard'}</b></span>
@@ -699,16 +787,16 @@
 													</div>
 												</div>
 											</div>
-											<div class="content-card">
-												<div class="flex justify-content-between">
+											<div class="content-card content-card-chambre">
+												<div class="flex justify-content-between col-gap-2">
 													<div class="block-content">
 														<label>Description</label>
 														<span><b class="description_chambre">${chambre.description || 'Chambre confortable'}</b></span>
 													</div>
-													<div class="block-content">
+													<div class="block-content d-flex align-items-end">
 														<div class="actions">
 															<button class="btn btn-primary-rounded select-chambre-btn" type="button" data-chambre-id="${chambre.id}">
-																Sélectionner cette chambre
+																Sélectionner
 															</button>
 														</div>
 													</div>
@@ -739,7 +827,10 @@
 						// Show step 3
 						$('.step_2').hide();
 						$('.step_3').show();
-						window.scrollTo({ top: 0, behavior: 'smooth' });
+						window.scrollTo({
+							top: 0,
+							behavior: 'smooth'
+						});
 
 					} else {
 						$('#chambres-container').html('<div class="text-center p-5"><p>Aucune chambre disponible pour cet hôtel.</p></div>');
@@ -756,12 +847,15 @@
 		// Step 3: Room selection -> Final step
 		$('#btn-step3-next').click(function() {
 			const selectedChambreId = $('input[name="selected_chambre"]:checked').val();
-			
+
 			if (selectedChambreId) {
 				$('#selected-chambre-id').val(selectedChambreId);
 				$('.step_3').hide();
 				$('.step_4').show();
-				window.scrollTo({ top: 0, behavior: 'smooth' });
+				window.scrollTo({
+					top: 0,
+					behavior: 'smooth'
+				});
 			}
 		});
 
@@ -769,25 +863,34 @@
 		$('#btn-step2-back').click(function() {
 			$('.step_2').hide();
 			$('.step_1').show();
-			window.scrollTo({ top: 0, behavior: 'smooth' });
+			window.scrollTo({
+				top: 0,
+				behavior: 'smooth'
+			});
 		});
 
 		$('#btn-step3-back').click(function() {
 			$('.step_3').hide();
 			$('.step_2').show();
-			window.scrollTo({ top: 0, behavior: 'smooth' });
+			window.scrollTo({
+				top: 0,
+				behavior: 'smooth'
+			});
 		});
 
 		$('#btn-step4-back').click(function() {
 			$('.step_4').hide();
 			$('.step_3').show();
-			window.scrollTo({ top: 0, behavior: 'smooth' });
+			window.scrollTo({
+				top: 0,
+				behavior: 'smooth'
+			});
 		});
 
 		// Form submission validation
 		$('.reservations form').submit(function(event) {
 			event.preventDefault();
-			
+
 			const numOdm = $('input[name="data[Reservation][num_odm]"]').val();
 			const ordreMissionFiles = $('input[name="data[Reservation][ordre_mission][]"]')[0].files;
 			const cinFiles = $('input[name="data[Reservation][cin][]"]')[0].files;

@@ -14,10 +14,11 @@
 	<table class="table table-akdital">
 		<thead>
 			<tr>
-				<th>role</th>
-				<th>plafond_hotel</th>
+				<th>Rôle</th>
+				<th>Plafond Hôtel</th>
 				<th class="actions">Actions</th>
 			</tr>
+
 		</thead>
 		<tbody>
 			<?php foreach ($roles as $role): ?>
@@ -26,8 +27,8 @@
 					<td><?php echo $role['Role']['plafond_hotel']; ?></td>
 					<td class="actions">
 						<?php echo $this->Html->link(__('Voir'), array('action' => 'view', $role['Role']['id'])); ?> /
-						<?php echo $this->Html->link(__('Edit'), array('action' => 'edit', $role['Role']['id'])); ?> /
-						<?php echo $this->Form->postLink(__('Delete'), array('action' => 'delete', $role['Role']['id']), array('confirm' => __('Are you sure you want to delete # %s?', $role['Role']['id']))); ?>
+						<?php echo $this->Html->link(__('Modifier'), array('action' => 'edit', $role['Role']['id'])); ?> /
+						<?php echo $this->Form->postLink(__('Supprimer'), array('action' => 'delete', $role['Role']['id']), array('confirm' => __('Voulez-vous vraiment supprimer ce rôle?', $role['Role']['id']))); ?>
 					</td>
 				</tr>
 			<?php endforeach; ?>

@@ -1,8 +1,6 @@
 <div class="users view">
 
 	<div class="col-md-12 little-title-section">
-		<span class="little-title">Détails de l’utilisateur</span>
-
 		<div class="actions">
 		</div>
 	</div>

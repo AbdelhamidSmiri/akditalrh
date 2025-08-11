@@ -77,8 +77,13 @@ class UsersController extends AppController
 
 	public function index()
 	{
+		$title_for_layout = "Gestion des utilisateurs";
+		$pageSubtitle = "Vue d’ensemble des comptes et de leurs informations essentielles.";
+
 		$this->User->recursive = 0;
 		$this->set('users', $this->User->find("all"));
+								$this->set(compact("pageSubtitle", 'title_for_layout'));
+
 	}
 
 	/**
@@ -109,6 +114,15 @@ class UsersController extends AppController
 		}
 
 		$this->set('user', $user);
+		$title_for_layout = "Détails de l’utilisateur";
+		$pageSubtitle = " ";
+
+		if($id== null || AuthComponent::user('Role.role') !== 'Admin') 
+			$id=AuthComponent::user('id');
+		$options = array('conditions' => array('User.id' => $id));
+		$this->set('user', $this->User->find('first', $options));
+		$this->set(compact("pageSubtitle", 'title_for_layout'));
+
 	}
 
 
@@ -119,6 +133,9 @@ class UsersController extends AppController
 	 */
 	public function add()
 	{
+		$title_for_layout = "Ajouter un utilisateur";
+		$pageSubtitle = " ";
+
 		if ($this->request->is('post')) {
 			$this->User->create();
 			if ($this->User->save($this->request->data)) {
@@ -130,6 +147,8 @@ class UsersController extends AppController
 		}
 		$roles = $this->User->Role->find('list');
 		$this->set(compact('roles'));
+								$this->set(compact("pageSubtitle", 'title_for_layout'));
+
 	}
 
 	/**
@@ -141,6 +160,9 @@ class UsersController extends AppController
 	 */
 	public function edit($id = null)
 	{
+		$title_for_layout = "Modifier un utilisateur";
+		$pageSubtitle = " ";
+
 		if (!$this->User->exists($id)) {
 			throw new NotFoundException(__('Invalid user'));
 		}
@@ -157,6 +179,8 @@ class UsersController extends AppController
 		}
 		$roles = $this->User->Role->find('list');
 		$this->set(compact('roles'));
+								$this->set(compact("pageSubtitle", 'title_for_layout'));
+
 	}
 
 	/**

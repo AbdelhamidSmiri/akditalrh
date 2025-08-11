@@ -22,12 +22,17 @@ class HotelsController extends AppController
 
 	public function index()
 	{
+		$title_for_layout = "Liste des Hôtels";
+		$pageSubtitle = "Parcourez et gérez tous les hôtels disponibles.";
 		$this->Hotel->recursive = 0;
 		$this->set('hotels', $this->Hotel->find("all"));
+		$this->set(compact("pageSubtitle", 'title_for_layout'));
 	}
 
 	public function view($id = null)
 	{
+		$title_for_layout = "Détails de l’Hôtel";
+		$pageSubtitle = "Visualisez toutes les informations concernant cet hôtel";
 		if (!$this->Hotel->exists($id)) {
 			throw new NotFoundException(__('Invalid hotel'));
 		}
@@ -89,6 +94,7 @@ class HotelsController extends AppController
 		));
 
 		$this->set(compact('hotel', 'hotels'));
+		$this->set(compact("pageSubtitle", 'title_for_layout'));
 	}
 
 	/**
@@ -98,6 +104,8 @@ class HotelsController extends AppController
 	 */
 	public function add()
 	{
+		$title_for_layout = "Ajouter un Hôtel";
+		$pageSubtitle = "Remplissez le formulaire pour créer un nouvel hôtel";
 		if ($this->request->is('post')) {
 			$this->request->data['Hotel']['images'] = $this->uploadFile('hotels', $this->request->data['Hotel']['images']);
 			// Création d'une nouvelle entité
@@ -142,6 +150,7 @@ class HotelsController extends AppController
 		));
 
 		$this->set(compact('villes_hotel'));
+		$this->set(compact("pageSubtitle", 'title_for_layout'));
 	}
 
 
@@ -154,6 +163,8 @@ class HotelsController extends AppController
 	 */
 	public function edit($id = null)
 	{
+		$title_for_layout = "Modifier l’Hôtel";
+		$pageSubtitle = "Mettez à jour les informations de l’hôtel sélectionné";
 		if (!$this->Hotel->exists($id)) {
 			throw new NotFoundException(__('Invalid hotel'));
 		}
@@ -257,6 +268,8 @@ class HotelsController extends AppController
 		));
 
 		$this->set(compact('villes_hotel'));
+				$this->set(compact("pageSubtitle", 'title_for_layout'));
+
 	}
 
 	/**

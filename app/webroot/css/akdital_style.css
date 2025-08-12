@@ -513,11 +513,14 @@
 	color: #1e2c5a;
 	margin-bottom: 4px;
 }
-
+.dark-card{
+	background-color: #303030;
+	color: #ffffff;
+}
 .view-card {
-	border: 1px solid #d0d9ff;
-
-	border-radius: 12px;
+    border: 1px solid #d0d9ff;
+    border-radius: 12px;
+    height: 149px !important;
 }
 
 .view-card .card-body {

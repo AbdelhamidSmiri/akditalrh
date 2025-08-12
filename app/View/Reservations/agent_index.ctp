@@ -123,7 +123,7 @@ function dureeSejour($checkin_date, $checkout_date)
 
         <div class="row">
             <div class="col-12">
-                <h1 class="main-title">Dashboard Réservations</h1>
+                <h1 class="little-title">Dashboard Réservations</h1>
             </div>
         </div>
 
@@ -208,7 +208,7 @@ function dureeSejour($checkin_date, $checkout_date)
     <!-- Statistiques par Site -->
     <div class="row mb-4">
         <div class="col-12 ">
-            <h1 class="main-title">Répartition par Site</h1>
+            <h1 class="little-title">Répartition par Site</h1>
             <div class="row">
                 <?php foreach ($sites_stats as $site => $stats): ?>
                     <div class="col-md-6">

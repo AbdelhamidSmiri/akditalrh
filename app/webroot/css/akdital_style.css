@@ -518,9 +518,9 @@
 	color: #ffffff;
 }
 .view-card {
-    border: 1px solid #d0d9ff;
+    border: 2px solid #3780cbc2;
     border-radius: 12px;
-    height: 149px !important;
+    height: 177px !important;
 }
 
 .view-card .card-body {

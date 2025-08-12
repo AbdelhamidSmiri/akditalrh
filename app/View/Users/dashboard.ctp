@@ -1,10 +1,10 @@
   <div class="row g-3 mb-5">
   	<div class="col-12 col-md-4 col-lg-3">
-  		<div class="card view-card border-1 h-100 dark-card">
-  			<div class="stats-card card-body d-flex align-items-center justify-content-between p-3">
-  				<div class="d-flex flex-column">
+  		<div class="card view-card h-100 dark-card">
+  			<div class="stats-card card-body d-flex align-items-center justify-content-between pt-4">
+  				<div class="d-flex flex-column justify-content-center h-100 w-50">
   					<div class="stats-number mb-1" style="font-size: 2.5rem; font-weight: 600; line-height: 1;">
-  						5
+  						<?php echo $statistique['en_cours']; ?>
   					</div>
   					<div class="stats-label mb-0 text-muted" style="font-size: 16px; font-weight: 500; line-height: 1.3;">
   						Demandes en cours </div>
@@ -17,13 +17,13 @@
   			</div>
   		</div>
   	</div>
-	
+
   	<div class="col-12 col-md-4 col-lg-3">
-  		<div class="card view-card border-1 h-100">
-  			<div class="stats-card card-body d-flex align-items-center justify-content-between p-3">
-  				<div class="d-flex flex-column">
+  		<div class="card view-card h-100">
+  			<div class="stats-card card-body d-flex align-items-center justify-content-between pt-4">
+  				<div class="d-flex flex-column justify-content-center h-100 w-50">
   					<div class="stats-number mb-1" style="font-size: 2.5rem; font-weight: 600; line-height: 1;">
-  						2
+  						<?php echo $statistique['vols']; ?>
   					</div>
   					<div class="stats-label mb-0 text-muted" style="font-size: 16px; font-weight: 500; line-height: 1.3;">
 
@@ -41,11 +41,11 @@
 
   	<!-- Card 6 - Validées -->
   	<div class="col-12 col-md-4 col-lg-3">
-  		<div class="card view-card border-1 h-100">
-  			<div class="stats-card card-body d-flex align-items-center justify-content-between p-3">
-  				<div class="d-flex flex-column">
+  		<div class="card view-card h-100">
+  			<div class="stats-card card-body d-flex align-items-center justify-content-between pt-4">
+  				<div class="d-flex flex-column justify-content-center h-100 w-50">
   					<div class="stats-number mb-1" style="font-size: 2.5rem; font-weight: 600; line-height: 1;">
-  						6
+  						<?php echo $statistique['hotels']; ?>
   					</div>
   					<div class="stats-label mb-0 text-muted" style="font-size: 16px; font-weight: 500; line-height: 1.3;">
 

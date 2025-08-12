@@ -50,6 +50,7 @@ en toute simplicité.";
         if($vol['Volreservation']['etat'] == 'En cours'){
             $statistique['en_cours'] = isset($statistique['en_cours']) ? $statistique['en_cours'] + 1 : 1;
         }
+
         $data[] = [
             "category" => "Voyage",
             "type" => "Billet avion",
@@ -91,7 +92,7 @@ en toute simplicité.";
         if($hotel['Reservation']['etat'] == 'acceptée'){
             $statistique['hotels'] = isset($statistique['hotels']) ? $statistique['hotels'] + 1 : 1;
         }
-        if($hotel['Reservation']['etat'] == 'en cours'){
+        if($hotel['Reservation']['etat'] == 'En cours'){
             $statistique['en_cours'] = isset($statistique['en_cours']) ? $statistique['en_cours'] + 1 : 1;
         }
 
@@ -111,7 +112,14 @@ en toute simplicité.";
     usort($data, function ($a, $b) {
         return strtotime($b['created']) - strtotime($a['created']);
     });
+	$this->set(compact("data", "statistique", "pageSubtitle", 'title_for_layout'));
 
+	// Set the title for the layout
+	$this->set('title_for_layout', $title_for_layout);
+	$this->set('pageSubtitle', $pageSubtitle);
+
+	// Render the dashboard view
+	$this->render('dashboard');
 	$this->set(compact("data", "statistique","pageSubtitle", 'title_for_layout'));
 }
 

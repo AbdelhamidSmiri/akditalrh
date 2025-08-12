@@ -35,8 +35,8 @@
 }
 
 .status-btn.checked {
-	background-color: #F2F2F2;
-	color: #19161D !important;
+	background-color: #f2f2f2;
+	color: #19161d !important;
 	font-weight: 400 !important;
 }
 
@@ -49,7 +49,7 @@
 }
 
 .status-btn.refused {
-	background-color: #D5393C;
+	background-color: #d5393c;
 	/* Red */
 }
 
@@ -252,6 +252,15 @@
 	border-bottom-left-radius: 25px !important;
 	border-top-left-radius: 25px !important;
 }
+.btn-secondary-rounded:focus{
+	background-color: #f2f2f2 !important;
+	border-color: #f2f2f2 !important;
+	color: #19161d !important;
+	border: none;
+	box-shadow: none;
+	outline: none;
+}
+
 
 .btn-secondary-rounded:hover {
 	background-color: #000000;
@@ -292,7 +301,6 @@
 
 	color: #ffffff;
 }
-
 
 .redirect-btn-rounded i {
 	margin-right: 12px;
@@ -513,22 +521,22 @@
 	color: #1e2c5a;
 	margin-bottom: 4px;
 }
-.dark-card{
+.dark-card {
 	background-color: #303030;
 	color: #ffffff;
 }
-.dark-icon{
+.dark-icon {
 	width: 45px;
-    height: 45px;
-    border-radius: 50%;
-    font-size: 1.2rem;
-    background-color: #314552;
-    color: #3498db;
+	height: 45px;
+	border-radius: 50%;
+	font-size: 1.2rem;
+	background-color: #314552;
+	color: #3498db;
 }
 .view-card {
-    border: 1.9px solid #3780cbc2;
-    border-radius: 12px;
-    height: 177px !important;
+	border: 1.9px solid #3780cbc2;
+	border-radius: 12px;
+	height: fit-content;
 }
 .card-actions{
 	height: 177px !important;
@@ -553,7 +561,7 @@
     font-weight: 700;
 }
 .view-card .card-body {
-	padding: 27px 23px
+	padding: 27px 23px;
 }
 
 /* form style (inputs) */
@@ -821,21 +829,21 @@ textarea {
 	border-radius: 4px;
 }
 
-.control:hover input~.control__indicator,
-.control input:focus~.control__indicator {
+.control:hover input ~ .control__indicator,
+.control input:focus ~ .control__indicator {
 	background: #ccc;
 }
 
-.control input:checked~.control__indicator {
+.control input:checked ~ .control__indicator {
 	background: #f1f1f1;
 }
 
-.control:hover input:not([disabled]):checked~.control__indicator,
-.control input:checked:focus~.control__indicator {
+.control:hover input:not([disabled]):checked ~ .control__indicator,
+.control input:checked:focus ~ .control__indicator {
 	background: #f1f1f1;
 }
 
-.control input:disabled~.control__indicator {
+.control input:disabled ~ .control__indicator {
 	background: #e6e6e6;
 
 	opacity: 0.9;
@@ -861,7 +869,7 @@ textarea {
 	transition: 0.3s all ease;
 }
 
-.control input:checked~.control__indicator:after {
+.control input:checked ~ .control__indicator:after {
 	display: block;
 
 	color: #00548d;
@@ -882,7 +890,7 @@ textarea {
 /* end style checkbox */
 
 .content-table {
-	overflow: auto
+	overflow: auto;
 }
 
 /* design upload input */
@@ -1112,9 +1120,9 @@ textarea {
 }
 
 .import-span {
-	font-size: 0.9rem;
-
 	color: #6c757d;
+	font-size: 16px;
+	font-weight: 500;
 }
 
 .pagin-steps {
@@ -1250,7 +1258,6 @@ td {
 
 /* rederect button  */
 .redirect-btn-rounded {
-	background-color: #3498DB;
-	border-color: #3498DB;
+	background-color: #3498db;
+	border-color: #3498db;
 }
-

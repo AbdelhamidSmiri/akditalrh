@@ -84,18 +84,18 @@
 						<div class="collapse" id="agence">
 							<div class="dropdown-menu show">
 								<?php echo $this->Html->link(
-									$billetterie_icon.' Vols demandés',
+									'<i class="fa-solid fa-spinner me-2"></i> Demandes en cours',
 									array('controller' => 'volreservations', 'action' => 'agence_index'),
 									array('class' => 'dropdown-item', 'escape' => false)
 								);
 								echo $this->Html->link(
-									'<i class="fa-light fa-circle-check me-2"></i>Vols Terminés',
+									'<i class="fa-light fa-circle-check me-2"></i>Billets émis',
 									array('controller' => 'volreservations', 'action' => 'agence_valider'),
 									array('class' => 'dropdown-item', 'escape' => false)
 								);
 
 								echo $this->Html->link(
-									'<i class="fa-light fa-circle-xmark me-2"></i>Vols Annulés',
+									'<i class="fa-light fa-circle-xmark me-2"></i>Demandes annulées ',
 									array('controller' => 'volreservations', 'action' => 'agence_annuler'),
 									array('class' => 'dropdown-item', 'escape' => false)
 								);
@@ -120,18 +120,18 @@
 						<button class="nav-link dropdown-toggle" type="button" data-bs-toggle="collapse"
 							data-bs-target="#reservationsDropdown" aria-expanded="false">
 							<?php echo $reservations_icon; ?>
-							Réservations de vols
+							Billets d’avion
 						</button>
 						<div class="collapse" id="reservationsDropdown">
 							<div class="dropdown-menu show">
 								<?php echo $this->Html->link(
-									'<i class="fa-regular fa-plus me-2"></i>Demande de billet',
+									'<i class="fa-regular fa-plus me-2"></i>Demande de billet d’avion',
 									array('controller' => 'volreservations', 'action' => 'add'),
 									array('class' => 'dropdown-item', 'escape' => false)
 
 								); ?>
 								<?php echo $this->Html->link(
-									$demande_hotel_icon . 'Mes demandes de vols',
+									$demande_hotel_icon . 'Historique des billets d’avion',
 									array('controller' => 'volreservations', 'action' => 'agent_index'),
 									array('class' => 'dropdown-item', 'escape' => false)
 								); ?>
@@ -181,19 +181,19 @@
 						<button class="nav-link dropdown-toggle" type="button" data-bs-toggle="collapse"
 							data-bs-target="#reservationsDropdown" aria-expanded="false">
 							<?php echo $reservations_icon; ?>
-							Réservations de vols
+							Billets d’avion
 						</button>
 						<div class="collapse" id="reservationsDropdown">
 							<div class="dropdown-menu show">
 								<?php echo $this->Html->link(
-									'<i class="fa-regular fa-plus me-2"></i>Demande de billet',
+									'<i class="fa-regular fa-plus me-2"></i>Demande de billet d’avion',
 									array('controller' => 'volreservations', 'action' => 'add'),
 									array('class' => 'dropdown-item', 'escape' => false)
 
 								);
 								echo $this->Html->link(
 									$billetterie_icon .
-										' Réservations vols',
+										' Historique des billets d’avion',
 									array('controller' => 'volreservations', 'action' => 'index'),
 									array('class' => 'dropdown-item', 'escape' => false)
 								);

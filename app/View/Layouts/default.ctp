@@ -108,22 +108,13 @@
 
 				<?php
 				if (!in_array(AuthComponent::user("Role.role"), ['Agence', 'Admin'])): ?>
-					<li class="nav-item dropdown">
-						<button class="nav-link dropdown-toggle" type="button" data-bs-toggle="collapse"
-							data-bs-target="#commandesDropdown" aria-expanded="false">
-							<?php echo $bons_commande_icon; ?>
-							Dashboard
-						</button>
-						<div class="collapse" id="commandesDropdown">
-							<div class="dropdown-menu show">
-								<?php echo $this->Html->link(
-									$billetterie_icon .
-										'Dashboard',
-									array('controller' => 'users', 'action' => 'dashboard'),
-									array('class' => 'dropdown-item', 'escape' => false)
-								); ?>
-							</div>
-						</div>
+					<li class="nav-item">
+						<?php
+						echo $this->Html->link(
+							$dashboard_icon . ' Dashboard',
+							array('controller' => 'users', 'action' => 'dashboard'),
+							array('class' => 'nav-link', 'escape' => false)
+						); ?>
 					</li>
 					<li class="nav-item dropdown">
 						<button class="nav-link dropdown-toggle" type="button" data-bs-toggle="collapse"

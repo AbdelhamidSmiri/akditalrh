@@ -32,6 +32,9 @@ class UsersController extends AppController
 
 	function dashboard($user_id = 0)
 	{
+		$title_for_layout = "Dashboard";
+		$pageSubtitle = "Gérez vos réservations, vos demandes et suivez vos informations 
+en toute simplicité.";
 		if ($user_id == 0 || AuthComponent::user('Role.role') !== 'Admin') {
 			$user_id = AuthComponent::user('id');
 		}
@@ -73,6 +76,8 @@ class UsersController extends AppController
 		});
 		//debug($data);exit();
 		$this->set(compact("data"));
+										$this->set(compact("pageSubtitle", 'title_for_layout'));
+
 	}
 
 	public function index()

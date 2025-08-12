@@ -14,23 +14,22 @@ class ReservationsController extends AppController
 	function beforeFilter()
 	{
 		parent::beforeFilter();
-		$this->Auth->allow('index','accepte', 'reject','fetch_hotels_with_details','fetch_chambres');
+		$this->Auth->allow('accepte', 'reject','fetch_hotels_with_details','fetch_chambres');
 	}
 	public function isAuthorized($user)
 	{
 		// Exemples de rôle : agent, agence, admin
 		$role = AuthComponent::user('Role.role');
-
-		// Actions autorisées pour "agence"
+		// Admin : accès à tout
+		if ($role === 'Admin') {
+			return true;
+		}
 		// Actions autorisées pour "agent"
 		if ($role !== ' Admin' && $role !== 'Agence') {
 			return in_array($this->action, ['agent_index', "add", 'view', 'edit']);
 		}
 
-		// Admin : accès à tout
-		if ($role === 'Admin') {
-			return true;
-		}
+		
 		// Refus par défaut
 		return false;
 	}

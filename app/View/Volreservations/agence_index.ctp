@@ -15,14 +15,14 @@
 	<table class="table table-akdital">
 		<thead>
 			<tr>
-				<th>Utilisateur</th>
+				<th>Demandeur</th>
 				<th>Site</th>
-				<th>destination</th>
-				<th>Date aller</th>
-				<th>Date retour</th>
-				<th>message</th>
-				<th>Date d'ajout</th>
-				<th>Transfert</th>
+				<th>Trajet</th>
+				<th>Date de départ</th>
+				<th>Date de retour</th>
+				<th>Transfert inclus</th>
+				<th>Motif</th>
+				<th>Date de soumission</th>
 				<th class="actions">Actions</th>
 			</tr>
 		</thead>
@@ -44,15 +44,16 @@
 					</td>
 					<td><?php echo $volreservation['Volreservation']['date_aller']; ?></td>
 					<td><?php echo $volreservation['Volreservation']['date_retour']; ?></td>
-					
+					<td>
+						<span class="badge badge-transfer">
+							<?php echo ($volreservation['Volreservation']['transfer'] == "1") ? 'Oui' : 'Non';
+							?>
+						</span>
+					</td>
 
 					<td><?php echo $volreservation['Volreservation']['message']; ?></td>
 					<td><?php echo $volreservation['Volreservation']['created']; ?></td>
-					<td>
-					<span class="badge badge-transfer">
-							<?php echo ($volreservation['Volreservation']['transfer'] == "1") ? 'Oui' : 'Non';
-						?>
-						</span></td>
+
 					<td class="actions">
 						<?php echo $this->Html->link(__('Voir'), array('action' => 'view', $volreservation['Volreservation']['id'])); ?>
 					</td>

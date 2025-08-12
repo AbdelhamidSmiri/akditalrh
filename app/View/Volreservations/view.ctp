@@ -7,12 +7,12 @@
 		<div class="actions_right">
 			<?php if (AuthComponent::user('Role.role') == 'Agence' && $volreservation["Volreservation"]["etat"] == "En cours"): ?>
 				<a href="<?php echo $this->Html->url(array('controller' => 'Volreservations', 'action' => 'agence_valide', $volreservation['Volreservation']['id'])); ?>"
-					class="btn btn-success-rounded">Marquer comme validée</a>
+					class="btn btn-success-rounded"><i class="fa-solid fa-check"></i> Valider et émettre le billet</a>
 			<?php endif; ?>
 
 			<?php if ($volreservation["Volreservation"]["etat"] == "En cours"): ?>
 				<button type="button" class="btn btn-secondary-rounded" data-bs-toggle="modal" data-bs-target="#archiveModal">
-					Archiver
+					<i class="fa-solid fa-xmark"></i> Refuser la demande
 				</button>
 			<?php endif; ?>
 		</div>
@@ -39,13 +39,13 @@
 
 				<div class="modal-body">
 					<div class="mb-3">
-						<?php echo $this->Form->input('reponse', array('placeholder' => '')); ?>
+						<?php echo $this->Form->input('reponse', array('placeholder' => '','label'=>'Motif du refus', 'required'=>'required' )); ?>
 					</div>
 				</div>
 
 				<div class="modal-footer">
-					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
-					<button type="submit" class="btn btn-danger">Envoyer</button>
+					<button type="button" class="btn btn-secondary-rounded" data-bs-dismiss="modal">Annuler</button>
+					<button type="submit" class="btn btn-success-rounded">Envoyer</button>
 				</div>
 				<?php echo $this->Form->end(); ?>
 
@@ -64,7 +64,7 @@
 					<?php if (!empty($volreservation['User']['nom'])): ?>
 						<div class="col-md-3">
 							<div class="info">
-								<label>Nom d'utilisateur</label>
+								<label>Demandeur</label>
 								<span><?php echo h($volreservation['User']['nom']); ?></span>
 							</div>
 						</div>
@@ -82,7 +82,7 @@
 					<?php if (!empty($volreservation['Volreservation']['destination'] || $volreservation['Volreservation']['depart'])): ?>
 						<div class="col-md-3">
 							<div class="info">
-								<label>Destination</label>
+								<label>Trajet</label>
 								<div>
 									<span><?php echo h($volreservation['Volreservation']['depart']); ?></span>
 									<i class="fa-solid fa-arrow-right"></i>
@@ -98,9 +98,9 @@
 					<?php if (!empty($volreservation['Volreservation']['date_retour']) && !empty($volreservation['Volreservation']['date_aller'])): ?>
 						<div class="col-md-3">
 							<div class="info">
-								<label>Dates </label>
+								<label>Dates de voyage : </label>
 
-								<span><b>Aller : </b> <?php echo h($volreservation['Volreservation']['date_retour']); ?></span>
+								<span><b>Départ : </b> <?php echo h($volreservation['Volreservation']['date_retour']); ?></span>
 								<span><b>Retour : </b><?php echo h($volreservation['Volreservation']['date_aller']); ?></span>
 
 							</div>
@@ -111,7 +111,7 @@
 					if (!empty($volreservation['Volreservation']['num_odm'])): ?>
 						<div class="col-md-3">
 							<div class="info">
-								<label>Num ODM</label>
+								<label>Numéro ODM</label>
 								<span><?php echo h($volreservation['Volreservation']['num_odm']); ?></span>
 							</div>
 						</div>
@@ -123,7 +123,7 @@
 						<?php if (is_array($cinImages) && count($cinImages)): ?>
 							<div class="col-md-3">
 								<div class="info">
-									<label>Ordre mission</label>
+									<label>Ordre de mission</label>
 									<div class="lightgallery">
 										<?php foreach ($cinImages as $key => $img):
 											$active = 'img_deactive';
@@ -144,7 +144,7 @@
 												<?php else: ?>
 													<i class="fa-regular fa-eye"></i>
 												<?php endif; ?>
-												<?php echo h($img); ?>
+												<?php echo h("Visualiser le document"); ?>
 											</a>
 										<?php endforeach; ?>
 									</div>
@@ -179,7 +179,7 @@
 												<?php else: ?>
 													<i class="fa-regular fa-eye"></i>
 												<?php endif; ?>
-												<?php echo h($img); ?>
+												<?php echo h("Visualiser le document"); ?>
 											</a>
 										<?php endforeach; ?>
 									</div>
@@ -214,7 +214,7 @@
 												<?php else: ?>
 													<i class="fa-regular fa-eye"></i>
 												<?php endif; ?>
-												<?php echo h($img); ?>
+												<?php echo h("Visualiser le document"); ?>
 											</a>
 										<?php endforeach; ?>
 									</div>
@@ -226,7 +226,7 @@
 					<?php if (!empty($volreservation['Volreservation']['message'])): ?>
 						<div class="col-md-3">
 							<div class="info">
-								<label>Message</label>
+								<label>Motif du voyage</label>
 								<span><?php echo h($volreservation['Volreservation']['message']); ?></span>
 							</div>
 						</div>
@@ -235,7 +235,7 @@
 					<?php if (!empty($volreservation['Volreservation']['created'])): ?>
 						<div class="col-md-3">
 							<div class="info">
-								<label>Date de demande</label>
+								<label>Date de soumission</label>
 								<span><?php echo h($volreservation['Volreservation']['created']); ?></span>
 							</div>
 						</div>
@@ -311,7 +311,7 @@
 					<?php if (!empty($volreservation['Volreservation']['num_vol'])): ?>
 						<div class="col-md-3">
 							<div class="info">
-								<label>Numéro vol</label>
+								<label>Numéro du billet</label>
 								<span><?php echo h($volreservation['Volreservation']['num_vol']); ?></span>
 							</div>
 						</div>
@@ -322,7 +322,7 @@
 						<?php if (is_array($allerFiles) && count($allerFiles)): ?>
 							<div class="col-md-3">
 								<div class="info">
-									<label>Fichier Aller</label>
+									<label>Billet aller</label>
 									<div class="lightgallery">
 										<?php foreach ($allerFiles as $key => $file):
 											$active = ($key === 0) ? 'img_active' : 'img_deactive';
@@ -343,7 +343,7 @@
 						<?php if (is_array($retourFiles) && count($retourFiles)): ?>
 							<div class="col-md-3">
 								<div class="info">
-									<label>Fichier Retour</label>
+									<label>Billet retour</label>
 									<div class="lightgallery">
 										<?php foreach ($retourFiles as $key => $file):
 											$active = ($key === 0) ? 'img_active' : 'img_deactive';
@@ -362,7 +362,7 @@
 					<?php if (!empty($volreservation['Volreservation']['transfer'])): ?>
 						<div class="col-md-3">
 							<div class="info">
-								<label>Transfert</label>
+								<label>Transfert inclus</label>
 								<span class="badge badge-transfer">
 									<?php echo ($volreservation['Volreservation']['transfer'] == "1") ? 'Oui' : 'Non';
 									?>

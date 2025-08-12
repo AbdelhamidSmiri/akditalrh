@@ -33,7 +33,6 @@
 		padding: 12px 18px;
 		width: 58%;
 		height: fit-content;
-		padding-bottom: 32px;
 	}
 
 	.title-card {
@@ -242,7 +241,7 @@
 	}
 
 	.view-card .card-body {
-		padding: 27px 18px;
+		padding: 10px 18px;
 	}
 
 	.form-check-input:checked {
@@ -784,7 +783,7 @@
 											<div class="content-card content-card-chambre">
 												<div class="flex justify-content-between col-gap-2">
 													<div class="block-content">
-														<label>Nom de la chambre</label>
+														<label>Type de chambre</label>
 														<span><b class="nom_chambre">${chambre.nom}</b></span>
 													</div>
 													<div class="block-content">
@@ -796,20 +795,8 @@
 											<div class="content-card content-card-chambre">
 												<div class="flex justify-content-between col-gap-2">
 													<div class="block-content">
-														<label>Type de chambre</label>
+														<label>Statut</label>
 														<span><b class="type_chambre">${chambre.type || 'Standard'}</b></span>
-													</div>
-													<div class="block-content">
-														<label>Capacité</label>
-														<span><b class="capacite_chambre">${chambre.capacite || 'N/A'} personne(s)</b></span>
-													</div>
-												</div>
-											</div>
-											<div class="content-card content-card-chambre">
-												<div class="flex justify-content-between col-gap-2">
-													<div class="block-content">
-														<label>Description</label>
-														<span><b class="description_chambre">${chambre.description || 'Chambre confortable'}</b></span>
 													</div>
 													<div class="block-content d-flex align-items-end">
 														<div class="actions">

@@ -30,7 +30,7 @@
 	}
 
 	.content-card {
-		padding: 12px 27px;
+		padding: 12px 18px;
 		width: 58%;
 		height: fit-content;
 		padding-bottom: 32px;
@@ -248,6 +248,12 @@
 	.form-check-input:checked {
 		background-color: #3780CB;
 		border-color: #3780CB;
+	}
+
+	#hotels-container,
+	#chambres-container {
+		height: 404px;
+		overflow: auto;
 	}
 
 	@media only screen and (max-width: 600px) {
@@ -548,16 +554,25 @@
 
 <script>
 	document.addEventListener("DOMContentLoaded", function() {
+		window.scrollTo({
+			top: document.body.scrollHeight,
+			behavior: "smooth" // smooth scroll animation
+		});
 		// Initialize date pickers
 		flatpickr("#date_checkin, #date_checkout", {
 			dateFormat: "Y-m-d",
 			locale: "fr",
-			allowInput: true
+			allowInput: true,
+			disableMobile: true,
+			allowInput: false,
 		});
 
 		// Step 1: Search hotels
 		$('#btn-step1-next').click(function() {
 			console.log('clicked')
+			$('html, body').animate({
+				scrollTop: $(document).height()
+			}, 500); // 500ms for smooth scrolling
 			const villeId = $('#ville-select').val();
 			const siteId = $('select[name="data[Reservation][site_id]"]').val();
 			const checkin = $('#date_checkin').val();
@@ -726,6 +741,9 @@
 
 		// Step 2: Hotel selection -> Load rooms
 		$('#btn-step2-next').click(function() {
+			$('html, body').animate({
+				scrollTop: $(document).height()
+			}, 500); // 500ms for smooth scrolling
 			const selectedHotelId = $('input[name="selected_hotel"]:checked').val();
 			const selectedHotelName = $(`.hotel-card[data-hotel-id="${selectedHotelId}"]`).data('hotel-name');
 
@@ -846,6 +864,9 @@
 
 		// Step 3: Room selection -> Final step
 		$('#btn-step3-next').click(function() {
+			$('html, body').animate({
+				scrollTop: $(document).height()
+			}, 500); // 500ms for smooth scrolling
 			const selectedChambreId = $('input[name="selected_chambre"]:checked').val();
 
 			if (selectedChambreId) {
@@ -861,6 +882,10 @@
 
 		// Back buttons
 		$('#btn-step2-back').click(function() {
+			$('html, body').animate({
+				scrollTop: $(document).height()
+			}, 500); // 500ms for smooth scrolling
+
 			$('.step_2').hide();
 			$('.step_1').show();
 			window.scrollTo({
@@ -870,6 +895,9 @@
 		});
 
 		$('#btn-step3-back').click(function() {
+			$('html, body').animate({
+				scrollTop: $(document).height()
+			}, 500); // 500ms for smooth scrolling
 			$('.step_3').hide();
 			$('.step_2').show();
 			window.scrollTo({
@@ -879,6 +907,9 @@
 		});
 
 		$('#btn-step4-back').click(function() {
+			$('html, body').animate({
+				scrollTop: $(document).height()
+			}, 500); // 500ms for smooth scrolling
 			$('.step_4').hide();
 			$('.step_3').show();
 			window.scrollTo({

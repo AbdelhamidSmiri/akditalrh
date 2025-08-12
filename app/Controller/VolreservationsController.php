@@ -15,7 +15,7 @@ class VolreservationsController extends AppController
 		$role = AuthComponent::user('Role.role');
 		// Actions autorisées pour "agence"
 		if ($role === 'Agence' || $role === 'Admin') {
-			return in_array($this->action, ['index','agence_index', 'agence_valider', 'agence_archive', "view", 'agence_valide', 'agence_annuler']);
+			return in_array($this->action, ['add','index','agence_index', 'agence_valider', 'agence_archive', "view", 'agence_valide', 'agence_annuler']);
 		}
 
 		// Actions autorisées pour "agent"

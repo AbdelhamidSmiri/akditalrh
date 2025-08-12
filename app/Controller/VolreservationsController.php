@@ -43,8 +43,8 @@ class VolreservationsController extends AppController
 
 	function agent_index()
 	{
-		$title_for_layout = "Gestion des Réservations de Vols";
-		$pageSubtitle = "Consultez les détails des réservations de vols";
+		$title_for_layout = "Mes demandes de billets d’avion";
+		$pageSubtitle = "Suivez le traitement de vos demandes et accédez à vos billets validés.";
 
 
 		$this->set('volreservations', $this->Volreservation->find("all", array(

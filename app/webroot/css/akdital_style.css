@@ -517,8 +517,16 @@
 	background-color: #303030;
 	color: #ffffff;
 }
+.dark-icon{
+	width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    font-size: 1.2rem;
+    background-color: #314552;
+    color: #3498db;
+}
 .view-card {
-    border: 2px solid #3780cbc2;
+    border: 1.9px solid #3780cbc2;
     border-radius: 12px;
     height: 177px !important;
 }

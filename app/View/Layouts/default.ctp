@@ -125,7 +125,7 @@
 						<div class="collapse" id="reservationsDropdown">
 							<div class="dropdown-menu show">
 								<?php echo $this->Html->link(
-									'<i class="fa-regular fa-plus me-2"></i>  Demande de vol',
+									'<i class="fa-regular fa-plus me-2"></i>Demande de billet',
 									array('controller' => 'volreservations', 'action' => 'add'),
 									array('class' => 'dropdown-item', 'escape' => false)
 
@@ -186,7 +186,7 @@
 						<div class="collapse" id="reservationsDropdown">
 							<div class="dropdown-menu show">
 								<?php echo $this->Html->link(
-									'<i class="fa-regular fa-plus me-2"></i>  Demande de vol',
+									'<i class="fa-regular fa-plus me-2"></i>Demande de billet',
 									array('controller' => 'volreservations', 'action' => 'add'),
 									array('class' => 'dropdown-item', 'escape' => false)
 

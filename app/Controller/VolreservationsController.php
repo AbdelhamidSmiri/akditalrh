@@ -173,8 +173,8 @@ class VolreservationsController extends AppController
 	 */
 	public function add()
 	{
-		$title_for_layout = "Demandes de vols";
-		$pageSubtitle = "Complétez ce formulaire pour enregistrer une nouvelle demande de vol";
+		$title_for_layout = "Demandes de billets d'avion";
+		$pageSubtitle = "Merci de compléter ce formulaire afin d’enregistrer votre nouvelle demande de billet d’avion.";
 
 		if ($this->request->is('post')) {
 			$this->Volreservation->create();

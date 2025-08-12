@@ -84,19 +84,18 @@
 						<div class="collapse" id="agence">
 							<div class="dropdown-menu show">
 								<?php echo $this->Html->link(
-									'<i class="fa-regular fa-plus"></i> Demandes de Vols',
+									$billetterie_icon.' Vols demandés',
 									array('controller' => 'volreservations', 'action' => 'agence_index'),
 									array('class' => 'dropdown-item', 'escape' => false)
 								);
 								echo $this->Html->link(
-									$hebergement_icon .
-										'Vols Terminés',
+									'<i class="fa-light fa-circle-check me-2"></i>Vols Terminés',
 									array('controller' => 'volreservations', 'action' => 'agence_valider'),
 									array('class' => 'dropdown-item', 'escape' => false)
 								);
+
 								echo $this->Html->link(
-									$hebergement_icon .
-										' Vols Annulés',
+									'<i class="fa-light fa-circle-xmark me-2"></i>Vols Annulés',
 									array('controller' => 'volreservations', 'action' => 'agence_annuler'),
 									array('class' => 'dropdown-item', 'escape' => false)
 								);

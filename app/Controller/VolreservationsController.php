@@ -58,8 +58,8 @@ class VolreservationsController extends AppController
 
 	function agence_index()
 	{
-		$title_for_layout = "Demandes de Vols";
-		$pageSubtitle = "Consultez les demandes de vols en cours de traitement";
+		$title_for_layout = "Demandes de billets d'avion";
+		$pageSubtitle = "Merci de compléter ce formulaire afin d’enregistrer votre nouvelle demande de billet d’avion.";
 		$volreservations = $this->Volreservation->find("all", array(
 			'conditions' => array('Volreservation.etat' => "En cours"),
 			'order' => array('Volreservation.created' => 'DESC') // or any other field you want to sort by

@@ -129,9 +129,22 @@
 											$active = 'img_deactive';
 											if ($key == 0)
 												$active = 'img_active';
+
+											// Get file extension to check if it's a PDF
+											$fileExtension = strtolower(pathinfo($img, PATHINFO_EXTENSION));
+											$isPdf = ($fileExtension === 'pdf');
+
+											// Add pdf-link class for PDFs
+											$linkClass = $active . ($isPdf ? ' pdf-link' : '');
 										?>
-											<a href="/akditalrh/files/volreservations/<?php echo h($img); ?>" class="<?php echo $active; ?>">
-												<i class="fa-regular fa-eye"></i> <?php echo h($img); ?>
+											<a href="<?php echo $this->webroot . 'files/volreservations/' . h($img); ?>"
+												class="<?php echo h($linkClass); ?>">
+												<?php if ($isPdf): ?>
+													<i class="fa-regular fa-file-pdf"></i>
+												<?php else: ?>
+													<i class="fa-regular fa-eye"></i>
+												<?php endif; ?>
+												<?php echo h($img); ?>
 											</a>
 										<?php endforeach; ?>
 									</div>
@@ -152,9 +165,21 @@
 											$active = 'img_deactive';
 											if ($key == 0)
 												$active = 'img_active';
+
+											// Get file extension to check if it's a PDF
+											$fileExtension = strtolower(pathinfo($img, PATHINFO_EXTENSION));
+											$isPdf = ($fileExtension === 'pdf');
+
+											// Add pdf-link class for PDFs
+											$linkClass = $active . ($isPdf ? ' pdf-link' : '');
 										?>
-											<a href="/akditalrh/files/volreservations/<?php echo h($img); ?>" class="<?php echo $active; ?>">
-												<i class="fa-regular fa-eye"></i> <?php echo h($img); ?>
+											<a href="/akditalrh/files/volreservations/<?php echo h($img); ?>" class="<?php echo h($linkClass); ?>">
+												<?php if ($isPdf): ?>
+													<i class="fa-regular fa-file-pdf"></i>
+												<?php else: ?>
+													<i class="fa-regular fa-eye"></i>
+												<?php endif; ?>
+												<?php echo h($img); ?>
 											</a>
 										<?php endforeach; ?>
 									</div>
@@ -175,9 +200,21 @@
 											$active = 'img_deactive';
 											if ($key == 0)
 												$active = 'img_active';
+
+											// Get file extension to check if it's a PDF
+											$fileExtension = strtolower(pathinfo($img, PATHINFO_EXTENSION));
+											$isPdf = ($fileExtension === 'pdf');
+
+											// Add pdf-link class for PDFs
+											$linkClass = $active . ($isPdf ? ' pdf-link' : '');
 										?>
-											<a href="/akditalrh/files/volreservations/<?php echo h($img); ?>" class="<?php echo $active; ?>">
-												<i class="fa-regular fa-eye"></i> <?php echo h($img); ?>
+											<a href="/akditalrh/files/volreservations/<?php echo h($img); ?>" class="<?php echo h($linkClass); ?>">
+												<?php if ($isPdf): ?>
+													<i class="fa-regular fa-file-pdf"></i>
+												<?php else: ?>
+													<i class="fa-regular fa-eye"></i>
+												<?php endif; ?>
+												<?php echo h($img); ?>
 											</a>
 										<?php endforeach; ?>
 									</div>
@@ -387,7 +424,14 @@
 	document.addEventListener('DOMContentLoaded', function() {
 		document.querySelectorAll('.lightgallery').forEach(function(el) {
 			lightGallery(el, {
-				selector: 'a'
+				selector: 'a:not(.pdf-link)'
+			});
+		});
+		document.querySelectorAll('.pdf-link').forEach(function(link) {
+			link.addEventListener('click', function(e) {
+				e.preventDefault();
+				e.stopPropagation();
+				window.open(this.href, '_blank');
 			});
 		});
 	});

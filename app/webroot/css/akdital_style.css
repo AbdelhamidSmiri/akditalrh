@@ -39,9 +39,11 @@
 	color: #19161D !important;
 	font-weight: 400 !important;
 }
-.add-index-button{
+
+.add-index-button {
 	padding: 12px 12px !important;
 }
+
 .status-btn.in-progress {
 	background-color: #1e40aff0;
 }
@@ -292,9 +294,10 @@
 }
 
 
-.redirect-btn-rounded i{
+.redirect-btn-rounded i {
 	margin-right: 12px;
 }
+
 .btn-success-rounded {
 	background-color: #3e875e;
 
@@ -510,11 +513,14 @@
 	color: #1e2c5a;
 	margin-bottom: 4px;
 }
-
+.dark-card{
+	background-color: #303030;
+	color: #ffffff;
+}
 .view-card {
-	border: 1px solid #d0d9ff;
-
-	border-radius: 12px;
+    border: 1px solid #d0d9ff;
+    border-radius: 12px;
+    height: 149px !important;
 }
 
 .view-card .card-body {
@@ -847,7 +853,7 @@ textarea {
 /* end style checkbox */
 
 .content-table {
-	overflow-x: scroll;
+	overflow: auto
 }
 
 /* design upload input */

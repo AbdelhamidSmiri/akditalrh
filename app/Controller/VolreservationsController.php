@@ -11,25 +11,35 @@ class VolreservationsController extends AppController
 
 	public function isAuthorized($user)
 	{
-		// Exemples de rôle : agent, agence, admin
 		$role = AuthComponent::user('Role.role');
-		// Actions autorisées pour "agence"
-		if ($role === 'Agence' || $role === 'Admin') {
-			return in_array($this->action, ['add','index','agence_index', 'agence_valider', 'agence_archive', "view", 'agence_valide', 'agence_annuler']);
-		}
 
-		// Actions autorisées pour "agent"
-		if ($role !== ' Admin' && $role !== 'Agence') {
-			return in_array($this->action, ['agent_index', "add", 'view', 'edit']);
-		}
-
-		// Admin : accès à tout
+		// Admin: accès à tout
 		if ($role === 'Admin') {
 			return true;
 		}
+
+		// Actions autorisées pour "agence"
+		if ($role === 'Agence') {
+			return in_array($this->action, [
+				'index',
+				'agence_index',
+				'agence_valider',
+				'agence_archive',
+				'view',
+				'agence_valide',
+				'agence_annuler'
+			]);
+		}
+
+		// Actions autorisées pour "agent"
+		if ($role !== 'Admin' && $role !== 'Agence') {
+			return in_array($this->action, ['agent_index', 'add', 'view', 'edit']);
+		}
+
 		// Refus par défaut
 		return false;
 	}
+
 
 	function agent_index()
 	{

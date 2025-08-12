@@ -55,7 +55,9 @@
         color: #424242;
         font-size: 18px;
     }
-    .links label, .links a {
+
+    .links label,
+    .links a {
         font-family: 'Poppins', sans-serif;
         font-weight: 500;
         color: #9F9D9D;
@@ -182,3 +184,12 @@
         </div>
     </div>
 </div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        window.scrollTo({
+            top: document.body.scrollHeight,
+            behavior: "smooth" // smooth scroll animation
+        });
+    });
+</script>

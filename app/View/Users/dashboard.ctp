@@ -67,20 +67,20 @@
 					Vos actions essentielles<br>en un clic.
 				</div>
 				<div class="d-flex flex-column align-items-center gap-2">
-				
-					<?php echo $this->Html->link(
-									'<i class="fa-light fa-circle me-2"></i>Demande de billet d’avion',
-									array('controller' => 'volreservations', 'action' => 'add'),
-									array('class' => 'btn btn-primary-rounded2', 'escape' => false)
 
-								);?>
-								<?php
-								echo $this->Html->link(
-									'<i class="fa-light fa-circle me-2"></i> Demande d’hôtel',
-									array('controller' => 'reservations', 'action' => 'add'),
-									array('class' => 'btn btn-primary-rounded2', 'escape' => false)
-								); ?>
-					
+					<?php echo $this->Html->link(
+						'<i class="fa-light fa-circle me-2"></i>Demande de billet d’avion',
+						array('controller' => 'volreservations', 'action' => 'add'),
+						array('class' => 'btn btn-primary-rounded2', 'escape' => false)
+
+					); ?>
+					<?php
+					echo $this->Html->link(
+						'<i class="fa-light fa-circle me-2"></i> Demande d’hôtel',
+						array('controller' => 'reservations', 'action' => 'add'),
+						array('class' => 'btn btn-primary-rounded2', 'escape' => false)
+					); ?>
+
 				</div>
 			</div>
 		</div>
@@ -89,6 +89,10 @@
 
 
 </div>
+<h1 class="little-title m-0">Mes demandes récentes</h1>
+<p class="slogan mb-5">
+	Consultez rapidement l’état de vos dernières demandes.
+</p>
 <div class="users index"></div>
 
 <div class="col-md-5">
@@ -120,9 +124,31 @@
 					<td><?php echo h($item['type']); ?></td>
 					<td><?php echo h($item['detail']); ?></td>
 					<td><?php echo h($item['dates']); ?></td>
-					<td><?php echo h($item['status']); ?></td>
+					<td>
+						<?php
+						switch ($item['status']) {
+
+							case 'En cours':
+								echo '<span class="status-btn in-progress"><i class="fas fa-clock"></i> En cours</span>';
+								break;
+							case 'Validé':
+								echo '<span class="status-btn checked"><i class="fas fa-check-circle"></i> Validé</span>';
+								break;
+							case 'acceptée':
+								echo '<span class="status-btn confirmed"><i class="fas fa-check-circle"></i> Confirmé</span>';
+								break;
+							case 'refusée':
+								echo '<span class="status-btn refused"><i class="fas fa-times-circle"></i> Refusée</span>';
+								break;
+
+							default:
+								echo '<span class="status-btn passe"><i class="fas fa-question-circle"></i> ' . htmlspecialchars($item['status']) . '</span>';
+						}
+						?>
+
+					</td>
 					<td class="actions">
-						<?php echo $this->Html->link('Voir détails', ['controller' => $item['controller'], 'action' => 'view', $item['id']], ['escape' => false, 'title' => 'Voir']); ?>
+						<?php echo $this->Html->link('Voir', ['controller' => $item['controller'], 'action' => 'view', $item['id']], ['escape' => false, 'title' => 'Voir']); ?>
 					<?php endforeach; ?>
 		</tbody>
 	</table>

@@ -13,15 +13,18 @@
 	.btns-step2 {
 		display: none;
 	}
+
 	.message-error {
 		color: #b80000;
 		font-size: 0.875rem;
 		margin-top: 5px;
 		display: none;
 	}
+
 	.btns-step {
 		display: flex;
 	}
+
 	.btns-submit {
 		display: none;
 	}
@@ -52,7 +55,7 @@
 						</div>
 					</div>
 					<div class='col-12'>
-						<?php echo $this->Form->input('prix_vol', array('placeholder' => '','label'=>'Prix du billet (ttc)' )); ?>
+						<?php echo $this->Form->input('prix_vol', array('placeholder' => '', 'label' => 'Prix du billet (ttc)')); ?>
 						<div class="message-error prix-vol-error">
 							Veuillez saisir le prix du billet.
 						</div>
@@ -119,14 +122,14 @@
 					<?php if ($vol["Volreservation"]["transfer"] == 1): ?>
 						<div class='col-12'>
 							<?php
-							echo $this->Form->input('nom_transfer', array('placeholder' => ''));
+							echo $this->Form->input('nom_transfer', array('placeholder' => '', 'label' => 'Nom de chauffeur'));
 							?>
 						</div>
 						<div class='col-12'>
 							<div class="has-calendar-icon input text">
 								<?php
 								echo $this->Form->input('date_transfer', array(
-									'label' => 'Date Transfer',
+									'label' => 'Date et heure du transfer',
 									'type' => 'text', // important: not 'date'
 									'id' => 'date_transfer', // so we can replace it
 									'placeholder' => '',
@@ -141,17 +144,22 @@
 
 						<div class='col-12'>
 							<?php
-							echo $this->Form->input('tel_transfer', array('placeholder' => ''));
+							echo $this->Form->input('tel_transfer', array('placeholder' => '', 'label' => 'Téléphone du chauffeur'));
+							?>
+						</div>
+						<div class='col-12 mb-3'>
+							<?php
+							echo $this->Form->input('description_transfer', array('placeholder' => '', 'label' => 'Description du transfert'));
 							?>
 						</div>
 						<div class='col-12'>
 							<?php
-							echo $this->Form->input('description_transfer', array('placeholder' => ''));
+							echo $this->Form->input('pick_up', array('placeholder' => '', 'label' => 'Pick-up'));
 							?>
 						</div>
 						<div class='col-12'>
 							<?php
-							echo $this->Form->input('prix_transfert', array('placeholder' => ''));
+							echo $this->Form->input('prix_transfert', array('placeholder' => '', 'label' => 'Prix du transfert(TTC)'));
 							?>
 						</div>
 					<?php endif; ?>
@@ -185,20 +193,20 @@
 				<div class="col-12">
 					<div class='col-12 d-flex justify-content-between mt-4 btns-step'>
 						<button type="button" id="btn-back" class="btn btn-secondary-rounded" style="display:none">
-							<i class="fa-solid fa-arrow-left"></i> Retour
+							<i class="fa-solid fa-arrow-left me-2"></i> Retour
 						</button>
 						<div></div>
 						<button type="button" id="btn-next" class="btn btn-primary-rounded">
-							<i class="fa-solid fa-arrow-right"></i> Suivant
+							<i class="fa-solid fa-arrow-right me-2"></i> Suivant
 						</button>
 					</div>
 
 					<div class='submit-section btns-submit'>
 						<button type="button" id="btn-back-final" class="btn btn-secondary-rounded">
-							<i class="fa-solid fa-arrow-left"></i> Retour
+							<i class="fa-solid fa-arrow-left me-2"></i> Retour
 						</button>
 						<button type="submit" class="btn btn-submit">
-							<i class="fa-solid fa-paper-plane"></i> Valider et envoyer
+							<i class="fa-solid fa-paper-plane me-2"></i> Valider et envoyer au demandeur
 						</button>
 					</div>
 
@@ -222,9 +230,12 @@
 <script>
 	document.addEventListener("DOMContentLoaded", function() {
 		flatpickr("#date_transfer", {
-			dateFormat: "Y-m-d",
+			enableTime: true, // allow time selection
+			dateFormat: "Y-m-d H:i", // format with date and time
+			time_24hr: true, // 24-hour format instead of AM/PM
 			locale: "fr",
-			allowInput: true
+			allowInput: true,
+			minDate: "today"
 		});
 	});
 
@@ -234,22 +245,22 @@
 
 		// Get form elements using multiple possible selectors (CakePHP generates different IDs)
 		const reponse = document.getElementById('VolreservationReponse') ||
-		              document.querySelector('input[name="data[Volreservation][reponse]"]') ||
-		              document.querySelector('#reponse');
+			document.querySelector('input[name="data[Volreservation][reponse]"]') ||
+			document.querySelector('#reponse');
 
 		const numVol = document.getElementById('VolreservationNumVol') ||
-		              document.querySelector('input[name="data[Volreservation][num_vol]"]') ||
-		              document.querySelector('#num_vol');
+			document.querySelector('input[name="data[Volreservation][num_vol]"]') ||
+			document.querySelector('#num_vol');
 
 		const prixVol = document.getElementById('VolreservationPrixVol') ||
-		               document.querySelector('input[name="data[Volreservation][prix_vol]"]') ||
-		               document.querySelector('#prix_vol');
+			document.querySelector('input[name="data[Volreservation][prix_vol]"]') ||
+			document.querySelector('#prix_vol');
 
 		const fileAller = document.querySelector('input[name="data[Volreservation][file_aller][]"]') ||
-		                 document.getElementById('VolreservationFileAller');
+			document.getElementById('VolreservationFileAller');
 
 		const fileRetour = document.querySelector('input[name="data[Volreservation][file_retour][]"]') ||
-		                  document.getElementById('VolreservationFileRetour');
+			document.getElementById('VolreservationFileRetour');
 
 		// Debug: Log what we found
 		console.log('Validation elements found:', {
@@ -353,6 +364,8 @@
 			if (index === 0) {
 				backBtn.style.display = 'none';
 				btnsStep.style.justifyContent = 'flex-end';
+				nextBtn.style.display = 'inline-block';
+
 			} else {
 				nextBtn.style.display = 'none';
 				backBtn.style.display = 'inline-block';

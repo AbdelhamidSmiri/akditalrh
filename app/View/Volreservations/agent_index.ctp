@@ -15,14 +15,13 @@
 	<table class="table table-akdital">
 		<thead>
 			<tr>
-				<th>Utilisateur</th>
 				<th>Site</th>
-				<th>destination</th>
-				<th>Date aller</th>
+				<th>Itinéraire</th>
+				<th>Date de départ</th>
 				<th>Date retour</th>
-				<th>message</th>
-				<th>Date d'ajout</th>
-				<th>Etat</th>
+				<th>Message</th>
+				<th>Date de soumission</th>
+				<th>État</th>
 				<th>Transfert</th>
 				<th class="actions">Actions</th>
 			</tr>
@@ -30,9 +29,6 @@
 		<tbody>
 			<?php foreach ($volreservations as $volreservation): ?>
 				<tr>
-					<td>
-						<?php echo $volreservation['User']['nom'] ?>
-					</td>
 					<td>
 						<?php echo $volreservation['Site']['site']; ?>
 					</td>
@@ -74,7 +70,7 @@
 						</span>
 					</td>
 					<td class="actions">
-						<?php echo $this->Html->link(__('Voir'), array('action' => 'view', $volreservation['Volreservation']['id'])); ?>
+						<?php echo $this->Html->link(__('Voir détails'), array('action' => 'view', $volreservation['Volreservation']['id'])); ?>
 					</td>
 				</tr>
 			<?php endforeach; ?>

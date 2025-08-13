@@ -79,7 +79,7 @@
 					<li class="nav-item dropdown">
 						<button class="nav-link dropdown-toggle" type="button" data-bs-toggle="collapse"
 							data-bs-target="#agence" aria-expanded="false">
-							<?php echo $bons_commande_icon; ?> Gestion des vols
+							<?php echo $bons_commande_icon; ?> Billets d’avion
 						</button>
 						<div class="collapse" id="agence">
 							<div class="dropdown-menu show">

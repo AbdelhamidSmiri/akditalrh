@@ -30,98 +30,124 @@ class UsersController extends AppController
 	}
 
 
-function dashboard($user_id = 0)
-{
-	$title_for_layout = "Dashboard";
-		$pageSubtitle = "Gérez vos réservations, vos demandes et suivez vos informations
-en toute simplicité.";
-    if ($user_id == 0 || AuthComponent::user('Role.role') !== 'Admin') {
-        $user_id = AuthComponent::user('id');
-    }
-    $vols = $this->User->Volreservation->find("all", ["conditions" => ["Volreservation.user_id" => $user_id]]);
-    $hotels = $this->User->Reservation->find("all", ["conditions" => ["Reservation.user_id" => $user_id]]);
-    $data = [];
-    $statistique = [];
+	function dashboard($user_id = 0)
+	{
+		$title_for_layout = "Dashboard";
+		$pageSubtitle = "Gérez vos réservations, vos demandes et suivez vos informations en toute simplicité.";
 
-    foreach ($vols as $vol) {
-        if($vol['Volreservation']['etat'] == 'Validé'){
-            $statistique['vols'] = isset($statistique['vols']) ? $statistique['vols'] + 1 : 1;
-        }
-        if($vol['Volreservation']['etat'] == 'En cours'){
-            $statistique['en_cours'] = isset($statistique['en_cours']) ? $statistique['en_cours'] + 1 : 1;
-        }
+		// Check if user is Admin
+		$isAdmin = (AuthComponent::user('Role.role') === 'Admin');
 
-        $data[] = [
-            "category" => "Voyage",
-            "type" => "Billet avion",
-            "detail" => $vol['Volreservation']['depart'] . " -> " . $vol['Volreservation']['destination'],
-            "dates" => $vol['Volreservation']['date_aller'] . " -> " . $vol['Volreservation']['date_retour'],
-            "status" => $vol['Volreservation']['etat'],
-            "controller" => "volreservations",
-            "id" => $vol['Volreservation']['id'],
-            "created" => $vol['Volreservation']['created']
-        ];
-    }
+		// Set conditions based on role
+		$volConditions = [];
+		$hotelConditions = [];
 
-    $this->loadModel("Hotel");
-    $allhotels = $this->Hotel->find("list");
-    $this->Hotel->Chambre->recursive = -1;
+		if (!$isAdmin) {
+			// Non-admin users: filter by their user ID
+			$user_id = AuthComponent::user('id');
+			$volConditions = ["Volreservation.user_id" => $user_id];
+			$hotelConditions = ["Reservation.user_id" => $user_id];
+		} else {
+			// Admin users: get all data (no user_id filter)
+			// If a specific user_id is provided in URL, filter by that user
+			if ($user_id > 0) {
+				$volConditions = ["Volreservation.user_id" => $user_id];
+				$hotelConditions = ["Reservation.user_id" => $user_id];
+			}
+			// Otherwise, leave conditions empty to get all records
+		}
 
-    foreach ($hotels as $hotel) {
-        // Check if chambre_id exists and is not empty
-        if (empty($hotel['Reservation']['chambre_id'])) {
-            continue; // Skip this iteration if no chambre_id
-        }
+		// Fetch data with appropriate conditions
+		$vols = $this->User->Volreservation->find("all", ["conditions" => $volConditions]);
+		$hotels = $this->User->Reservation->find("all", ["conditions" => $hotelConditions]);
 
-        $chambre = $this->Hotel->Chambre->findById($hotel['Reservation']['chambre_id']);
+		$data = [];
+		$statistique = [];
 
-        // Check if chambre was found and has the expected structure
-        if (empty($chambre) || !isset($chambre['Chambre']['hotel_id'])) {
-            continue; // Skip this iteration if chambre not found or malformed
-        }
+		foreach ($vols as $vol) {
+			if ($vol['Volreservation']['etat'] == 'Validé') {
+				$statistique['vols'] = isset($statistique['vols']) ? $statistique['vols'] + 1 : 1;
+			}
+			if ($vol['Volreservation']['etat'] == 'En cours') {
+				$statistique['en_cours'] = isset($statistique['en_cours']) ? $statistique['en_cours'] + 1 : 1;
+			}
 
-        $hotel_id = $chambre['Chambre']['hotel_id'];
+			$data[] = [
+				"category" => "Voyage",
+				"type" => "Billet avion",
+				"detail" => $vol['Volreservation']['depart'] . " -> " . $vol['Volreservation']['destination'],
+				"dates" => $vol['Volreservation']['date_aller'] . " -> " . $vol['Volreservation']['date_retour'],
+				"status" => $vol['Volreservation']['etat'],
+				"controller" => "volreservations",
+				"id" => $vol['Volreservation']['id'],
+				"created" => $vol['Volreservation']['created'],
+				// Add user info for admin view
+				"user_id" => $vol['Volreservation']['user_id']
+			];
+		}
 
-        // Check if hotel exists in the list
-        if (!isset($allhotels[$hotel_id])) {
-            continue; // Skip if hotel not found in the list
-        }
+		$this->loadModel("Hotel");
+		$allhotels = $this->Hotel->find("list");
+		$this->Hotel->Chambre->recursive = -1;
 
-        $chambre_detail = $allhotels[$hotel_id];
+		foreach ($hotels as $hotel) {
+			// Check if chambre_id exists and is not empty
+			if (empty($hotel['Reservation']['chambre_id'])) {
+				continue; // Skip this iteration if no chambre_id
+			}
 
-        if($hotel['Reservation']['etat'] == 'acceptée'){
-            $statistique['hotels'] = isset($statistique['hotels']) ? $statistique['hotels'] + 1 : 1;
-        }
-        if($hotel['Reservation']['etat'] == 'En cours'){
-            $statistique['en_cours'] = isset($statistique['en_cours']) ? $statistique['en_cours'] + 1 : 1;
-        }
+			$chambre = $this->Hotel->Chambre->findById($hotel['Reservation']['chambre_id']);
 
-        $data[] = [
-            "category" => "Hébergement",
-            "type" => "Hôtel",
-            "detail" => $chambre_detail,
-            "dates" => $hotel['Reservation']['checkin'] . " -> " . $hotel['Reservation']['checkout'],
-            "status" => $hotel['Reservation']['etat'],
-            "controller" => "reservations",
-            "id" => $hotel['Reservation']['id'],
-            "created" => $hotel['Reservation']['created']
-        ];
-    }
+			// Check if chambre was found and has the expected structure
+			if (empty($chambre) || !isset($chambre['Chambre']['hotel_id'])) {
+				continue; // Skip this iteration if chambre not found or malformed
+			}
 
-    // Sort by created date in descending order
-    usort($data, function ($a, $b) {
-        return strtotime($b['created']) - strtotime($a['created']);
-    });
-	$this->set(compact("data", "statistique", "pageSubtitle", 'title_for_layout'));
+			$hotel_id = $chambre['Chambre']['hotel_id'];
 
-	// Set the title for the layout
-	$this->set('title_for_layout', $title_for_layout);
-	$this->set('pageSubtitle', $pageSubtitle);
+			// Check if hotel exists in the list
+			if (!isset($allhotels[$hotel_id])) {
+				continue; // Skip if hotel not found in the list
+			}
 
-	// Render the dashboard view
-	$this->render('dashboard');
-	$this->set(compact("data", "statistique","pageSubtitle", 'title_for_layout'));
-}
+			$chambre_detail = $allhotels[$hotel_id];
+
+			if ($hotel['Reservation']['etat'] == 'acceptée') {
+				$statistique['hotels'] = isset($statistique['hotels']) ? $statistique['hotels'] + 1 : 1;
+			}
+			if ($hotel['Reservation']['etat'] == 'En cours') {
+				$statistique['en_cours'] = isset($statistique['en_cours']) ? $statistique['en_cours'] + 1 : 1;
+			}
+
+			$data[] = [
+				"category" => "Hébergement",
+				"type" => "Hôtel",
+				"detail" => $chambre_detail,
+				"dates" => $hotel['Reservation']['checkin'] . " -> " . $hotel['Reservation']['checkout'],
+				"status" => $hotel['Reservation']['etat'],
+				"controller" => "reservations",
+				"id" => $hotel['Reservation']['id'],
+				"created" => $hotel['Reservation']['created'],
+				// Add user info for admin view
+				"user_id" => $hotel['Reservation']['user_id']
+			];
+		}
+
+		// Sort by created date in descending order
+		usort($data, function ($a, $b) {
+			return strtotime($b['created']) - strtotime($a['created']);
+		});
+
+		// Pass admin status to view for conditional display
+		$this->set(compact("data", "statistique", "pageSubtitle", "title_for_layout", "isAdmin"));
+
+		// Set the title for the layout
+		$this->set('title_for_layout', $title_for_layout);
+		$this->set('pageSubtitle', $pageSubtitle);
+
+		// Render the dashboard view
+		$this->render('dashboard');
+	}
 
 	public function index()
 	{
@@ -130,8 +156,7 @@ en toute simplicité.";
 
 		$this->User->recursive = 0;
 		$this->set('users', $this->User->find("all"));
-								$this->set(compact("pageSubtitle", 'title_for_layout'));
-
+		$this->set(compact("pageSubtitle", 'title_for_layout'));
 	}
 
 	/**
@@ -165,12 +190,11 @@ en toute simplicité.";
 		$title_for_layout = "Détails de l’utilisateur";
 		$pageSubtitle = " ";
 
-		if($id== null || AuthComponent::user('Role.role') !== 'Admin')
-			$id=AuthComponent::user('id');
+		if ($id == null || AuthComponent::user('Role.role') !== 'Admin')
+			$id = AuthComponent::user('id');
 		$options = array('conditions' => array('User.id' => $id));
 		$this->set('user', $this->User->find('first', $options));
 		$this->set(compact("pageSubtitle", 'title_for_layout'));
-
 	}
 
 
@@ -195,8 +219,7 @@ en toute simplicité.";
 		}
 		$roles = $this->User->Role->find('list');
 		$this->set(compact('roles'));
-								$this->set(compact("pageSubtitle", 'title_for_layout'));
-
+		$this->set(compact("pageSubtitle", 'title_for_layout'));
 	}
 
 	/**
@@ -227,8 +250,7 @@ en toute simplicité.";
 		}
 		$roles = $this->User->Role->find('list');
 		$this->set(compact('roles'));
-								$this->set(compact("pageSubtitle", 'title_for_layout'));
-
+		$this->set(compact("pageSubtitle", 'title_for_layout'));
 	}
 
 	/**

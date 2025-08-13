@@ -1,5 +1,11 @@
 <link href="https://cdn.jsdelivr.net/npm/lightgallery@2.7.1/css/lightgallery-bundle.min.css" rel="stylesheet" />
-
+<style>
+	.little-title-section {
+		display: flex;
+		justify-content: space-between;
+		margin-top: 40px;
+	}
+</style>
 <div class="volreservations view">
 
 	<div class="col-md-12 little-title-section">
@@ -39,7 +45,7 @@
 
 				<div class="modal-body">
 					<div class="mb-3">
-						<?php echo $this->Form->input('reponse', array('placeholder' => '','label'=>'Motif du refus', 'required'=>'required' )); ?>
+						<?php echo $this->Form->input('reponse', array('placeholder' => '', 'label' => 'Motif du refus', 'required' => 'required')); ?>
 					</div>
 				</div>
 
@@ -53,27 +59,27 @@
 		</div>
 	</div>
 
-
-
-
-
 	<div class="card view-card">
 		<div class="card-body">
 			<div class="col-12">
 				<div class="row row-gap-3">
-					<?php if (!empty($volreservation['User']['nom'])): ?>
-						<div class="col-md-3">
-							<div class="info">
-								<label>Demandeur</label>
-								<span><?php echo h($volreservation['User']['nom']); ?></span>
+					<?php if (!empty($volreservation['User']['nom'])):
+						if (in_array(AuthComponent::user("Role.role"), ['Agence', 'Admin'])):
+					?>
+							<div class="col-md-3">
+								<div class="info">
+									<label>Demandeur</label>
+									<span><?php echo h($volreservation['User']['nom']); ?></span>
+								</div>
 							</div>
-						</div>
-					<?php endif; ?>
+					<?php
+						endif;
+					endif; ?>
 
 					<?php if (!empty($volreservation['Site']['site'])): ?>
 						<div class="col-md-3">
 							<div class="info">
-								<label>Site</label>
+								<label>Site de prise en charge :</label>
 								<span><?php echo h($volreservation['Site']['site']); ?></span>
 							</div>
 						</div>
@@ -82,7 +88,7 @@
 					<?php if (!empty($volreservation['Volreservation']['destination'] || $volreservation['Volreservation']['depart'])): ?>
 						<div class="col-md-3">
 							<div class="info">
-								<label>Trajet</label>
+								<label>Itinéraire</label>
 								<div>
 									<span><?php echo h($volreservation['Volreservation']['depart']); ?></span>
 									<i class="fa-solid fa-arrow-right"></i>
@@ -111,11 +117,142 @@
 					if (!empty($volreservation['Volreservation']['num_odm'])): ?>
 						<div class="col-md-3">
 							<div class="info">
-								<label>Numéro ODM</label>
+								<label>Numéro d’ODM</label>
 								<span><?php echo h($volreservation['Volreservation']['num_odm']); ?></span>
 							</div>
 						</div>
 					<?php endif; ?>
+
+
+
+					<?php if (!empty($volreservation['Volreservation']['message'])): ?>
+						<div class="col-md-3">
+							<div class="info">
+								<label>Motif du voyage</label>
+								<span><?php echo h($volreservation['Volreservation']['message']); ?></span>
+							</div>
+						</div>
+					<?php endif; ?>
+
+					<?php if (!empty($volreservation['Volreservation']['created'])): ?>
+						<div class="col-md-3">
+							<div class="info">
+								<label>Date de soumission</label>
+								<span><?php echo h($volreservation['Volreservation']['created']); ?></span>
+							</div>
+						</div>
+					<?php endif; ?>
+
+					<?php if (!empty($volreservation['Volreservation']['etat'])): ?>
+						<div class="col-md-3">
+							<div class="info">
+								<label>État</label>
+								<?php
+
+								switch ($volreservation['Volreservation']['etat']) {
+
+									case 'En cours':
+										echo '<span class="status-btn in-progress"><i class="fas fa-clock"></i> En cours</span>';
+										break;
+									case 'Validé':
+										echo '<span class="status-btn confirmed"><i class="fas fa-check-circle"></i> Validé</span>';
+										break;
+									case 'refusée':
+										echo '<span class="status-btn refused"><i class="fas fa-times-circle"></i> Refusée</span>';
+										break;
+									case 'passe':
+										echo '<span class="status-btn passe"><i class="fas fa-calendar-times"></i> Passé</span>';
+										break;
+									default:
+										echo '<span class="status-btn passe"><i class="fas fa-question-circle"></i> ' . htmlspecialchars($volreservation['Volreservation']['etat']) . '</span>';
+								}
+								?>
+							</div>
+						</div>
+					<?php endif; ?>
+
+					<?php if (!empty($volreservation['Volreservation']['reponse'])): ?>
+						<div class="col-md-3">
+							<div class="info">
+								<label>Réponse</label>
+								<span><?php echo h($volreservation['Volreservation']['reponse']); ?></span>
+							</div>
+						</div>
+					<?php endif; ?>
+
+					<?php if (!empty($volreservation['Volreservation']['date_reponse'])): ?>
+						<div class="col-md-3">
+							<div class="info">
+								<label>Date de réponse</label>
+								<span><?php echo h($volreservation['Volreservation']['date_reponse']); ?></span>
+							</div>
+						</div>
+					<?php endif; ?>
+
+					<?php if (!empty($volreservation['Volreservation']['num_vol'])): ?>
+						<div class="col-md-3">
+							<div class="info">
+								<label>Numéro du billet</label>
+								<span><?php echo h($volreservation['Volreservation']['num_vol']); ?></span>
+							</div>
+						</div>
+					<?php endif; ?>
+				</div>
+
+
+			</div>
+		</div>
+	</div>
+
+
+	<div class="col-md-12 little-title-section">
+		<span class="little-title">Documents voyage</span>
+	</div>
+	<div class="card view-card">
+		<div class="card-body">
+			<div class="col-12">
+				<div class="row row-gap-3">
+					<?php if (!empty($volreservation['Volreservation']['file_aller'])): ?>
+						<?php $allerFiles = json_decode($volreservation['Volreservation']['file_aller'], true); ?>
+						<?php if (is_array($allerFiles) && count($allerFiles)): ?>
+							<div class="col-md-3">
+								<div class="info">
+									<label>Billet aller</label>
+									<div class="lightgallery">
+										<?php foreach ($allerFiles as $key => $file):
+											$active = ($key === 0) ? 'img_active' : 'img_deactive';
+										?>
+											<a href="/akditalrh/files/volreservations/<?php echo h($file); ?>" class="<?php echo $active; ?>" target="_blank">
+												<i class="fa-regular fa-eye"></i> <?php echo h($file); ?>
+											</a><br />
+										<?php endforeach; ?>
+									</div>
+								</div>
+							</div>
+						<?php endif; ?>
+					<?php endif; ?>
+
+
+					<?php if (!empty($volreservation['Volreservation']['file_retour'])): ?>
+						<?php $retourFiles = json_decode($volreservation['Volreservation']['file_retour'], true); ?>
+						<?php if (is_array($retourFiles) && count($retourFiles)): ?>
+							<div class="col-md-3">
+								<div class="info">
+									<label>Billet retour</label>
+									<div class="lightgallery">
+										<?php foreach ($retourFiles as $key => $file):
+											$active = ($key === 0) ? 'img_active' : 'img_deactive';
+										?>
+											<a href="/akditalrh/files/volreservations/<?php echo h($file); ?>" class="<?php echo $active; ?>" target="_blank">
+												<i class="fa-regular fa-eye"></i> <?php echo h($file); ?>
+											</a><br />
+										<?php endforeach; ?>
+									</div>
+								</div>
+							</div>
+						<?php endif; ?>
+					<?php endif; ?>
+
 
 					<!-- CIN images (lightgallery) -->
 					<?php if (!empty($volreservation['Volreservation']['ordre_mission'])): ?>
@@ -223,51 +360,6 @@
 						<?php endif; ?>
 					<?php endif; ?>
 
-					<?php if (!empty($volreservation['Volreservation']['message'])): ?>
-						<div class="col-md-3">
-							<div class="info">
-								<label>Motif du voyage</label>
-								<span><?php echo h($volreservation['Volreservation']['message']); ?></span>
-							</div>
-						</div>
-					<?php endif; ?>
-
-					<?php if (!empty($volreservation['Volreservation']['created'])): ?>
-						<div class="col-md-3">
-							<div class="info">
-								<label>Date de soumission</label>
-								<span><?php echo h($volreservation['Volreservation']['created']); ?></span>
-							</div>
-						</div>
-					<?php endif; ?>
-
-					<?php if (!empty($volreservation['Volreservation']['etat'])): ?>
-						<div class="col-md-3">
-							<div class="info">
-								<label>État</label>
-								<?php
-
-								switch ($volreservation['Volreservation']['etat']) {
-
-									case 'En cours':
-										echo '<span class="status-btn in-progress"><i class="fas fa-clock"></i> En cours</span>';
-										break;
-									case 'Validé':
-										echo '<span class="status-btn confirmed"><i class="fas fa-check-circle"></i> Validé</span>';
-										break;
-									case 'refusée':
-										echo '<span class="status-btn refused"><i class="fas fa-times-circle"></i> Refusée</span>';
-										break;
-									case 'passe':
-										echo '<span class="status-btn passe"><i class="fas fa-calendar-times"></i> Passé</span>';
-										break;
-									default:
-										echo '<span class="status-btn passe"><i class="fas fa-question-circle"></i> ' . htmlspecialchars($volreservation['Volreservation']['etat']) . '</span>';
-								}
-								?>
-							</div>
-						</div>
-					<?php endif; ?>
 					<!-- document -->
 					<?php if (!empty($volreservation['Volreservation']['documents'])): ?>
 						<?php $documentFiles = json_decode($volreservation['Volreservation']['documents'], true); ?>
@@ -288,131 +380,76 @@
 							</div>
 						<?php endif; ?>
 					<?php endif; ?>
-
-
-					<?php if (!empty($volreservation['Volreservation']['reponse'])): ?>
-						<div class="col-md-3">
-							<div class="info">
-								<label>Réponse</label>
-								<span><?php echo h($volreservation['Volreservation']['reponse']); ?></span>
-							</div>
-						</div>
-					<?php endif; ?>
-
-					<?php if (!empty($volreservation['Volreservation']['date_reponse'])): ?>
-						<div class="col-md-3">
-							<div class="info">
-								<label>Date réponse</label>
-								<span><?php echo h($volreservation['Volreservation']['date_reponse']); ?></span>
-							</div>
-						</div>
-					<?php endif; ?>
-
-					<?php if (!empty($volreservation['Volreservation']['num_vol'])): ?>
-						<div class="col-md-3">
-							<div class="info">
-								<label>Numéro du billet</label>
-								<span><?php echo h($volreservation['Volreservation']['num_vol']); ?></span>
-							</div>
-						</div>
-					<?php endif; ?>
-
-					<?php if (!empty($volreservation['Volreservation']['file_aller'])): ?>
-						<?php $allerFiles = json_decode($volreservation['Volreservation']['file_aller'], true); ?>
-						<?php if (is_array($allerFiles) && count($allerFiles)): ?>
-							<div class="col-md-3">
-								<div class="info">
-									<label>Billet aller</label>
-									<div class="lightgallery">
-										<?php foreach ($allerFiles as $key => $file):
-											$active = ($key === 0) ? 'img_active' : 'img_deactive';
-										?>
-											<a href="/akditalrh/files/volreservations/<?php echo h($file); ?>" class="<?php echo $active; ?>" target="_blank">
-												<i class="fa-regular fa-eye"></i> <?php echo h($file); ?>
-											</a><br />
-										<?php endforeach; ?>
-									</div>
-								</div>
-							</div>
-						<?php endif; ?>
-					<?php endif; ?>
-
-
-					<?php if (!empty($volreservation['Volreservation']['file_retour'])): ?>
-						<?php $retourFiles = json_decode($volreservation['Volreservation']['file_retour'], true); ?>
-						<?php if (is_array($retourFiles) && count($retourFiles)): ?>
-							<div class="col-md-3">
-								<div class="info">
-									<label>Billet retour</label>
-									<div class="lightgallery">
-										<?php foreach ($retourFiles as $key => $file):
-											$active = ($key === 0) ? 'img_active' : 'img_deactive';
-										?>
-											<a href="/akditalrh/files/volreservations/<?php echo h($file); ?>" class="<?php echo $active; ?>" target="_blank">
-												<i class="fa-regular fa-eye"></i> <?php echo h($file); ?>
-											</a><br />
-										<?php endforeach; ?>
-									</div>
-								</div>
-							</div>
-						<?php endif; ?>
-					<?php endif; ?>
-
-
-					<?php if (!empty($volreservation['Volreservation']['transfer'])): ?>
-						<div class="col-md-3">
-							<div class="info">
-								<label>Transfert inclus</label>
-								<span class="badge badge-transfer">
-									<?php echo ($volreservation['Volreservation']['transfer'] == "1") ? 'Oui' : 'Non';
-									?>
-								</span>
-
-							</div>
-						</div>
-					<?php endif; ?>
-
-					<?php if (!empty($volreservation['Volreservation']['nom_transfer'])): ?>
-						<div class="col-md-3">
-							<div class="info">
-								<label>Nom Transfert</label>
-								<span><?php echo h($volreservation['Volreservation']['nom_transfer']); ?></span>
-							</div>
-						</div>
-					<?php endif; ?>
-
-					<?php if (!empty($volreservation['Volreservation']['date_transfer'])): ?>
-						<div class="col-md-3">
-							<div class="info">
-								<label>Date Transfert</label>
-								<span><?php echo h($volreservation['Volreservation']['date_transfer']); ?></span>
-							</div>
-						</div>
-					<?php endif; ?>
-
-					<?php if (!empty($volreservation['Volreservation']['tel_transfer'])): ?>
-						<div class="col-md-3">
-							<div class="info">
-								<label>Téléphone Transfert</label>
-								<span><?php echo h($volreservation['Volreservation']['tel_transfer']); ?></span>
-							</div>
-						</div>
-					<?php endif; ?>
-
-					<?php if (!empty($volreservation['Volreservation']['description_transfer'])): ?>
-						<div class="col-md-3">
-							<div class="info">
-								<label>Description Transfert</label>
-								<span><?php echo h($volreservation['Volreservation']['description_transfer']); ?></span>
-							</div>
-						</div>
-					<?php endif; ?>
 				</div>
 
 
 			</div>
 		</div>
 	</div>
+
+	<?php if (!empty($volreservation['Volreservation']['transfer'])): ?>
+		<div class="col-md-12 little-title-section">
+			<span class="little-title"> Détails du transfert</span>
+		</div>
+		<div class="card view-card">
+			<div class="card-body">
+				<div class="col-12">
+					<div class="row row-gap-3">
+						<?php if (!empty($volreservation['Volreservation']['transfer'])): ?>
+							<div class="col-md-3">
+								<div class="info">
+									<label>Transfert inclus</label>
+									<span class="badge badge-transfer">
+										<?php echo ($volreservation['Volreservation']['transfer'] == "1") ? 'Oui' : 'Non';
+										?>
+									</span>
+
+								</div>
+							</div>
+						<?php endif; ?>
+
+						<?php if (!empty($volreservation['Volreservation']['nom_transfer'])): ?>
+							<div class="col-md-3">
+								<div class="info">
+									<label>Nom Transfert</label>
+									<span><?php echo h($volreservation['Volreservation']['nom_transfer']); ?></span>
+								</div>
+							</div>
+						<?php endif; ?>
+
+						<?php if (!empty($volreservation['Volreservation']['date_transfer'])): ?>
+							<div class="col-md-3">
+								<div class="info">
+									<label>Date Transfert</label>
+									<span><?php echo h($volreservation['Volreservation']['date_transfer']); ?></span>
+								</div>
+							</div>
+						<?php endif; ?>
+
+						<?php if (!empty($volreservation['Volreservation']['tel_transfer'])): ?>
+							<div class="col-md-3">
+								<div class="info">
+									<label>Téléphone Transfert</label>
+									<span><?php echo h($volreservation['Volreservation']['tel_transfer']); ?></span>
+								</div>
+							</div>
+						<?php endif; ?>
+
+						<?php if (!empty($volreservation['Volreservation']['description_transfer'])): ?>
+							<div class="col-md-3">
+								<div class="info">
+									<label>Description Transfert</label>
+									<span><?php echo h($volreservation['Volreservation']['description_transfer']); ?></span>
+								</div>
+							</div>
+						<?php endif; ?>
+					</div>
+
+
+				</div>
+			</div>
+		</div>
+	<?php endif; ?>
 
 </div>
 

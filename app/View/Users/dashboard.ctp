@@ -67,12 +67,20 @@
 					Vos actions essentielles<br>en un clic.
 				</div>
 				<div class="d-flex flex-column align-items-center gap-2">
-					<button class="btn btn-primary-rounded2">
-						<i class="fa-light fa-circle me-2"></i>Demande de billet d'avion
-					</button>
-					<button class="btn btn-primary-rounded2">
-						<i class="fa-light fa-circle me-2"></i>Demande d'hôtel
-					</button>
+				
+					<?php echo $this->Html->link(
+									'<i class="fa-light fa-circle me-2"></i>Demande de billet d’avion',
+									array('controller' => 'volreservations', 'action' => 'add'),
+									array('class' => 'btn btn-primary-rounded2', 'escape' => false)
+
+								);?>
+								<?php
+								echo $this->Html->link(
+									'<i class="fa-light fa-circle me-2"></i> Demande d’hôtel',
+									array('controller' => 'reservations', 'action' => 'add'),
+									array('class' => 'btn btn-primary-rounded2', 'escape' => false)
+								); ?>
+					
 				</div>
 			</div>
 		</div>

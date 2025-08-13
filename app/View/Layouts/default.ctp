@@ -171,7 +171,7 @@
 						<?php
 						echo $this->Html->link(
 							$dashboard_icon . ' Dashboard',
-							array('controller' => 'dashboard', 'action' => 'index'),
+							array('controller' => 'users', 'action' => 'dashboard'),
 							array('class' => 'nav-link', 'escape' => false)
 						); ?>
 					</li>

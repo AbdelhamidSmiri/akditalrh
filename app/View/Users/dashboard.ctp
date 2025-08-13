@@ -150,6 +150,7 @@
 					<td class="actions">
 						<?php echo $this->Html->link('Voir', ['controller' => $item['controller'], 'action' => 'view', $item['id']], ['escape' => false, 'title' => 'Voir']); ?>
 					<?php endforeach; ?>
+					</td>
 		</tbody>
 	</table>
 </div>

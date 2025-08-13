@@ -548,13 +548,13 @@
     border-color: #2E61B4;
     color: #ffffff;
     font-weight: 400;
-    font-size: 14px;
-    padding: 12px 20px;
+    font-size: 12px;
+    padding: 12px 10px;
     border-radius: 25px;
     border: none;
-	margin: 0px;
+    margin: 0px;
+    white-space: nowrap;
     width: auto !important;
-	white-space: nowrap;
 }
 .actions-title{
 	    color: #424242;

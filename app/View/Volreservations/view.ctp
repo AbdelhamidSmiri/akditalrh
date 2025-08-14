@@ -11,12 +11,13 @@
 	<div class="col-md-12 little-title-section">
 		<span class="little-title">Informations générales</span>
 		<div class="actions_right">
-			<?php if (AuthComponent::user('Role.role') == 'Agence' && $volreservation["Volreservation"]["etat"] == "En cours"): ?>
+			<?php
+			if (in_array(AuthComponent::user("Role.role"), ['Agence', 'Admin']) && $volreservation["Volreservation"]["etat"] == "En cours"): ?>
 				<a href="<?php echo $this->Html->url(array('controller' => 'Volreservations', 'action' => 'agence_valide', $volreservation['Volreservation']['id'])); ?>"
 					class="btn btn-success-rounded"><i class="fa-solid fa-check"></i> Valider et émettre le billet</a>
 			<?php endif; ?>
 
-			<?php if ($volreservation["Volreservation"]["etat"] == "En cours"): ?>
+			<?php if (in_array(AuthComponent::user("Role.role"), ['Agence', 'Admin']) && $volreservation["Volreservation"]["etat"] == "En cours"): ?>
 				<button type="button" class="btn btn-secondary-rounded" data-bs-toggle="modal" data-bs-target="#archiveModal">
 					<i class="fa-solid fa-xmark"></i> Refuser la demande
 				</button>
@@ -39,7 +40,7 @@
 				));
 				?>
 				<div class="modal-header">
-					<h5 class="modal-title" id="archiveModalLabel">Archiver la demande</h5>
+					<h5 class="modal-title" id="archiveModalLabel">Refuser la demmande</h5>
 					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
 				</div>
 

@@ -73,7 +73,7 @@
         <div class="image-bg">
             <div class="text-box d-flex flex-column  align-items-center">
                 <h1 class=" text-white poppins-bold fs-1 mb-5">Bienvenue sur la plateforme de gestion des moyens généraux Akdital</h1>
-                <p class=" text-white poppins-regular fs-3">Bienvenue sur la plateforme de gestion des moyens généraux Akdital</p>
+                <!-- <p class=" text-white poppins-regular fs-3">Bienvenue sur la plateforme de gestion des moyens généraux Akdital</p> -->
             </div>
         </div>
     </div>

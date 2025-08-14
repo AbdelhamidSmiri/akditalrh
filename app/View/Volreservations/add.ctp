@@ -28,7 +28,7 @@
 						echo $this->Form->input('site_id', array(
 							'placeholder' => '',
 							'label' => 'Site',
-							'empty' => 'Choisissez le site de la réservation',
+							'empty' => 'Choisissez le site de prise en charge',
 						));
 						?>
 						<div class="message">
@@ -109,7 +109,7 @@
 						</div>
 					</div>
 					<div class='col-12 mt-5'>
-						<label class="control control--checkbox">Je veux un transfert
+						<label class="control control--checkbox">Je souhaite réserver un transfert
 							<input type="hidden" name="data[Volreservation][transfer]" id="transferValue" value="" />
 							<input type="checkbox" id="transferCheckbox" />
 							<div class="control__indicator"></div>
@@ -249,13 +249,34 @@
 
 <script>
 	document.addEventListener("DOMContentLoaded", function() {
-		flatpickr("#date_aller_input, #date_retour_input", {
+		const dateAller = flatpickr("#date_aller_input", {
 			dateFormat: "Y-m-d",
 			locale: "fr",
 			allowInput: false,
-			disableMobile: true
+			disableMobile: true,
+			minDate: "today",
+			onChange: function(selectedDates, dateStr) {
+				// Update minDate of the return date picker
+				dateRetour.set('minDate', dateStr);
+
+				// Auto-fill return date if it's empty or before departure
+				const retourValue = dateRetour.input.value;
+				if (!retourValue || new Date(retourValue) < new Date(dateStr)) {
+					dateRetour.setDate(dateStr);
+				}
+			}
+		});
+
+		const dateRetour = flatpickr("#date_retour_input", {
+			dateFormat: "Y-m-d",
+			locale: "fr",
+			allowInput: false,
+			disableMobile: true,
+			minDate: "today"
 		});
 	});
+
+
 
 
 	// Handle the "Next" button click

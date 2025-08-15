@@ -275,7 +275,7 @@
 								); ?>
 								<?php echo $this->Html->link(
 									'Référentiel de prix',
-									array('controller' => 'parc', 'action' => 'referentiel_prix'),
+									array('controller' => 'referentiels', 'action' => 'index'),
 									array('class' => 'dropdown-item')
 								); ?>
 							</div>

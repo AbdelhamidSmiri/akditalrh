@@ -124,6 +124,9 @@
 							<?php
 							echo $this->Form->input('nom_transfer', array('placeholder' => '', 'label' => 'Nom de chauffeur'));
 							?>
+							<div class="message-error nom-transfer-error">
+								Veuillez saisir le nom du chauffeur.
+							</div>
 						</div>
 						<div class='col-12'>
 							<div class="has-calendar-icon input text">
@@ -137,7 +140,7 @@
 								));
 								?>
 							</div>
-							<div class="message-error dateRetour-error">
+							<div class="message-error date-transfer-error">
 								Veuillez choisir une date de transfer.
 							</div>
 						</div>
@@ -146,21 +149,33 @@
 							<?php
 							echo $this->Form->input('tel_transfer', array('placeholder' => '', 'label' => 'Téléphone du chauffeur'));
 							?>
+							<div class="message-error tel-transfer-error">
+								Veuillez saisir le téléphone du chauffeur.
+							</div>
 						</div>
 						<div class='col-12 mb-3'>
 							<?php
 							echo $this->Form->input('description_transfer', array('placeholder' => '', 'label' => 'Description du transfert'));
 							?>
+							<div class="message-error description-transfer-error">
+								Veuillez saisir une description du transfert.
+							</div>
 						</div>
 						<div class='col-12'>
 							<?php
 							echo $this->Form->input('pick_up', array('placeholder' => '', 'label' => 'Pick-up'));
 							?>
+							<div class="message-error pick-up-error">
+								Veuillez saisir le point de pick-up.
+							</div>
 						</div>
 						<div class='col-12'>
 							<?php
 							echo $this->Form->input('prix_transfert', array('placeholder' => '', 'label' => 'Prix du transfert(TTC)'));
 							?>
+							<div class="message-error prix-transfert-error">
+								Veuillez saisir le prix du transfert.
+							</div>
 						</div>
 					<?php endif; ?>
 					<div class=""></div>
@@ -187,6 +202,9 @@
 
 						<div class="description-text">
 							Téléversez les autre documents.
+						</div>
+						<div class="message-error autre-documents-error">
+							Veuillez téléverser au moins un autre document.
 						</div>
 					</div>
 				</div>
@@ -237,6 +255,27 @@
 			allowInput: true,
 			minDate: "today"
 		});
+
+		// Add submit button validation
+		const submitBtn = document.querySelector('button[type="submit"]');
+		if (submitBtn) {
+			submitBtn.addEventListener('click', function(e) {
+				e.preventDefault(); // Prevent form submission initially
+				
+				// Validate step 2 before submitting
+				if (!validateStep2()) {
+					// Scroll to top to show errors
+					window.scrollTo({
+						top: 0,
+						behavior: 'smooth'
+					});
+					return; // Don't submit if validation fails
+				}
+				
+				// If validation passes, submit the form
+				document.querySelector('form').submit();
+			});
+		}
 	});
 
 	// Validation function for step 1
@@ -262,17 +301,7 @@
 		const fileRetour = document.querySelector('input[name="data[Volreservation][file_retour][]"]') ||
 			document.getElementById('VolreservationFileRetour');
 
-		// Debug: Log what we found
-		console.log('Validation elements found:', {
-			reponse: reponse,
-			reponseValue: reponse ? reponse.value : 'not found',
-			numVol: numVol,
-			numVolValue: numVol ? numVol.value : 'not found',
-			prixVol: prixVol,
-			prixVolValue: prixVol ? prixVol.value : 'not found',
-			fileAller: fileAller,
-			fileRetour: fileRetour
-		});
+	
 
 		// Validate reponse
 		if (!reponse || !reponse.value.trim()) {
@@ -327,6 +356,114 @@
 			if (parent) parent.style.border = '';
 			document.querySelector('.file-retour-error').style.display = 'none';
 		}
+
+		return isValid;
+	}
+
+	// Validation function for step 2
+	function validateStep2() {
+		let isValid = true;
+
+		// Check if transfer is enabled by looking for the transfer fields
+		const nomTransfer = document.getElementById('VolreservationNomTransfer') ||
+			document.querySelector('input[name="data[Volreservation][nom_transfer]"]');
+		
+		// If transfer fields don't exist, step 2 is valid (no transfer required)
+		if (!nomTransfer) {
+			return true;
+		}
+
+		// Get all transfer-related form elements
+		const dateTransfer = document.getElementById('VolreservationDateTransfer') ||
+			document.querySelector('input[name="data[Volreservation][date_transfer]"]') ||
+			document.getElementById('date_transfer');
+
+		const telTransfer = document.getElementById('VolreservationTelTransfer') ||
+			document.querySelector('input[name="data[Volreservation][tel_transfer]"]');
+
+		const descriptionTransfer = document.getElementById('VolreservationDescriptionTransfer') ||
+			document.querySelector('textarea[name="data[Volreservation][description_transfer]"]') ||
+			document.querySelector('input[name="data[Volreservation][description_transfer]"]');
+
+		const pickUp = document.getElementById('VolreservationPickUp') ||
+			document.querySelector('input[name="data[Volreservation][pick_up]"]');
+
+		const prixTransfert = document.getElementById('VolreservationPrixTransfert') ||
+			document.querySelector('input[name="data[Volreservation][prix_transfert]"]');
+
+		// Validate nom_transfer
+		if (!nomTransfer || !nomTransfer.value.trim()) {
+			if (nomTransfer) nomTransfer.style.border = '1px solid #b80000';
+			const errorElement = document.querySelector('.nom-transfer-error');
+			if (errorElement) errorElement.style.display = 'block';
+			isValid = false;
+		} else {
+			nomTransfer.style.border = '';
+			const errorElement = document.querySelector('.nom-transfer-error');
+			if (errorElement) errorElement.style.display = 'none';
+		}
+
+		// Validate date_transfer
+		if (!dateTransfer || !dateTransfer.value.trim()) {
+			if (dateTransfer) dateTransfer.style.border = '1px solid #b80000';
+			const errorElement = document.querySelector('.date-transfer-error');
+			if (errorElement) errorElement.style.display = 'block';
+			isValid = false;
+		} else {
+			dateTransfer.style.border = '';
+			const errorElement = document.querySelector('.date-transfer-error');
+			if (errorElement) errorElement.style.display = 'none';
+		}
+
+		// Validate tel_transfer
+		if (!telTransfer || !telTransfer.value.trim()) {
+			if (telTransfer) telTransfer.style.border = '1px solid #b80000';
+			const errorElement = document.querySelector('.tel-transfer-error');
+			if (errorElement) errorElement.style.display = 'block';
+			isValid = false;
+		} else {
+			telTransfer.style.border = '';
+			const errorElement = document.querySelector('.tel-transfer-error');
+			if (errorElement) errorElement.style.display = 'none';
+		}
+
+		// Validate description_transfer
+		if (!descriptionTransfer || !descriptionTransfer.value.trim()) {
+			if (descriptionTransfer) descriptionTransfer.style.border = '1px solid #b80000';
+			const errorElement = document.querySelector('.description-transfer-error');
+			if (errorElement) errorElement.style.display = 'block';
+			isValid = false;
+		} else {
+			descriptionTransfer.style.border = '';
+			const errorElement = document.querySelector('.description-transfer-error');
+			if (errorElement) errorElement.style.display = 'none';
+		}
+
+		// Validate pick_up
+		if (!pickUp || !pickUp.value.trim()) {
+			if (pickUp) pickUp.style.border = '1px solid #b80000';
+			const errorElement = document.querySelector('.pick-up-error');
+			if (errorElement) errorElement.style.display = 'block';
+			isValid = false;
+		} else {
+			pickUp.style.border = '';
+			const errorElement = document.querySelector('.pick-up-error');
+			if (errorElement) errorElement.style.display = 'none';
+		}
+
+		// Validate prix_transfert
+		if (!prixTransfert || !prixTransfert.value.trim()) {
+			if (prixTransfert) prixTransfert.style.border = '1px solid #b80000';
+			const errorElement = document.querySelector('.prix-transfert-error');
+			if (errorElement) errorElement.style.display = 'block';
+			isValid = false;
+		} else {
+			prixTransfert.style.border = '';
+			const errorElement = document.querySelector('.prix-transfert-error');
+			if (errorElement) errorElement.style.display = 'none';
+		}
+	
+	
 
 		return isValid;
 	}

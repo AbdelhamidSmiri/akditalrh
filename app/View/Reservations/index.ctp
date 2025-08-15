@@ -202,10 +202,10 @@ function dureeSejour($checkin_date, $checkout_date)
 
     <div class="row mb-4">
         <div class="col-12 ">
-            <h1 class="main-title">Répartition par Site</h1>
+            <h1 class="little-title">Répartition par Site</h1>
             <div class="row">
                 <?php foreach ($sites_stats as $site => $stats): ?>
-                    <div class="col-md-6">
+                    <div class="col-md-6 mb-3">
                         <div class="card view-card border-1 h-100">
                             <div class="stats-card card-body d-flex align-items-center justify-content-between p-3">
                                 <div class="d-flex flex-column">

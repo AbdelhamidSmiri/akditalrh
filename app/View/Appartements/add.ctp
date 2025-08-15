@@ -73,7 +73,7 @@
                 </div>
                 <div class='submit-section'>
                     <button type="submit" class="btn btn-submit">
-                        <i class="fa-solid fa-paper-plane"></i> Envoyer
+                        <i class="fa-solid fa-paper-plane"></i> Enregistrer
                     </button>
                 </div><?php echo $this->Form->end(); ?>
             </div>

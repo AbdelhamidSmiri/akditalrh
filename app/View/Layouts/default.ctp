@@ -125,13 +125,13 @@
 						<div class="collapse" id="reservationsDropdown">
 							<div class="dropdown-menu show">
 								<?php echo $this->Html->link(
-									'<i class="fa-regular fa-plus me-2"></i>Demande de billet d’avion',
+									'<i class="fa-regular fa-plus me-2"></i>Nouvelle demmande',
 									array('controller' => 'volreservations', 'action' => 'add'),
 									array('class' => 'dropdown-item', 'escape' => false)
 
 								); ?>
 								<?php echo $this->Html->link(
-									$demande_hotel_icon . 'Historique des billets d’avion',
+									$demande_hotel_icon . 'Mes billets',
 									array('controller' => 'volreservations', 'action' => 'agent_index'),
 									array('class' => 'dropdown-item', 'escape' => false)
 								); ?>

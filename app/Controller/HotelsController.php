@@ -22,12 +22,17 @@ class HotelsController extends AppController
 
 	public function index()
 	{
+		$title_for_layout = "Liste des Hôtels";
+		$pageSubtitle = "Parcourez et gérez tous les hôtels disponibles.";
 		$this->Hotel->recursive = 0;
 		$this->set('hotels', $this->Hotel->find("all"));
+		$this->set(compact("pageSubtitle", 'title_for_layout'));
 	}
 
 	public function view($id = null)
 	{
+		$title_for_layout = "Détails de l’Hôtel";
+		$pageSubtitle = "Visualisez toutes les informations concernant cet hôtel";
 		if (!$this->Hotel->exists($id)) {
 			throw new NotFoundException(__('Invalid hotel'));
 		}
@@ -89,6 +94,7 @@ class HotelsController extends AppController
 		));
 
 		$this->set(compact('hotel', 'hotels'));
+		$this->set(compact("pageSubtitle", 'title_for_layout'));
 	}
 
 	/**
@@ -98,10 +104,35 @@ class HotelsController extends AppController
 	 */
 	public function add()
 	{
+		$title_for_layout = "Ajouter un Hôtel";
+		$pageSubtitle = "Remplissez le formulaire pour créer un nouvel hôtel";
 		if ($this->request->is('post')) {
 			$this->request->data['Hotel']['images'] = $this->uploadFile('hotels', $this->request->data['Hotel']['images']);
 			// Création d'une nouvelle entité
 			$this->Hotel->create();
+
+			if (!empty($this->request->data['Hotel']['ville_autre'])) {
+				$villeName = strtoupper(trim($this->request->data['Hotel']['ville_autre']));
+
+				// Check if ville already exists
+				$existingVille = $this->Hotel->Ville->find('first', array(
+					'conditions' => array('UPPER(Ville.ville)' => $villeName),
+					'recursive' => -1
+				));
+
+				if ($existingVille) {
+					// Use existing ville ID
+					$this->request->data['Hotel']['ville_id'] = $existingVille['Ville']['id'];
+				} else {
+					// Create new ville
+					$this->Hotel->Ville->create();
+					$this->Hotel->Ville->save(array('ville' => $villeName));
+					$this->request->data['Hotel']['ville_id'] = $this->Hotel->Ville->id;
+				}
+			} else {
+				// Use selected ville_id from dropdown
+				$this->request->data['Hotel']['ville_id'] = $this->request->data['Hotel']['ville_select'];
+			}
 
 			// Sauvegarde
 			if ($this->Hotel->save($this->request->data)) {
@@ -112,13 +143,14 @@ class HotelsController extends AppController
 			}
 		}
 
-		$villes_hotel = $this->Hotel->find('list', array(
-			'fields' => array('Hotel.ville', 'Hotel.ville'),
-			'group' => array('Hotel.ville'),
+		$villes_hotel = $this->Hotel->Ville->find('list', array(
+			'fields' => array('Ville.id', 'Ville.ville'),
+			'group' => array('Ville.ville'),
 			'recursive' => -1
 		));
 
 		$this->set(compact('villes_hotel'));
+		$this->set(compact("pageSubtitle", 'title_for_layout'));
 	}
 
 
@@ -131,6 +163,8 @@ class HotelsController extends AppController
 	 */
 	public function edit($id = null)
 	{
+		$title_for_layout = "Modifier l’Hôtel";
+		$pageSubtitle = "Mettez à jour les informations de l’hôtel sélectionné";
 		if (!$this->Hotel->exists($id)) {
 			throw new NotFoundException(__('Invalid hotel'));
 		}
@@ -142,14 +176,27 @@ class HotelsController extends AppController
 
 			// Handle deleted images
 			if (!empty($this->request->data['Hotel']['deleted_images'])) {
-				$deletedImages = explode(',', $this->request->data['Hotel']['deleted_images']);
+				// Fix: Ensure deleted_images is a string before exploding
+				$deletedImagesString = $this->request->data['Hotel']['deleted_images'];
+				if (is_array($deletedImagesString)) {
+					// If it's already an array, implode it first
+					$deletedImagesString = implode(',', $deletedImagesString);
+				}
+
+				$deletedImages = explode(',', $deletedImagesString);
 				$this->deleteImages($deletedImages);
 
 				// Remove deleted images from existing images list
-				if (!empty($existingImages)) {
+				if (!empty($existingImages) && is_string($existingImages)) {
 					$existingImagesArray = explode(',', $existingImages);
+					// Filter out empty values before array_diff
+					$existingImagesArray = array_filter($existingImagesArray);
+					$deletedImages = array_filter($deletedImages);
+
 					$existingImagesArray = array_diff($existingImagesArray, $deletedImages);
-					$existingImages = implode(',', array_filter($existingImagesArray));
+					$existingImages = !empty($existingImagesArray) ? implode(',', $existingImagesArray) : '';
+				} else {
+					$existingImages = '';
 				}
 			}
 
@@ -158,7 +205,7 @@ class HotelsController extends AppController
 			if (!empty($this->request->data['Hotel']['images']) && is_array($this->request->data['Hotel']['images'])) {
 				$uploadedImages = [];
 				foreach ($this->request->data['Hotel']['images'] as $file) {
-					if (is_array($file) && $file['error'] === 0) {
+					if (is_array($file) && isset($file['error']) && $file['error'] === 0) {
 						$uploadedImage = $this->uploadFile('hotels', $file);
 						if ($uploadedImage) {
 							$uploadedImages[] = $uploadedImage;
@@ -169,11 +216,39 @@ class HotelsController extends AppController
 			}
 
 			// Combine existing and new images
-			$allImages = array_filter([$existingImages, $newImages]);
+			$allImages = array_filter(array($existingImages, $newImages), function ($value) {
+				return !empty($value);
+			});
 			$this->request->data['Hotel']['images'] = implode(',', $allImages);
 
 			// Remove the deleted_images field before saving
 			unset($this->request->data['Hotel']['deleted_images']);
+
+			if (!empty($this->request->data['Hotel']['ville_autre'])) {
+				$villeName = strtoupper(trim($this->request->data['Hotel']['ville_autre']));
+
+				// Check if ville already exists
+				$existingVille = $this->Hotel->Ville->find('first', array(
+					'conditions' => array('UPPER(Ville.ville)' => $villeName),
+					'recursive' => -1
+				));
+
+				if ($existingVille) {
+					// Use existing ville ID
+					$this->request->data['Hotel']['ville_id'] = $existingVille['Ville']['id'];
+				} else {
+					// Create new ville
+					$this->Hotel->Ville->create();
+					$this->Hotel->Ville->save(array('ville' => $villeName));
+					$this->request->data['Hotel']['ville_id'] = $this->Hotel->Ville->id;
+				}
+			} else {
+				// Use selected ville_id from dropdown
+				$this->request->data['Hotel']['ville_id'] = $this->request->data['Hotel']['ville_select'];
+			}
+
+			unset($this->request->data['Hotel']['ville_select']);
+			unset($this->request->data['Hotel']['ville_autre']);
 
 			if ($this->Hotel->save($this->request->data)) {
 				$this->Session->setFlash(__('The hotel has been saved.'));
@@ -186,13 +261,15 @@ class HotelsController extends AppController
 			$this->request->data = $this->Hotel->find('first', $options);
 		}
 
-		$villes_hotel = $this->Hotel->find('list', array(
-			'fields' => array('Hotel.ville', 'Hotel.ville'),
-			'group' => array('Hotel.ville'),
+		$villes_hotel = $this->Hotel->Ville->find('list', array(
+			'fields' => array('Ville.id', 'Ville.ville'),
+			'group' => array('Ville.ville'),
 			'recursive' => -1
 		));
 
 		$this->set(compact('villes_hotel'));
+				$this->set(compact("pageSubtitle", 'title_for_layout'));
+
 	}
 
 	/**
@@ -218,19 +295,20 @@ class HotelsController extends AppController
 
 
 
-	private function deleteImages($imageNames) {
-        $dir = WWW_ROOT . 'files' . DS . 'hotels' . DS;
-        
-        foreach ($imageNames as $imageName) {
-            $imageName = trim($imageName);
-            if (!empty($imageName)) {
-                $filePath = $dir . $imageName;
-                if (file_exists($filePath)) {
-                    unlink($filePath);
-                }
-            }
-        }
-    }
+	private function deleteImages($imageNames)
+	{
+		$dir = WWW_ROOT . 'files' . DS . 'hotels' . DS;
+
+		foreach ($imageNames as $imageName) {
+			$imageName = trim($imageName);
+			if (!empty($imageName)) {
+				$filePath = $dir . $imageName;
+				if (file_exists($filePath)) {
+					unlink($filePath);
+				}
+			}
+		}
+	}
 
 
 	public function uploadFile($folder, $file)

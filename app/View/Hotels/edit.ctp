@@ -13,23 +13,35 @@
 				</div>
 				<div class='col-12'>
 					<?php
-					echo $this->Form->input('hotel', array('placeholder' => ''));
+					echo $this->Form->input('hotel', array('placeholder' => '','label' => 'Nom de l’hôtel'));
 					?>
 				</div>
 				<div class='col-12'>
 					<?php
-					echo $this->Form->input('etoile', array('placeholder' => ''));
+					echo $this->Form->input('etoile', array('placeholder' => '','label' => 'Étoile'));
 					?>
 				</div>
 				<div class='col-12'>
 					<?php
-					echo $this->Form->input('region', array('placeholder' => ''));
+					echo $this->Form->input('region', array('placeholder' => '','label' => 'Région'));
 					?>
 				</div>
 				<div class='col-12'>
 					<?php
-					// Add 'Autre' option at the end of villes
 					$villes_hotel['__autre__'] = 'Autre';
+
+					// Determine selected ville (id)
+					$selectedVilleId = isset($this->request->data['Hotel']['ville_id']) ? $this->request->data['Hotel']['ville_id'] : null;
+
+					// If the current ville_id is not in the list, set to '__autre__'
+					$villeExists = array_key_exists($selectedVilleId, $villes_hotel);
+					$selected = $villeExists ? $selectedVilleId : '__autre__';
+
+					// Set default value for ville_autre (only if ville not found in list)
+					$ville_autre_value = '';
+					if (!$villeExists && isset($this->request->data['Hotel']['ville']['ville'])) {
+						$ville_autre_value = $this->request->data['Hotel']['ville']['ville'];
+					}
 
 					echo $this->Form->input('ville_select', array(
 						'label' => 'Ville',
@@ -37,19 +49,22 @@
 						'options' => $villes_hotel,
 						'empty' => 'Sélectionner une ville',
 						'class' => 'form-control',
-						'id' => 'ville-select'
+						'id' => 'ville-select',
+						'default' => $selected
 					));
 
-					// Hidden input shown only when "Autre" is selected
-					echo $this->Form->input('ville', array(
+					echo $this->Form->input('ville_autre', array(
 						'label' => 'Autre ville',
 						'type' => 'text',
 						'id' => 'ville-autre',
-						'style' => 'display: none;',
+						'style' => !$villeExists ? 'display:block;' : 'display:none;',
+						'value' => $ville_autre_value,
 						'placeholder' => ''
 					));
 					?>
+
 				</div>
+
 				<div class='col-12'>
 					<?php
 					echo $this->Form->input('adresse', array('placeholder' => ''));
@@ -90,22 +105,24 @@
 						'type' => 'textarea',
 						'placeholder' => '',
 						'rows' => 5,
+						'label' => 'Email(s)'
+
 					));
 					?>
 				</div>
 				<div class='col-12'>
 					<?php
-					echo $this->Form->input('telephone', array('placeholder' => ''));
+					echo $this->Form->input('telephone', array('placeholder' => '', 'label' => 'Téléphone'));
 					?>
 				</div>
 				<div class='col-12'>
 					<?php
-					echo $this->Form->input('nom_responsable', array('placeholder' => ''));
+					echo $this->Form->input('nom_responsable', array('placeholder' => '', 'label' => 'Nom du responsable'));
 					?>
 				</div>
 				<div class='col-12'>
 					<?php
-					echo $this->Form->input('reglement', array('placeholder' => ''));
+					echo $this->Form->input('reglement', array('placeholder' => '', 'label' => 'Règlement'));
 					?>
 				</div>
 				<div class='submit-section'>
@@ -141,16 +158,20 @@
 
 		// for ville autre
 
-		var select = document.getElementById('ville-select');
-		var inputAutre = document.getElementById('ville-autre');
+		const select = document.getElementById('ville-select');
+		const inputAutre = document.getElementById('ville-autre');
 
-		select.addEventListener('change', function() {
-			if (this.value === '__autre__') {
+		function toggleAutreField() {
+			if (select.value === '__autre__') {
 				inputAutre.style.display = 'block';
+				inputAutre.name = 'Hotel[ville_autre]';
 			} else {
 				inputAutre.style.display = 'none';
-				inputAutre.value = this.value; // Auto-fill hidden input with selected value
+				inputAutre.name = '';
 			}
-		});
+		}
+
+		toggleAutreField(); // run on page load
+		select.addEventListener('change', toggleAutreField);
 	});
 </script>

@@ -125,7 +125,7 @@
 			<!-- Button trigger modal -->
 			<?php
 			echo $this->Html->link(
-				__('<i class="fa-regular fa-plus"></i> Nouveau hotel'),
+				__('<i class="fa-regular fa-plus"></i> Nouveau hôtel'),
 				array('action' => 'add'),
 				array(
 					'escape' => false,
@@ -159,8 +159,8 @@
 
 							<span> <?php echo $hotel['Hotel']['hotel']; ?></span>
 							<div class="ville">
-								<?php if (!empty($hotel['Hotel']['ville'])): ?>
-									<span><i class="fa-regular fa-location-dot"></i> <?php echo $hotel['Hotel']['ville']; ?></span>
+								<?php if (!empty($hotel['Ville']['ville'])): ?>
+									<span><i class="fa-regular fa-location-dot"></i> <?php echo $hotel['Ville']['ville']; ?></span>
 								<?php endif; ?>
 								<div class="starts">
 									<?php for ($i = 0; $i < $hotel['Hotel']['etoile']; $i++) {
@@ -211,8 +211,8 @@
 				<div class="actions text-end">
 
 					<?php echo $this->Html->link(__('Voir'), array('action' => 'view', $hotel['Hotel']['id'])); ?> /
-					<?php echo $this->Html->link(__('Edit'), array('action' => 'edit', $hotel['Hotel']['id'])); ?> /
-					<?php echo $this->Form->postLink(__('Delete'), array('action' => 'delete', $hotel['Hotel']['id']), array('confirm' => __('Are you sure you want to delete # %s?', $hotel['Hotel']['id']))); ?>
+					<?php echo $this->Html->link(__('modifier'), array('action' => 'edit', $hotel['Hotel']['id'])); ?> /
+					<?php echo $this->Form->postLink(__('Supprimer'), array('action' => 'delete', $hotel['Hotel']['id']), array('confirm' => __('Voulez-vous vraiment supprimer cet hôtel ?', $hotel['Hotel']['id']))); ?>
 
 				</div>
 

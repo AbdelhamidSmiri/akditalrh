@@ -23,7 +23,7 @@
 				<th>Message</th>
 				<th>État</th>
 				<th>Réponse</th>
-				<th>Réponse</th>
+				<th>Date de création</th>
 				<th>Numéro de vol</th>
 				<th>Transfert</th>
 				<th>Nom du transfert</th>

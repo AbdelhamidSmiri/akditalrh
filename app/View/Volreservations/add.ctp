@@ -28,64 +28,88 @@
 						echo $this->Form->input('site_id', array(
 							'placeholder' => '',
 							'label' => 'Site',
-							'empty' => 'Choisissez le site de la réservation',
+							'empty' => 'Choisissez le site de prise en charge',
 						));
 						?>
+						<div class="message">
+							Veuillez sélectionner un site
+						</div>
 						<div class="message-error site-error">
 							Veuillez choisir un site.
 						</div>
 					</div>
-
-					<div class='col-12'>
-						<?php
-						echo $this->Form->input('depart', array('placeholder' => ''));
-						?>
-						<div class="message-error depart-error">
-							Veuillez choisir un lieu de départ.
-						</div>
-					</div>
-					<div class='col-12'>
-						<?php
-						echo $this->Form->input('destination', array('placeholder' => ''));
-						?>
-						<div class="message-error destination-error">
-							Veuillez choisir une destination.
-						</div>
-					</div>
-					<div class='col-12'>
-						<div class="has-calendar-icon input text">
+					<div class="row">
+						<div class='col-md-6 col-sm-12'>
 							<?php
-							echo $this->Form->input('date_aller', array(
-								'label' => 'Date Aller',
-								'type' => 'text', // important: not 'date'
-								'id' => 'date_aller_input', // so we can replace it
+							echo $this->Form->input('depart', array(
 								'placeholder' => '',
-								'div' => false,
+								'label' => 'Lieu de départ',
 							));
 							?>
+							<div class="message">
+								D’où partez-vous ?
+							</div>
+							<div class="message-error depart-error">
+								Veuillez choisir un lieu de départ.
+							</div>
 						</div>
-						<div class="message-error dateAller-error">
-							Veuillez choisir une date aller.
-						</div>
-					</div>
-					<div class='col-12'>
-						<div class="has-calendar-icon input text">
+						<div class='col-md-6 col-sm-12'>
 							<?php
-							echo $this->Form->input('date_retour', array(
-								'label' => 'Date Retour',
-								'type' => 'text', // important: not 'date'
-								'id' => 'date_retour_input', // so we can replace it
+							echo $this->Form->input('destination', array(
 								'placeholder' => '',
-								'div' => false,
+								'label' => 'Destination',
 							));
 							?>
+							<div class="message">
+								Où souhaitez-vous aller ?
+							</div>
+							<div class="message-error destination-error">
+								Veuillez choisir une destination.
+							</div>
 						</div>
-						<div class="message-error dateRetour-error">
-							Veuillez choisir une date retour.
+					</div>
+					<div class="row">
+						<div class='col-md-6 col-sm-12'>
+							<div class="has-calendar-icon input text">
+								<?php
+								echo $this->Form->input('date_aller', array(
+									'label' => 'Date de départ',
+									'type' => 'text', // important: not 'date'
+									'id' => 'date_aller_input', // so we can replace it
+									'placeholder' => '',
+									'div' => false,
+								));
+								?>
+							</div>
+							<div class="message">
+								Sélectionnez la date prévue de départ
+							</div>
+							<div class="message-error dateAller-error">
+								Veuillez choisir une date aller.
+							</div>
+						</div>
+						<div class='col-md-6 col-sm-12'>
+							<div class="has-calendar-icon input text">
+								<?php
+								echo $this->Form->input('date_retour', array(
+									'label' => 'Date de retour',
+									'type' => 'text', // important: not 'date'
+									'id' => 'date_retour_input', // so we can replace it
+									'placeholder' => '',
+									'div' => false,
+								));
+								?>
+							</div>
+							<div class="message">
+								Sélectionnez la date prévue de retour
+							</div>
+							<div class="message-error dateRetour-error">
+								Veuillez choisir une date retour.
+							</div>
 						</div>
 					</div>
 					<div class='col-12 mt-5'>
-						<label class="control control--checkbox">Je veux un transfert
+						<label class="control control--checkbox">Je souhaite réserver un transfert
 							<input type="hidden" name="data[Volreservation][transfer]" id="transferValue" value="" />
 							<input type="checkbox" id="transferCheckbox" />
 							<div class="control__indicator"></div>
@@ -96,8 +120,10 @@
 							<span class="rounded_icon"><i class="fa-solid fa-arrow-right"></i></span> Suivant
 						</button>
 					</div>
-					<div class="col-12 d-flex justify-content-between mt-3">
-						<span class="import-span">Tous les champs sont obligatoires.</span>
+					<div class="col-md-9 col-sm-12 d-flex justify-content-between mt-3">
+						<span class="import-span">Tous les champs et documents sont obligatoires pour la
+							validation de la demande.
+						</span>
 						<span class="pagin-steps"></span>
 					</div>
 				</div>
@@ -199,13 +225,14 @@
 					</div>
 					<div class='submit-section'>
 						<button type="submit" class="btn btn-submit">
-							<i class="fa-solid fa-paper-plane"></i> Envoyer
+							<i class="fa-solid fa-paper-plane mx-2"></i> Soumettre la demande
 						</button>
 
 
 					</div>
 					<div class="col-12 d-flex justify-content-between mt-3">
-						<span class="import-span">Tous les champs sont obligatoires.</span>
+						<span class="import-span">Tous les champs et documents sont obligatoires pour la
+							validation de la demande.</span>
 						<span class="pagin-steps"></span>
 					</div>
 					<?php echo $this->Form->end(); ?>
@@ -222,13 +249,34 @@
 
 <script>
 	document.addEventListener("DOMContentLoaded", function() {
-		flatpickr("#date_aller_input, #date_retour_input", {
+		const dateAller = flatpickr("#date_aller_input", {
 			dateFormat: "Y-m-d",
 			locale: "fr",
 			allowInput: false,
-			disableMobile: true
+			disableMobile: true,
+			minDate: "today",
+			onChange: function(selectedDates, dateStr) {
+				// Update minDate of the return date picker
+				dateRetour.set('minDate', dateStr);
+
+				// Auto-fill return date if it's empty or before departure
+				const retourValue = dateRetour.input.value;
+				if (!retourValue || new Date(retourValue) < new Date(dateStr)) {
+					dateRetour.setDate(dateStr);
+				}
+			}
+		});
+
+		const dateRetour = flatpickr("#date_retour_input", {
+			dateFormat: "Y-m-d",
+			locale: "fr",
+			allowInput: false,
+			disableMobile: true,
+			minDate: "today"
 		});
 	});
+
+
 
 
 	// Handle the "Next" button click
@@ -301,7 +349,7 @@
 	// Handle the form submission
 	document.querySelector('.volreservations form').addEventListener('submit', function(event) {
 		event.preventDefault(); // Prevent the default form submission
-		//validation step 2 
+		//validation step 2
 		const numOdm = document.querySelector('input[name="data[Volreservation][num_odm]"]');
 		const ordreMissionFiles = document.querySelector('input[name="data[Volreservation][ordre_mission][]"]');
 		const cinFiles = document.querySelector('input[name="data[Volreservation][cin][]"]');

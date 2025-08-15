@@ -49,7 +49,10 @@
 
 
     <div class="header">
-        <img class="logo" src="/akditalrh/img/svg/logo_colored.svg" alt="">
+        <?php echo $this->Html->image('svg/logo_colored.svg', [
+            'alt' => 'Logo',
+            'class' => 'logo'
+        ]); ?>
     </div>
     <?php if ($fin != 'ok') { ?>
         <div class="mt-5">

@@ -10,14 +10,14 @@ App::uses('CakeEmail', 'Network/Email');
 class UsersController extends AppController
 {
 
-	
+
 
 	public function isAuthorized($user)
 	{
 		// Exemples de rôle : agent, agence, admin
 		$role = AuthComponent::user('Role.role');
 		// Actions autorisées pour "agent"
-		if (in_array($this->action, ['view',"login", 'logout', 'forgot_password',"dashboard"])) {
+		if (in_array($this->action, ['view', "login", 'logout', 'forgot_password', "dashboard"])) {
 			return true;
 		}
 
@@ -30,56 +30,133 @@ class UsersController extends AppController
 	}
 
 
-	function dashboard($user_id=0)
+	function dashboard($user_id = 0)
 	{
-		if ($user_id==0 || AuthComponent::user('Role.role') !== 'Admin') {
-			$user_id=AuthComponent::user('id');
+		$title_for_layout = "Dashboard";
+		$pageSubtitle = "Gérez vos réservations, vos demandes et suivez vos informations en toute simplicité.";
+
+		// Check if user is Admin
+		$isAdmin = (AuthComponent::user('Role.role') === 'Admin');
+
+		// Set conditions based on role
+		$volConditions = [];
+		$hotelConditions = [];
+
+		if (!$isAdmin) {
+			// Non-admin users: filter by their user ID
+			$user_id = AuthComponent::user('id');
+			$volConditions = ["Volreservation.user_id" => $user_id];
+			$hotelConditions = ["Reservation.user_id" => $user_id];
+		} else {
+			// Admin users: get all data (no user_id filter)
+			// If a specific user_id is provided in URL, filter by that user
+			if ($user_id > 0) {
+				$volConditions = ["Volreservation.user_id" => $user_id];
+				$hotelConditions = ["Reservation.user_id" => $user_id];
+			}
+			// Otherwise, leave conditions empty to get all records
 		}
-		$vols=$this->User->Volreservation->find("all",["conditions"=>["Volreservation.user_id"=>$user_id]]);
-		$hotels=$this->User->Reservation->find("all",["conditions"=>["Reservation.user_id"=>$user_id]]);
-		$data=[];
-		foreach($vols as $vol) {
-			$data[]=[
-				"category"=>"Voyage",
-				"type"=>"Billet avion",
-				"detail"=>$vol['Volreservation']['depart']." -> ".$vol['Volreservation']['destination'],
-				"dates"=>$vol['Volreservation']['date_aller']." -> ".$vol['Volreservation']['date_retour'],
-				"status"=>$vol['Volreservation']['etat'],
-				"controller"=>"volreservations",
-				"id"=>$vol['Volreservation']['id'],
-				"created"=>$vol['Volreservation']['created']
+
+		// Fetch data with appropriate conditions
+		$vols = $this->User->Volreservation->find("all", ["conditions" => $volConditions]);
+		$hotels = $this->User->Reservation->find("all", ["conditions" => $hotelConditions]);
+
+		$data = [];
+		$statistique = [];
+
+		foreach ($vols as $vol) {
+			if ($vol['Volreservation']['etat'] == 'Validé') {
+				$statistique['vols'] = isset($statistique['vols']) ? $statistique['vols'] + 1 : 1;
+			}
+			if ($vol['Volreservation']['etat'] == 'En cours') {
+				$statistique['en_cours'] = isset($statistique['en_cours']) ? $statistique['en_cours'] + 1 : 1;
+			}
+
+			$data[] = [
+				"category" => "Voyage",
+				"type" => "Billet avion",
+				"detail" => $vol['Volreservation']['depart'] . " -> " . $vol['Volreservation']['destination'],
+				"dates" => $vol['Volreservation']['date_aller'] . " -> " . $vol['Volreservation']['date_retour'],
+				"status" => $vol['Volreservation']['etat'],
+				"controller" => "volreservations",
+				"id" => $vol['Volreservation']['id'],
+				"created" => $vol['Volreservation']['created'],
+				// Add user info for admin view
+				"user_id" => $vol['Volreservation']['user_id']
 			];
 		}
+
 		$this->loadModel("Hotel");
-		$allhotels=$this->Hotel->find("list");
-		$this->Hotel->Chambre->recursive=-1;
-		foreach($hotels as $hotel) 
-		{
-			$chambre=$this->Hotel->Chambre->findById($hotel['Reservation']['chambre_id']);
-			$chambre=$allhotels[$chambre['Chambre']['hotel_id']];
-			$data[]=[
-				"category"=>"Hébergement",
-				"type"=>"Hôtel",
-				"detail"=>$chambre,
-				"dates"=>$hotel['Reservation']['checkin']." -> ".$hotel['Reservation']['checkout'],
-				"status"=>$hotel['Reservation']['etat'],
-				"controller"=>"reservations",
-				"id"=>$hotel['Reservation']['id'],
-				"created"=>$hotel['Reservation']['created']
+		$allhotels = $this->Hotel->find("list");
+		$this->Hotel->Chambre->recursive = -1;
+
+		foreach ($hotels as $hotel) {
+			// Check if chambre_id exists and is not empty
+			if (empty($hotel['Reservation']['chambre_id'])) {
+				continue; // Skip this iteration if no chambre_id
+			}
+
+			$chambre = $this->Hotel->Chambre->findById($hotel['Reservation']['chambre_id']);
+
+			// Check if chambre was found and has the expected structure
+			if (empty($chambre) || !isset($chambre['Chambre']['hotel_id'])) {
+				continue; // Skip this iteration if chambre not found or malformed
+			}
+
+			$hotel_id = $chambre['Chambre']['hotel_id'];
+
+			// Check if hotel exists in the list
+			if (!isset($allhotels[$hotel_id])) {
+				continue; // Skip if hotel not found in the list
+			}
+
+			$chambre_detail = $allhotels[$hotel_id];
+
+			if ($hotel['Reservation']['etat'] == 'acceptée') {
+				$statistique['hotels'] = isset($statistique['hotels']) ? $statistique['hotels'] + 1 : 1;
+			}
+			if ($hotel['Reservation']['etat'] == 'En cours') {
+				$statistique['en_cours'] = isset($statistique['en_cours']) ? $statistique['en_cours'] + 1 : 1;
+			}
+
+			$data[] = [
+				"category" => "Hébergement",
+				"type" => "Hôtel",
+				"detail" => $chambre_detail,
+				"dates" => $hotel['Reservation']['checkin'] . " -> " . $hotel['Reservation']['checkout'],
+				"status" => $hotel['Reservation']['etat'],
+				"controller" => "reservations",
+				"id" => $hotel['Reservation']['id'],
+				"created" => $hotel['Reservation']['created'],
+				// Add user info for admin view
+				"user_id" => $hotel['Reservation']['user_id']
 			];
 		}
+
 		// Sort by created date in descending order
-		usort($data, function($a, $b) {
+		usort($data, function ($a, $b) {
 			return strtotime($b['created']) - strtotime($a['created']);
 		});
-		//debug($data);exit();
-		$this->set(compact("data"));
+
+		// Pass admin status to view for conditional display
+		$this->set(compact("data", "statistique", "pageSubtitle", "title_for_layout", "isAdmin"));
+
+		// Set the title for the layout
+		$this->set('title_for_layout', $title_for_layout);
+		$this->set('pageSubtitle', $pageSubtitle);
+
+		// Render the dashboard view
+		$this->render('dashboard');
 	}
 
 	public function index()
 	{
+		$title_for_layout = "Gestion des utilisateurs";
+		$pageSubtitle = "Vue d’ensemble des comptes et de leurs informations essentielles.";
+
 		$this->User->recursive = 0;
 		$this->set('users', $this->User->find("all"));
+		$this->set(compact("pageSubtitle", 'title_for_layout'));
 	}
 
 	/**
@@ -91,11 +168,35 @@ class UsersController extends AppController
 	 */
 	public function view($id = null)
 	{
-		if($id== null || AuthComponent::user('Role.role') !== 'Admin') 
-			$id=AuthComponent::user('id');
+		// If user is not logged in → go to login
+		if (!AuthComponent::user()) {
+			return $this->redirect(array('action' => 'login'));
+		}
+
+		// If no ID or current user is not Admin → show own profile
+		if ($id === null || AuthComponent::user('Role.role') !== 'Admin') {
+			$id = AuthComponent::user('id');
+		}
+
+		// Check if user exists
+		$options = array('conditions' => array('User.id' => $id));
+		$user = $this->User->find('first', $options);
+
+		if (empty($user)) {
+			throw new NotFoundException(__('User not found'));
+		}
+
+		$this->set('user', $user);
+		$title_for_layout = "Détails de l’utilisateur";
+		$pageSubtitle = " ";
+
+		if ($id == null || AuthComponent::user('Role.role') !== 'Admin')
+			$id = AuthComponent::user('id');
 		$options = array('conditions' => array('User.id' => $id));
 		$this->set('user', $this->User->find('first', $options));
+		$this->set(compact("pageSubtitle", 'title_for_layout'));
 	}
+
 
 	/**
 	 * add method
@@ -104,6 +205,9 @@ class UsersController extends AppController
 	 */
 	public function add()
 	{
+		$title_for_layout = "Ajouter un utilisateur";
+		$pageSubtitle = " ";
+
 		if ($this->request->is('post')) {
 			$this->User->create();
 			if ($this->User->save($this->request->data)) {
@@ -115,6 +219,7 @@ class UsersController extends AppController
 		}
 		$roles = $this->User->Role->find('list');
 		$this->set(compact('roles'));
+		$this->set(compact("pageSubtitle", 'title_for_layout'));
 	}
 
 	/**
@@ -126,6 +231,9 @@ class UsersController extends AppController
 	 */
 	public function edit($id = null)
 	{
+		$title_for_layout = "Modifier un utilisateur";
+		$pageSubtitle = " ";
+
 		if (!$this->User->exists($id)) {
 			throw new NotFoundException(__('Invalid user'));
 		}
@@ -142,6 +250,7 @@ class UsersController extends AppController
 		}
 		$roles = $this->User->Role->find('list');
 		$this->set(compact('roles'));
+		$this->set(compact("pageSubtitle", 'title_for_layout'));
 	}
 
 	/**
@@ -170,15 +279,13 @@ class UsersController extends AppController
 	public function login()
 	{
 
-		// other layout 
+		// other layout
 		$this->layout = 'login';
 		if ($this->Auth->user()) {
 			return $this->redirect($this->Auth->loginRedirect); // or Auth->redirect()
 		}
-		if ($this->request->is('post')) 
-		{
-			if ($this->Auth->login()) 
-			{
+		if ($this->request->is('post')) {
+			if ($this->Auth->login()) {
 				$this->Session->setFlash(
 					'Bonjour ' . $this->Auth->user('nom') . ', vous êtes connecté avec succès.',
 					'Flash/success',
@@ -186,14 +293,14 @@ class UsersController extends AppController
 					'success'
 				);
 				$role = AuthComponent::user('Role.role');
-				if($role== "Admin") {
+				if ($role == "Admin") {
 					$this->Auth->redirectUrl(array('controller' => 'users', 'action' => 'index'));
 				} elseif ($role == "Agence") {
 					$this->Auth->redirectUrl(array('controller' => 'volreservations', 'action' => 'agence_index'));
-				} elseif ($role !==' Admin' && $role !== 'Agence') 
+				} elseif ($role !== ' Admin' && $role !== 'Agence')
 					$this->Auth->redirectUrl(array('controller' => 'volreservations', 'action' => 'agent_index'));
-				
-				
+
+
 				return $this->redirect($this->Auth->redirect());
 			} else {
 				$this->Session->setFlash(

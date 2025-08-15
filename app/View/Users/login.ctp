@@ -55,7 +55,9 @@
         color: #424242;
         font-size: 18px;
     }
-    .links label, .links a {
+
+    .links label,
+    .links a {
         font-family: 'Poppins', sans-serif;
         font-weight: 500;
         color: #9F9D9D;
@@ -71,7 +73,7 @@
         <div class="image-bg">
             <div class="text-box d-flex flex-column  align-items-center">
                 <h1 class=" text-white poppins-bold fs-1 mb-5">Bienvenue sur la plateforme de gestion des moyens généraux Akdital</h1>
-                <p class=" text-white poppins-regular fs-3">Bienvenue sur la plateforme de gestion des moyens généraux Akdital</p>
+                <!-- <p class=" text-white poppins-regular fs-3">Bienvenue sur la plateforme de gestion des moyens généraux Akdital</p> -->
             </div>
         </div>
     </div>
@@ -182,3 +184,12 @@
         </div>
     </div>
 </div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        window.scrollTo({
+            top: document.body.scrollHeight,
+            behavior: "smooth" // smooth scroll animation
+        });
+    });
+</script>

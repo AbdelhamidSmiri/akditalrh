@@ -41,7 +41,7 @@
 			<div class="row">
 				<div class="step step_1">
 					<div class='col-12'>
-						<?php echo $this->Form->input('reponse', array('placeholder' => '')); ?>
+						<?php echo $this->Form->input('reponse', array('placeholder' => '','label' =>'Réponse')); ?>
 						<div class="message-error reponse-error">
 							Veuillez saisir une réponse.
 						</div>

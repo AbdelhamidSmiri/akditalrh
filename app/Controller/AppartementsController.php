@@ -124,7 +124,7 @@ class AppartementsController extends AppController
 		$users = $this->User->find('list');
 		$villes = $this->Appartement->Ville->find('list');
 		$this->set(compact('sites', 'users', 'appartement', "villes"));
-						$this->set(compact("pageSubtitle", 'title_for_layout'));
+		$this->set(compact("pageSubtitle", 'title_for_layout'));
 
 	}
 
@@ -135,6 +135,9 @@ class AppartementsController extends AppController
 	 */
 	public function add()
 	{
+			$title_for_layout = "Ajouter un nouvel appartement";
+		$pageSubtitle = "Renseignez les détails du logement";
+
 		if ($this->request->is('post')) {
 
 			$images = $this->request->data['Appartement']['images'];
@@ -162,6 +165,8 @@ class AppartementsController extends AppController
 		}
 		$villes = $this->Appartement->Ville->find('list');
 		$this->set(compact("villes"));
+		$this->set(compact("pageSubtitle", 'title_for_layout'));
+
 	}
 
 

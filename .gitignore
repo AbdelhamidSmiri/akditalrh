@@ -2,7 +2,11 @@
 #################################################
 /app/Config/database.php
 /app/tmp
-/lib/Cake/Console/Templates/skel/tmp/
+/app/Vendor/
+/app/composer.phar
+/app/Plugin/Bake/
+/lib/
+/lib.cakephp-eol/
 /plugins
 /vendors
 /build

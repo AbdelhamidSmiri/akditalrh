@@ -9,12 +9,20 @@ class AppController extends Controller
 
     public $components = array(
         'Session',
+        'Flash',
         'Auth' => array(
             'loginRedirect' => array('controller' => 'users', 'action' => 'view'),
             'logoutRedirect' => array('controller' => 'users', 'action' => 'login'),
             'authError' => 'You must be logged in to access this page.',
             'authorize' => array('Controller'), // Use controller-based authorization
         )
+    );
+
+    public $helpers = array(
+        'Session',
+        'Flash',
+        'Html',
+        'Form',
     );
 
 

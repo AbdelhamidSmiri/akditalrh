@@ -209,13 +209,13 @@
  			<?php foreach ($beneficiaires as $beneficiaire): ?>
  				<tr>
  					<td>
- 						<?php echo $beneficiaire['Site']['site']; ?>
+ 						<?php echo h($beneficiaire['Site']['site'] ?? ''); ?>
  					</td>
  					<td>
- 						<?php echo $beneficiaire['User']['nom']; ?>
+ 						<?php echo h($beneficiaire['User']['nom'] ?? ''); ?>
  					</td>
  					<td>
- 						<?php echo $beneficiaire['Appartement']['nom']; ?>
+ 						<?php echo h($beneficiaire['Appartement']['nom'] ?? ''); ?>
  					</td>
  					<td><?php echo $beneficiaire['Beneficiaire']['nom']; ?></td>
  					<td><?php echo $beneficiaire['Beneficiaire']['mail']; ?></td>
@@ -262,6 +262,9 @@
  					</td>
  				</tr>
  			<?php endforeach; ?>
+			<?php if (empty($beneficiaires)): ?>
+				<?php echo $this->element('empty_table', array('colspan' => 12)); ?>
+			<?php endif; ?>
  		</tbody>
  	</table>
  </div>

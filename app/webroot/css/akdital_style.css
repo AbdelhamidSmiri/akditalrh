@@ -502,6 +502,14 @@
   padding: 17px 12px;
 }
 
+.table-akdital tbody td.empty-table-msg,
+.empty-table-msg {
+  padding: 2.5rem 1rem;
+  color: #6c757d;
+  font-size: 0.95rem;
+  font-style: italic;
+}
+
 /* end table style  */
 
 /* start page header */

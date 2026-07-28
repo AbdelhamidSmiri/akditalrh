@@ -32,6 +32,9 @@
 					</td>
 				</tr>
 			<?php endforeach; ?>
+			<?php if (empty($roles)): ?>
+				<?php echo $this->element('empty_table', array('colspan' => 3)); ?>
+			<?php endif; ?>
 		</tbody>
 	</table>
 </div>

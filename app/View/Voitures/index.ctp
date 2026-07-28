@@ -64,6 +64,9 @@
 		</td>
 	</tr>
 <?php endforeach; ?>
+			<?php if (empty($voitures)): ?>
+				<?php echo $this->element('empty_table', array('colspan' => 17)); ?>
+			<?php endif; ?>
 		</tbody>
 	</table>
 </div>

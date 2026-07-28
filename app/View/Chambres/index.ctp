@@ -73,7 +73,9 @@
 <div class="col-md-12 filter-section"></div>
 <div class="content-table">
 	<?php 
-	debug($chambres);
+	if (empty($chambres)):
+		echo $this->element('empty_table');
+	else:
 	foreach ($chambres as $chambre): ?>
 		<div class="d-flex hotel-card">
 			<div class="image" style="background-image: url('<?php echo Router::url('/files/chambres/' . $chambre['Chambre']['images'], true); ?>');">
@@ -129,7 +131,8 @@
 
 
 		</div>
-	<?php endforeach; ?>
+	<?php endforeach;
+	endif; ?>
 </div>
 
 </div>

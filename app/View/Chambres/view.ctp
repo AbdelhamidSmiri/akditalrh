@@ -107,6 +107,9 @@
 						</td>
 					</tr>
 				<?php endforeach; ?>
+				<?php if (empty($hotelprices)): ?>
+					<?php echo $this->element('empty_table', array('colspan' => 5)); ?>
+				<?php endif; ?>
 			</tbody>
 		</table>
 	</div>

@@ -37,10 +37,10 @@
 			<?php foreach ($volreservations as $volreservation): ?>
 				<tr>
 					<td>
-						<?php echo $volreservation['User']['nom'] ?>
+						<?php echo h($volreservation['User']['nom'] ?? ''); ?>
 					</td>
 					<td>
-						<?php echo $volreservation['Site']['site']; ?>
+						<?php echo h($volreservation['Site']['site'] ?? ''); ?>
 					</td>
 					<td>
 						<div>
@@ -73,7 +73,7 @@
                                 break;
 
                             default:
-                                echo '<span class="status-btn passe"><i class="fas fa-question-circle"></i> ' . htmlspecialchars($beneficiaire['etat']) . '</span>';
+                                echo '<span class="status-btn passe"><i class="fas fa-question-circle"></i> ' . htmlspecialchars($volreservation['Volreservation']['etat']) . '</span>';
                         }
                         ?>
                     </td>
@@ -99,6 +99,9 @@
 					</td>
 				</tr>
 			<?php endforeach; ?>
+			<?php if (empty($volreservations)): ?>
+				<?php echo $this->element('empty_table', array('colspan' => 16)); ?>
+			<?php endif; ?>
 		</tbody>
 	</table>
 </div>

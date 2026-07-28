@@ -4,7 +4,7 @@
 			<div class="stats-card card-body d-flex align-items-center justify-content-between pt-4">
 				<div class="d-flex flex-column justify-content-center h-100 flex-grow-1">
 					<div class="stats-number mb-1" style="font-size: 2.5rem; font-weight: 600; line-height: 1;">
-						<?php echo $statistique['en_cours']; ?>
+						<?php echo $statistique['en_cours'] ?? 0; ?>
 					</div>
 					<div class="stats-label mb-0 text-muted" style="font-size: 16px; font-weight: 500; line-height: 1.3;">
 						Demandes en cours </div>
@@ -23,7 +23,7 @@
 			<div class="stats-card card-body d-flex align-items-center justify-content-between pt-4">
 				<div class="d-flex flex-column justify-content-center h-100 flex-grow-1">
 					<div class="stats-number mb-1" style="font-size: 2.5rem; font-weight: 600; line-height: 1;">
-						<?php echo $statistique['vols']; ?>
+						<?php echo $statistique['vols'] ?? 0; ?>
 					</div>
 					<div class="stats-label mb-0 text-muted" style="font-size: 16px; font-weight: 500; line-height: 1.3;">
 
@@ -45,7 +45,7 @@
 			<div class="stats-card card-body d-flex align-items-center justify-content-between pt-4">
 				<div class="d-flex flex-column justify-content-center h-100 flex-grow-1">
 					<div class="stats-number mb-1" style="font-size: 2.5rem; font-weight: 600; line-height: 1;">
-						<?php echo $statistique['hotels']; ?>
+						<?php echo $statistique['hotels'] ?? 0; ?>
 					</div>
 					<div class="stats-label mb-0 text-muted" style="font-size: 16px; font-weight: 500; line-height: 1.3;">
 
@@ -118,39 +118,41 @@
 			</tr>
 		</thead>
 		<tbody>
-			<?php foreach ($data as $item): ?>
-				<tr>
-					<td><?php echo h($item['category']); ?></td>
-					<td><?php echo h($item['type']); ?></td>
-					<td><?php echo h($item['detail']); ?></td>
-					<td><?php echo h($item['dates']); ?></td>
-					<td>
-						<?php
-						switch ($item['status']) {
-
-							case 'En cours':
-								echo '<span class="status-btn in-progress"><i class="fas fa-clock"></i> En cours</span>';
-								break;
-							case 'Validé':
-								echo '<span class="status-btn checked"><i class="fas fa-check-circle"></i> Validé</span>';
-								break;
-							case 'acceptée':
-								echo '<span class="status-btn confirmed"><i class="fas fa-check-circle"></i> Confirmé</span>';
-								break;
-							case 'refusée':
-								echo '<span class="status-btn refused"><i class="fas fa-times-circle"></i> Refusée</span>';
-								break;
-
-							default:
-								echo '<span class="status-btn passe"><i class="fas fa-question-circle"></i> ' . htmlspecialchars($item['status']) . '</span>';
-						}
-						?>
-
-					</td>
-					<td class="actions">
-						<?php echo $this->Html->link('Voir', ['controller' => $item['controller'], 'action' => 'view', $item['id']], ['escape' => false, 'title' => 'Voir']); ?>
-					<?php endforeach; ?>
-					</td>
+			<?php if (empty($data)): ?>
+				<?php echo $this->element('empty_table', array('colspan' => 6)); ?>
+			<?php else: ?>
+				<?php foreach ($data as $item): ?>
+					<tr>
+						<td><?php echo h($item['category']); ?></td>
+						<td><?php echo h($item['type']); ?></td>
+						<td><?php echo h($item['detail']); ?></td>
+						<td><?php echo h($item['dates']); ?></td>
+						<td>
+							<?php
+							switch ($item['status']) {
+								case 'En cours':
+									echo '<span class="status-btn in-progress"><i class="fas fa-clock"></i> En cours</span>';
+									break;
+								case 'Validé':
+									echo '<span class="status-btn checked"><i class="fas fa-check-circle"></i> Validé</span>';
+									break;
+								case 'acceptée':
+									echo '<span class="status-btn confirmed"><i class="fas fa-check-circle"></i> Confirmé</span>';
+									break;
+								case 'refusée':
+									echo '<span class="status-btn refused"><i class="fas fa-times-circle"></i> Refusée</span>';
+									break;
+								default:
+									echo '<span class="status-btn passe"><i class="fas fa-question-circle"></i> ' . htmlspecialchars($item['status']) . '</span>';
+							}
+							?>
+						</td>
+						<td class="actions">
+							<?php echo $this->Html->link('Voir', ['controller' => $item['controller'], 'action' => 'view', $item['id']], ['escape' => false, 'title' => 'Voir']); ?>
+						</td>
+					</tr>
+				<?php endforeach; ?>
+			<?php endif; ?>
 		</tbody>
 	</table>
 </div>

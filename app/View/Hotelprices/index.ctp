@@ -45,6 +45,9 @@
 					</td>
 				</tr>
 			<?php endforeach; ?>
+			<?php if (empty($hotelprices)): ?>
+				<?php echo $this->element('empty_table', array('colspan' => 6)); ?>
+			<?php endif; ?>
 		</tbody>
 	</table>
 </div>

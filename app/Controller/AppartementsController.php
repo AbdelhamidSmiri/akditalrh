@@ -45,6 +45,7 @@ class AppartementsController extends AppController
 		]);
 
 		$stats = [];
+		$appart_info = [];
 		$global = [
 			'total_appartements' => 0,
 			'total_ocupes' => 0,
@@ -52,12 +53,13 @@ class AppartementsController extends AppController
 		];
 
 		foreach ($appartements as $a) {
-			$ville = $a['Ville']['ville'];
-			$sexe = $a['Appartement']['sexe'];
+			$ville = !empty($a['Ville']['ville']) ? $a['Ville']['ville'] : 'Non définie';
+			$sexe = isset($a['Appartement']['sexe']) ? $a['Appartement']['sexe'] : '';
 			$cap = (int) $a['Appartement']['capacite'];
 
 			$nb_ocupants = 0;
-			foreach ($a['Beneficiaire'] as $b) {
+			$beneficiaires = !empty($a['Beneficiaire']) ? $a['Beneficiaire'] : [];
+			foreach ($beneficiaires as $b) {
 				if ($b['etat'] == 'Checkin') {
 					$nb_ocupants++;
 				}

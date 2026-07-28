@@ -1,6 +1,6 @@
 <?php
 // Calculs des statistiques
-$beneficiaires = $appartement["Beneficiaire"];
+$beneficiaires = !empty($appartement['Beneficiaire']) ? $appartement['Beneficiaire'] : [];
 $stats = [
     'total' => count($beneficiaires),
     'en_cours' => 0,
@@ -313,7 +313,7 @@ function calculerDureeTotal($dateDebut, $dateFin)
                         <div class="info">
                             <label>Adresse / Ville</label>
                             <span>
-                                <?php echo h(ucwords(strtolower($appartement['Appartement']['adresse']))); ?> , <?php echo h(ucwords(strtolower($appartement['Ville']['ville']))); ?>
+                                <?php echo h(ucwords(strtolower($appartement['Appartement']['adresse']))); ?> , <?php echo h(ucwords(strtolower(!empty($appartement['Ville']['ville']) ? $appartement['Ville']['ville'] : ''))); ?>
                         </div>
                     </div>
                     <div class="col-md-4">
@@ -409,6 +409,9 @@ function calculerDureeTotal($dateDebut, $dateFin)
                     </td>
                 </tr>
             <?php endforeach; ?>
+			<?php if (empty($beneficiaires_actifs)): ?>
+				<?php echo $this->element('empty_table', array('colspan' => 8)); ?>
+			<?php endif; ?>
         </tbody>
     </table>
 </div>
@@ -490,6 +493,9 @@ function calculerDureeTotal($dateDebut, $dateFin)
                     </td>
                 </tr>
             <?php endforeach; ?>
+			<?php if (empty($beneficiaires_historique)): ?>
+				<?php echo $this->element('empty_table', array('colspan' => 9)); ?>
+			<?php endif; ?>
         </tbody>
     </table>
 </div>

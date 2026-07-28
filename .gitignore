@@ -32,3 +32,14 @@
 Icon?
 ehthumbs.db
 Thumbs.db
+
+# Credential / export spreadsheets (project root only) #
+#######################################################
+/*.xlsx
+/*.xls
+/*.csv
+
+# One-off credential / export helper scripts (project root) #
+############################################################
+/_*.php
+/tmp_*.php

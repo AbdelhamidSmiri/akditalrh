@@ -54,6 +54,9 @@
 		</td>
 	</tr>
 <?php endforeach; ?>
+			<?php if (empty($cartecarburants)): ?>
+				<?php echo $this->element('empty_table', array('colspan' => 11)); ?>
+			<?php endif; ?>
 		</tbody>
 	</table>
 </div>

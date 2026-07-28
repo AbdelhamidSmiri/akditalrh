@@ -89,6 +89,9 @@
                 </tr>
             <?php endforeach; ?>
         <?php endforeach; ?>
+			<?php if (empty($stats)): ?>
+				<?php echo $this->element('empty_table', array('colspan' => 5)); ?>
+			<?php endif; ?>
     </tbody>
 </table>
 
@@ -127,5 +130,8 @@
                 </td>
             </tr>
         <?php endforeach; ?>
+			<?php if (empty($appart_info)): ?>
+				<?php echo $this->element('empty_table', array('colspan' => 7)); ?>
+			<?php endif; ?>
     </tbody>
 </table>

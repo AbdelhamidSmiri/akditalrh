@@ -30,7 +30,7 @@
 			<?php foreach ($volreservations as $volreservation): ?>
 				<tr>
 					<td>
-						<?php echo $volreservation['Site']['site']; ?>
+						<?php echo h($volreservation['Site']['site'] ?? ''); ?>
 					</td>
 					<td>
 						<div>
@@ -74,6 +74,9 @@
 					</td>
 				</tr>
 			<?php endforeach; ?>
+			<?php if (empty($volreservations)): ?>
+				<?php echo $this->element('empty_table', array('colspan' => 9)); ?>
+			<?php endif; ?>
 		</tbody>
 	</table>
 </div>

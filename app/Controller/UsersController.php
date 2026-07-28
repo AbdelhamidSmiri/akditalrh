@@ -62,14 +62,18 @@ class UsersController extends AppController
 		$hotels = $this->User->Reservation->find("all", ["conditions" => $hotelConditions]);
 
 		$data = [];
-		$statistique = [];
+		$statistique = [
+			'en_cours' => 0,
+			'vols' => 0,
+			'hotels' => 0,
+		];
 
 		foreach ($vols as $vol) {
 			if ($vol['Volreservation']['etat'] == 'Validé') {
-				$statistique['vols'] = isset($statistique['vols']) ? $statistique['vols'] + 1 : 1;
+				$statistique['vols']++;
 			}
 			if ($vol['Volreservation']['etat'] == 'En cours') {
-				$statistique['en_cours'] = isset($statistique['en_cours']) ? $statistique['en_cours'] + 1 : 1;
+				$statistique['en_cours']++;
 			}
 
 			$data[] = [
@@ -113,10 +117,10 @@ class UsersController extends AppController
 			$chambre_detail = $allhotels[$hotel_id];
 
 			if ($hotel['Reservation']['etat'] == 'acceptée') {
-				$statistique['hotels'] = isset($statistique['hotels']) ? $statistique['hotels'] + 1 : 1;
+				$statistique['hotels']++;
 			}
 			if ($hotel['Reservation']['etat'] == 'En cours') {
-				$statistique['en_cours'] = isset($statistique['en_cours']) ? $statistique['en_cours'] + 1 : 1;
+				$statistique['en_cours']++;
 			}
 
 			$data[] = [
@@ -266,10 +270,40 @@ class UsersController extends AppController
 			throw new NotFoundException(__('Invalid user'));
 		}
 		$this->request->allowMethod('post', 'delete');
-		if ($this->User->delete($id)) {
-			$this->Flash->success(__('The user has been deleted.'));
-		} else {
-			$this->Flash->error(__('The user could not be deleted. Please, try again.'));
+
+		$id = (int)$id;
+		$db = $this->User->getDataSource();
+		$db->begin();
+		try {
+			// Remove related rows that block FK delete (demandevoitures has no ON DELETE CASCADE)
+			$db->query('DELETE FROM demandevoitures WHERE user_id = ' . $id);
+			// demandes already cascades on user delete
+
+			if ($this->User->delete($id)) {
+				$db->commit();
+				$this->Session->setFlash(
+					__('L\'utilisateur a été supprimé.'),
+					'Flash/success',
+					array(),
+					'success'
+				);
+			} else {
+				$db->rollback();
+				$this->Session->setFlash(
+					__('Impossible de supprimer cet utilisateur. Veuillez réessayer.'),
+					'Flash/error',
+					array(),
+					'error'
+				);
+			}
+		} catch (Exception $e) {
+			$db->rollback();
+			$this->Session->setFlash(
+				__('Impossible de supprimer cet utilisateur : des données liées existent encore.'),
+				'Flash/error',
+				array(),
+				'error'
+			);
 		}
 		return $this->redirect(array('action' => 'index'));
 	}

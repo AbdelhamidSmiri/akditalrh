@@ -42,6 +42,9 @@
 					</td>
 				</tr>
 			<?php endforeach; ?>
+			<?php if (empty($users)): ?>
+				<?php echo $this->element('empty_table', array('colspan' => 7)); ?>
+			<?php endif; ?>
 		</tbody>
 	</table>
 </div>

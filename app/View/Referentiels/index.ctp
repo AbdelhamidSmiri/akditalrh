@@ -64,6 +64,9 @@
 		</td>
 	</tr>
 <?php endforeach; ?>
+			<?php if (empty($referentiels)): ?>
+				<?php echo $this->element('empty_table', array('colspan' => 18)); ?>
+			<?php endif; ?>
 		</tbody>
 	</table>
 </div>

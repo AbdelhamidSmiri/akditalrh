@@ -32,6 +32,7 @@
         <!-- flash message -->
 
         <?php
+        echo $this->Flash->render('flash');
         echo $this->Flash->render('info');
         echo $this->Flash->render('default');
         echo $this->Flash->render('success');

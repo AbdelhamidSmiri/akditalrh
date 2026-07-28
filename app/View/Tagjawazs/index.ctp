@@ -40,6 +40,9 @@
 		</td>
 	</tr>
 <?php endforeach; ?>
+			<?php if (empty($tagjawazs)): ?>
+				<?php echo $this->element('empty_table', array('colspan' => 4)); ?>
+			<?php endif; ?>
 		</tbody>
 	</table>
 </div>

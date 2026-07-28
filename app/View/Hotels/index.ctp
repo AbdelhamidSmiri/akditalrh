@@ -141,6 +141,9 @@
 
 <div class="col-md-12 filter-section"></div>
 <div class="d-grid row-gap-3">
+	<?php if (empty($hotels)): ?>
+		<?php echo $this->element('empty_table'); ?>
+	<?php else: ?>
 	<?php foreach ($hotels as $hotel): ?>
 		<div class="d-flex hotel-card">
 			<?php
@@ -221,6 +224,7 @@
 
 		</div>
 	<?php endforeach; ?>
+	<?php endif; ?>
 </div>
 
 </div>

@@ -38,6 +38,9 @@
 					</td>
 				</tr>
 			<?php endforeach; ?>
+			<?php if (empty($villes)): ?>
+				<?php echo $this->element('empty_table', array('colspan' => 2)); ?>
+			<?php endif; ?>
 		</tbody>
 	</table>
 </div>

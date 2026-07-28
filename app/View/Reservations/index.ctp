@@ -21,7 +21,7 @@ foreach ($reservations as $reservation) {
     }
 
     // Comptage par site
-    $site = $reservation['Site']['site'];
+    $site = !empty($reservation['Site']['site']) ? $reservation['Site']['site'] : 'Non défini';
     if (!isset($sites_stats[$site])) {
         $sites_stats[$site] = array('total' => 0, 'En cours' => 0, 'valide' => 0, 'refuse' => 0);
     }
@@ -213,10 +213,10 @@ function dureeSejour($checkin_date, $checkout_date)
                                         <?php echo $site; ?>
                                     </div>
                                     <div class="stats-label mb-0" style="font-size: 0.95rem; font-weight: 400; line-height: 1.3;">
-                                        <strong style="font-size: 1.2rem;"><?php echo $stats['total']; ?></strong> <span class="stats-label mb-0 text-muted"> total</span><br>
-                                        <span class="badge stats-label mb-0 text-muted"><?php echo $stats['valide']; ?> validées</span>
-                                        <span class="badge stats-label mb-0 text-muted"><?php echo $stats['En cours']; ?> en cours</span>
-                                        <span class=" badge stats-label mb-0 text-muted"><?php echo $stats['refuse']; ?> refusées</span>
+                                        <strong style="font-size: 1.2rem;"><?php echo $stats['total'] ?? 0; ?></strong> <span class="stats-label mb-0 text-muted"> total</span><br>
+                                        <span class="badge stats-label mb-0 text-muted"><?php echo $stats['valide'] ?? 0; ?> validées</span>
+                                        <span class="badge stats-label mb-0 text-muted"><?php echo $stats['En cours'] ?? 0; ?> en cours</span>
+                                        <span class=" badge stats-label mb-0 text-muted"><?php echo ($stats['refuse'] ?? $stats['refusée'] ?? 0); ?> refusées</span>
                                     </div>
                                 </div>
                                 <div class="stat-icon d-flex align-items-center justify-content-center flex-shrink-0">
@@ -272,15 +272,15 @@ function dureeSejour($checkin_date, $checkout_date)
                     $duree_sejour = dureeSejour($reservation['Reservation']['checkin'], $reservation['Reservation']['checkout']);
                     ?>
                     <tr>
-                        <td><strong><?php echo $reservation['User']['nom']; ?></strong></td>
+                        <td><strong><?php echo h($reservation['User']['nom'] ?? ''); ?></strong></td>
                         <td>
                             <?php
-                            $hotelId = $reservation['Chambre']['hotel_id'];
-                            echo isset($hotels[$hotelId]) ? $hotels[$hotelId] : '';
+                            $hotelId = $reservation['Chambre']['hotel_id'] ?? null;
+                            echo ($hotelId !== null && isset($hotels[$hotelId])) ? $hotels[$hotelId] : '';
                             ?>
                         </td>
-                        <td><?php echo $reservation['Chambre']['nom']; ?></td>
-                        <td><?php echo $reservation['Site']['site']; ?></td>
+                        <td><?php echo h($reservation['Chambre']['nom'] ?? ''); ?></td>
+                        <td><?php echo h($reservation['Site']['site'] ?? ''); ?></td>
                         <td><?php echo date('d/m/Y', strtotime($reservation['Reservation']['checkin'])); ?></td>
                         <td><?php echo date('d/m/Y', strtotime($reservation['Reservation']['checkout'])); ?></td>
                         <td>
@@ -329,6 +329,9 @@ function dureeSejour($checkin_date, $checkout_date)
                         </td>
                     </tr>
                 <?php endforeach; ?>
+				<?php if (empty($reservations)): ?>
+					<?php echo $this->element('empty_table', array('colspan' => 12)); ?>
+				<?php endif; ?>
             </tbody>
         </table>
     </div>
@@ -342,12 +345,19 @@ function dureeSejour($checkin_date, $checkout_date)
         const searchBtn = document.querySelector('.search-btn');
 
         function rechercher() {
-            const terme = searchInput.value.toLowerCase();
+            const terme = searchInput.value.trim().toLowerCase();
+            if (searchInput.value !== searchInput.value.trim()) {
+                searchInput.value = searchInput.value.trim();
+            }
             const lignes = document.querySelectorAll('tbody tr');
 
             lignes.forEach(function(ligne) {
+                if (ligne.querySelector('.empty-table-msg')) {
+                    ligne.style.display = terme ? 'none' : '';
+                    return;
+                }
                 const texte = ligne.textContent.toLowerCase();
-                if (texte.includes(terme)) {
+                if (!terme || texte.includes(terme)) {
                     ligne.style.display = '';
                 } else {
                     ligne.style.display = 'none';
@@ -360,6 +370,9 @@ function dureeSejour($checkin_date, $checkout_date)
             if (e.key === 'Enter') {
                 rechercher();
             }
+        });
+        searchInput.addEventListener('blur', function() {
+            searchInput.value = searchInput.value.trim();
         });
     });
 </script>

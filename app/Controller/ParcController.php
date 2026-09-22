@@ -8,6 +8,11 @@ class ParcController extends AppController
 {
 	public $uses = array('Demandevoiture', 'Referentiel', 'User');
 
+	public function isAuthorized($user)
+	{
+		return $this->isAdmin();
+	}
+
 	/**
 	 * Liste des requêtes véhicule des collaborateurs
 	 */

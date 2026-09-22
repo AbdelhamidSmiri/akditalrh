@@ -321,11 +321,11 @@ function dureeSejour($checkin_date, $checkout_date)
                         </td>
                         <td><?php echo date('d/m/Y', strtotime($reservation['Reservation']['created'])); ?></td>
                         <td class="actions">
-                            <?php echo $this->Html->link(__('Voir'), array('action' => 'view', $reservation['Reservation']['id'])); ?>
+                            <?php echo $this->Html->link(__('Voir'), array('action' => 'view', $this->SecureId->encode('reservation', $reservation['Reservation']['id']))); ?>
                             /
-                            <?php echo $this->Html->link(__('Modifier'), array('action' => 'edit', $reservation['Reservation']['id'])); ?>
+                            <?php echo $this->Html->link(__('Modifier'), array('action' => 'edit', $this->SecureId->encode('reservation', $reservation['Reservation']['id']))); ?>
                             /
-                            <?php echo $this->Form->postLink(__('Supprimer'), array('action' => 'delete', $reservation['Reservation']['id']), array('confirm' => __('Êtes-vous sûr de vouloir supprimer # %s?', $reservation['Reservation']['id']))); ?>
+                            <?php echo $this->Form->postLink(__('Supprimer'), array('action' => 'delete', $this->SecureId->encode('reservation', $reservation['Reservation']['id'])), array('confirm' => __('Êtes-vous sûr de vouloir supprimer # %s?', $reservation['Reservation']['id']))); ?>
                         </td>
                     </tr>
                 <?php endforeach; ?>

@@ -13,7 +13,7 @@
 		<div class="actions_right">
 			<?php
 			if (in_array(AuthComponent::user("Role.role"), ['Agence', 'Admin']) && $volreservation["Volreservation"]["etat"] == "En cours"): ?>
-				<a href="<?php echo $this->Html->url(array('controller' => 'Volreservations', 'action' => 'agence_valide', $volreservation['Volreservation']['id'])); ?>"
+				<a href="<?php echo $this->Html->url(array('controller' => 'Volreservations', 'action' => 'agence_valide', $this->SecureId->encode('volreservation', $volreservation['Volreservation']['id']))); ?>"
 					class="btn btn-success-rounded"><i class="fa-solid fa-check"></i> Valider et émettre le billet</a>
 			<?php endif; ?>
 
@@ -34,7 +34,7 @@
 
 				<?php
 				echo $this->Form->create('Volreservation', array(
-					'url' => array('controller' => 'Volreservations', 'action' => 'agence_archive', $volreservation['Volreservation']['id']),
+					'url' => array('controller' => 'Volreservations', 'action' => 'agence_archive', $this->SecureId->encode('volreservation', $volreservation['Volreservation']['id'])),
 					'type' => 'post',
 					'class' => 'modal-form'
 				));
@@ -223,7 +223,7 @@
 										<?php foreach ($allerFiles as $key => $file):
 											$active = ($key === 0) ? 'img_active' : 'img_deactive';
 										?>
-											<a href="/akditalrh/files/volreservations/<?php echo h($file); ?>" class="<?php echo $active; ?>" target="_blank">
+											<a href="<?php echo h($this->File->storageUrl('volreservations', $file)); ?>" class="<?php echo $active; ?>" target="_blank">
 												<i class="fa-regular fa-eye"></i> <?php echo h($file); ?>
 											</a><br />
 										<?php endforeach; ?>
@@ -244,7 +244,7 @@
 										<?php foreach ($retourFiles as $key => $file):
 											$active = ($key === 0) ? 'img_active' : 'img_deactive';
 										?>
-											<a href="/akditalrh/files/volreservations/<?php echo h($file); ?>" class="<?php echo $active; ?>" target="_blank">
+											<a href="<?php echo h($this->File->storageUrl('volreservations', $file)); ?>" class="<?php echo $active; ?>" target="_blank">
 												<i class="fa-regular fa-eye"></i> <?php echo h($file); ?>
 											</a><br />
 										<?php endforeach; ?>
@@ -275,7 +275,7 @@
 											// Add pdf-link class for PDFs
 											$linkClass = $active . ($isPdf ? ' pdf-link' : '');
 										?>
-											<a href="<?php echo $this->webroot . 'files/volreservations/' . h($img); ?>"
+											<a href="<?php echo h($this->File->storageUrl('volreservations', $img)); ?>"
 												class="<?php echo h($linkClass); ?>">
 												<?php if ($isPdf): ?>
 													<i class="fa-regular fa-file-pdf"></i>
@@ -311,7 +311,7 @@
 											// Add pdf-link class for PDFs
 											$linkClass = $active . ($isPdf ? ' pdf-link' : '');
 										?>
-											<a href="/akditalrh/files/volreservations/<?php echo h($img); ?>" class="<?php echo h($linkClass); ?>">
+											<a href="<?php echo h($this->File->storageUrl('volreservations', $img)); ?>" class="<?php echo h($linkClass); ?>">
 												<?php if ($isPdf): ?>
 													<i class="fa-regular fa-file-pdf"></i>
 												<?php else: ?>
@@ -346,7 +346,7 @@
 											// Add pdf-link class for PDFs
 											$linkClass = $active . ($isPdf ? ' pdf-link' : '');
 										?>
-											<a href="/akditalrh/files/volreservations/<?php echo h($img); ?>" class="<?php echo h($linkClass); ?>">
+											<a href="<?php echo h($this->File->storageUrl('volreservations', $img)); ?>" class="<?php echo h($linkClass); ?>">
 												<?php if ($isPdf): ?>
 													<i class="fa-regular fa-file-pdf"></i>
 												<?php else: ?>
@@ -372,7 +372,7 @@
 										<?php foreach ($documentFiles as $key => $doc):
 											$active = ($key === 0) ? 'img_active' : 'img_deactive';
 										?>
-											<a href="/akditalrh/files/volreservations/<?php echo h($doc); ?>" class="<?php echo $active; ?>" target="_blank">
+											<a href="<?php echo h($this->File->storageUrl('volreservations', $doc)); ?>" class="<?php echo $active; ?>" target="_blank">
 												<i class="fa-regular fa-eye"></i> <?php echo h($doc); ?>
 											</a><br />
 										<?php endforeach; ?>

@@ -1,6 +1,9 @@
 <?php
 App::uses('AppController', 'Controller');
 App::uses('CakeEmail', 'Network/Email');
+App::uses('MigratingPasswordHasher', 'Controller/Component/Auth');
+App::uses('LoginThrottle', 'Lib');
+App::uses('AuditLog', 'Lib');
 /**
  * Users Controller
  *
@@ -10,22 +13,32 @@ App::uses('CakeEmail', 'Network/Email');
 class UsersController extends AppController
 {
 
-
+	public function beforeFilter()
+	{
+		parent::beforeFilter();
+		$this->Auth->allow('login', 'forgot_password');
+		// Login / MFA challenge forms still use CSRF tokens from FormHelper;
+		// unlock only the password-upgrade edge cases if needed later.
+		$this->Security->unlockedActions = array('login', 'mfa_verify', 'forgot_password');
+	}
 
 	public function isAuthorized($user)
 	{
-		// Exemples de rôle : agent, agence, admin
 		$role = AuthComponent::user('Role.role');
-		// Actions autorisées pour "agent"
-		if (in_array($this->action, ['view', "login", 'logout', 'forgot_password', "dashboard"])) {
+
+		// Self-service / session actions
+		if (in_array($this->action, array(
+			'view', 'login', 'logout', 'forgot_password', 'dashboard',
+			'mfa_verify', 'mfa_setup', 'mfa_enable', 'mfa_disable',
+		), true)) {
 			return true;
 		}
 
-		// Admin : accès à tout
+		// Admin only for user management
 		if ($role === 'Admin') {
 			return true;
 		}
-		// Refus par défaut
+
 		return false;
 	}
 
@@ -190,15 +203,14 @@ class UsersController extends AppController
 			throw new NotFoundException(__('User not found'));
 		}
 
-		$this->set('user', $user);
 		$title_for_layout = "Détails de l’utilisateur";
 		$pageSubtitle = " ";
 
-		if ($id == null || AuthComponent::user('Role.role') !== 'Admin')
-			$id = AuthComponent::user('id');
-		$options = array('conditions' => array('User.id' => $id));
-		$this->set('user', $this->User->find('first', $options));
-		$this->set(compact("pageSubtitle", 'title_for_layout'));
+		$mfaRequired = false;
+		if (!empty($user['Role']['role'])) {
+			$mfaRequired = in_array($user['Role']['role'], $this->mfaRequiredRoles(), true);
+		}
+		$this->set(compact('user', 'pageSubtitle', 'title_for_layout', 'mfaRequired'));
 	}
 
 
@@ -215,10 +227,24 @@ class UsersController extends AppController
 		if ($this->request->is('post')) {
 			$this->User->create();
 			if ($this->User->save($this->request->data)) {
-				$this->Flash->success(__('The user has been saved.'));
+				$this->Flash->success('L\'utilisateur a été enregistré avec succès.');
 				return $this->redirect(array('action' => 'index'));
 			} else {
-				$this->Flash->error(__('The user could not be saved. Please, try again.'));
+				$details = array();
+				if (!empty($this->User->validationErrors)) {
+					foreach ($this->User->validationErrors as $fieldErrors) {
+						foreach ((array)$fieldErrors as $msg) {
+							$details[] = $msg;
+						}
+					}
+				}
+				$message = 'L\'utilisateur n\'a pas pu être enregistré.';
+				if ($details) {
+					$message .= ' ' . implode(' ', array_unique($details));
+				} else {
+					$message .= ' Veuillez réessayer.';
+				}
+				$this->Flash->error($message);
 			}
 		}
 		$roles = $this->User->Role->find('list');
@@ -243,10 +269,24 @@ class UsersController extends AppController
 		}
 		if ($this->request->is(array('post', 'put'))) {
 			if ($this->User->save($this->request->data)) {
-				$this->Flash->success(__('The user has been saved.'));
+				$this->Flash->success('L\'utilisateur a été modifié avec succès.');
 				return $this->redirect(array('action' => 'index'));
 			} else {
-				$this->Flash->error(__('The user could not be saved. Please, try again.'));
+				$details = array();
+				if (!empty($this->User->validationErrors)) {
+					foreach ($this->User->validationErrors as $fieldErrors) {
+						foreach ((array)$fieldErrors as $msg) {
+							$details[] = $msg;
+						}
+					}
+				}
+				$message = 'L\'utilisateur n\'a pas pu être modifié.';
+				if ($details) {
+					$message .= ' ' . implode(' ', array_unique($details));
+				} else {
+					$message .= ' Veuillez réessayer.';
+				}
+				$this->Flash->error($message);
 			}
 		} else {
 			$options = array('conditions' => array('User.' . $this->User->primaryKey => $id));
@@ -312,14 +352,65 @@ class UsersController extends AppController
 
 	public function login()
 	{
-
-		// other layout
 		$this->layout = 'login';
 		if ($this->Auth->user()) {
-			return $this->redirect($this->Auth->loginRedirect); // or Auth->redirect()
+			return $this->redirect($this->Auth->loginRedirect);
 		}
 		if ($this->request->is('post')) {
+			$username = isset($this->request->data['User']['username'])
+				? $this->request->data['User']['username']
+				: '';
+
+			if (LoginThrottle::isBlocked($username)) {
+				$seconds = LoginThrottle::remainingLockSeconds($username);
+				$minutes = max(1, (int)ceil($seconds / 60));
+				$this->Session->setFlash(
+					'Trop de tentatives. Réessayez dans environ ' . $minutes . ' minute(s).',
+					'Flash/error',
+					array(),
+					'error'
+				);
+				return;
+			}
+
 			if ($this->Auth->login()) {
+				LoginThrottle::clear($username);
+				$this->_upgradeLegacyPasswordIfNeeded();
+
+				// Reload auth user fields including MFA flags
+				$fresh = $this->User->find('first', array(
+					'conditions' => array('User.id' => $this->Auth->user('id')),
+					'contain' => false,
+					'recursive' => 0,
+				));
+				if (!empty($fresh['User'])) {
+					$userData = $fresh['User'];
+					if (!empty($fresh['Role'])) {
+						$userData['Role'] = $fresh['Role'];
+					}
+					$this->Session->write('Auth.User', $userData);
+				}
+
+				if (!empty($fresh['User']['totp_enabled'])) {
+					$this->Session->delete('Auth.mfa_verified');
+					AuditLog::write('login_password_ok_mfa_required');
+					return $this->redirect(array('action' => 'mfa_verify'));
+				}
+
+				if ($this->isMfaRequiredForCurrentUser()) {
+					AuditLog::write('login_password_ok_mfa_enrollment_required');
+					$this->Session->setFlash(
+						'La double authentification (MFA) est obligatoire. Veuillez l’activer pour continuer.',
+						'Flash/error',
+						array(),
+						'error'
+					);
+					return $this->redirect(array('action' => 'mfa_setup'));
+				}
+
+				$this->Session->write('Auth.mfa_verified', true);
+				AuditLog::write('login_success');
+
 				$this->Session->setFlash(
 					'Bonjour ' . $this->Auth->user('nom') . ', vous êtes connecté avec succès.',
 					'Flash/success',
@@ -331,12 +422,13 @@ class UsersController extends AppController
 					$this->Auth->redirectUrl(array('controller' => 'users', 'action' => 'index'));
 				} elseif ($role == "Agence") {
 					$this->Auth->redirectUrl(array('controller' => 'volreservations', 'action' => 'agence_index'));
-				} elseif ($role !== ' Admin' && $role !== 'Agence')
+				} elseif ($role !== ' Admin' && $role !== 'Agence') {
 					$this->Auth->redirectUrl(array('controller' => 'volreservations', 'action' => 'agent_index'));
-
+				}
 
 				return $this->redirect($this->Auth->redirect());
 			} else {
+				LoginThrottle::hitFailure($username);
 				$this->Session->setFlash(
 					'E-mail ou mot de passe incorrect. Veuillez réessayer.',
 					'Flash/error',
@@ -347,9 +439,189 @@ class UsersController extends AppController
 		}
 	}
 
+	/**
+	 * Re-hash legacy SHA1 passwords to bcrypt after a successful login.
+	 */
+	protected function _upgradeLegacyPasswordIfNeeded()
+	{
+		if (empty($this->request->data['User']['password'])) {
+			return;
+		}
+
+		$userId = $this->Auth->user('id');
+		$user = $this->User->find('first', array(
+			'conditions' => array('User.id' => $userId),
+			'fields' => array('User.id', 'User.password'),
+			'recursive' => -1,
+		));
+
+		if (empty($user['User']['password'])) {
+			return;
+		}
+
+		if (!MigratingPasswordHasher::needsRehash($user['User']['password'])) {
+			return;
+		}
+
+		$this->User->id = $userId;
+		$this->User->saveField('password', $this->request->data['User']['password']);
+	}
+
 	public function logout()
 	{
+		AuditLog::write('logout');
+		$this->Session->delete('Auth.mfa_verified');
+		$this->Session->delete('Mfa.setup_secret');
 		return $this->redirect($this->Auth->logout());
+	}
+
+	/**
+	 * MFA challenge after password login.
+	 */
+	public function mfa_verify()
+	{
+		$this->layout = 'login';
+		if (!$this->Auth->user()) {
+			return $this->redirect(array('action' => 'login'));
+		}
+		if (!$this->Auth->user('totp_enabled')) {
+			$this->Session->write('Auth.mfa_verified', true);
+			return $this->redirect($this->Auth->redirect());
+		}
+		if ($this->Session->read('Auth.mfa_verified')) {
+			return $this->redirect($this->Auth->loginRedirect);
+		}
+
+		if ($this->request->is('post')) {
+			App::uses('Totp', 'Lib');
+			$code = isset($this->request->data['User']['code']) ? $this->request->data['User']['code'] : '';
+			$secret = $this->Auth->user('totp_secret');
+			if (Totp::verify($secret, $code)) {
+				$this->Session->write('Auth.mfa_verified', true);
+				AuditLog::write('mfa_success');
+				$this->Session->setFlash(
+					'Authentification à deux facteurs réussie.',
+					'Flash/success',
+					array(),
+					'success'
+				);
+				$role = AuthComponent::user('Role.role');
+				if ($role === 'Admin') {
+					return $this->redirect(array('controller' => 'users', 'action' => 'index'));
+				}
+				if ($role === 'Agence') {
+					return $this->redirect(array('controller' => 'volreservations', 'action' => 'agence_index'));
+				}
+				return $this->redirect(array('controller' => 'volreservations', 'action' => 'agent_index'));
+			}
+			AuditLog::write('mfa_failed');
+			$this->Session->setFlash(
+				'Code MFA invalide. Réessayez.',
+				'Flash/error',
+				array(),
+				'error'
+			);
+		}
+	}
+
+	/**
+	 * Start MFA enrollment (shows QR + secret).
+	 */
+	public function mfa_setup()
+	{
+		$title_for_layout = 'Activer la double authentification';
+		$pageSubtitle = 'Scannez le QR code avec Google Authenticator / Microsoft Authenticator.';
+
+		App::uses('Totp', 'Lib');
+		$secret = $this->Session->read('Mfa.setup_secret');
+		if (!$secret) {
+			$secret = Totp::generateSecret();
+			$this->Session->write('Mfa.setup_secret', $secret);
+		}
+
+		$username = AuthComponent::user('username');
+		$otpauth = Totp::provisioningUri($secret, $username);
+		$qrUrl = 'https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=' . rawurlencode($otpauth);
+
+		$this->set(compact('secret', 'otpauth', 'qrUrl', 'title_for_layout', 'pageSubtitle'));
+	}
+
+	/**
+	 * Confirm MFA enrollment with a first TOTP code.
+	 */
+	public function mfa_enable()
+	{
+		if (!$this->request->is('post')) {
+			return $this->redirect(array('action' => 'mfa_setup'));
+		}
+
+		App::uses('Totp', 'Lib');
+		$secret = $this->Session->read('Mfa.setup_secret');
+		$code = isset($this->request->data['User']['code']) ? $this->request->data['User']['code'] : '';
+
+		if (!$secret || !Totp::verify($secret, $code)) {
+			$this->Flash->error('Code invalide. Rescannez le QR et réessayez.');
+			return $this->redirect(array('action' => 'mfa_setup'));
+		}
+
+		$this->User->id = AuthComponent::user('id');
+		$this->User->save(array(
+			'totp_secret' => $secret,
+			'totp_enabled' => 1,
+		), array('validate' => false, 'callbacks' => false));
+
+		$user = $this->Session->read('Auth.User');
+		$user['totp_secret'] = $secret;
+		$user['totp_enabled'] = 1;
+		$this->Session->write('Auth.User', $user);
+		$this->Session->write('Auth.mfa_verified', true);
+		$this->Session->delete('Mfa.setup_secret');
+
+		AuditLog::write('mfa_enabled');
+		$this->Flash->success('Double authentification activée.');
+		return $this->redirect(array('action' => 'view'));
+	}
+
+	/**
+	 * Disable MFA (requires current TOTP code).
+	 */
+	public function mfa_disable()
+	{
+		$title_for_layout = 'Désactiver la double authentification';
+		$pageSubtitle = 'Saisissez un code MFA actuel pour confirmer.';
+
+		if ($this->isMfaRequiredForCurrentUser()) {
+			$this->Flash->error('La MFA est obligatoire pour votre rôle et ne peut pas être désactivée.');
+			return $this->redirect(array('action' => 'view'));
+		}
+
+		if ($this->request->is('post')) {
+			App::uses('Totp', 'Lib');
+			$code = isset($this->request->data['User']['code']) ? $this->request->data['User']['code'] : '';
+			$secret = AuthComponent::user('totp_secret');
+			if (!Totp::verify($secret, $code)) {
+				$this->Flash->error('Code MFA invalide.');
+			} else {
+				$this->User->id = AuthComponent::user('id');
+				$this->User->save(array(
+					'totp_secret' => null,
+					'totp_enabled' => 0,
+				), array('validate' => false, 'callbacks' => false));
+
+				$user = $this->Session->read('Auth.User');
+				$user['totp_secret'] = null;
+				$user['totp_enabled'] = 0;
+				$this->Session->write('Auth.User', $user);
+				$this->Session->write('Auth.mfa_verified', true);
+				$this->Session->delete('Mfa.setup_secret');
+
+				AuditLog::write('mfa_disabled');
+				$this->Flash->success('Double authentification désactivée.');
+				return $this->redirect(array('action' => 'view'));
+			}
+		}
+
+		$this->set(compact('title_for_layout', 'pageSubtitle'));
 	}
 
 	/**

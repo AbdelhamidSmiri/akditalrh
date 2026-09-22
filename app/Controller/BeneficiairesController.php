@@ -265,13 +265,15 @@ class BeneficiairesController extends AppController
 	{
 		$fin = "";
 		$this->set('token', $token);
-		$token = base64_decode(urldecode($token)) ^ 19051983;
+		App::uses('SecureToken', 'Lib');
+		$id = SecureToken::parse($token);
+		if ($id === null) {
+			throw new ForbiddenException('Lien invalide ou expiré.');
+		}
 		$this->layout = "vide";
 		if ($this->request->is('post')) {
-			$this->Beneficiaire->id = $token;
+			$this->Beneficiaire->id = $id;
 			$this->Beneficiaire->saveField("etat", "Valider");
-			// echo $token;
-			// exit();
 			$this->Session->setFlash(
 				'Votre engagement a été validé avec succès.',
 				'Flash/success',
@@ -279,9 +281,7 @@ class BeneficiairesController extends AppController
 				'success'
 			);
 
-
 			$fin = "ok";
-			
 		}
 		$this->set('fin', $fin);
 	}

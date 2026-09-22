@@ -73,7 +73,7 @@
 				<div class='col-12 mb-4 input-file'>
 					<div class="file-upload-wrapper"
 						data-existing-images="<?php echo isset($this->request->data['Hotel']['images']) ? htmlspecialchars($this->request->data['Hotel']['images']) : ''; ?>"
-						data-images-path="/akditalrh/files/hotels/">
+						data-images-path="<?php echo h($this->Html->url(array('controller' => 'media', 'action' => 'serve', 'hotels'))); ?>?f=">
 						<div class="file-upload-area">
 							<div class="upload-text">Glissez-déposez les Images ici</div>
 							<div class="upload-subtext">Ou</div>

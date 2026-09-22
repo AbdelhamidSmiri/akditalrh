@@ -39,7 +39,23 @@ Thumbs.db
 /*.xls
 /*.csv
 
+# Secrets #
+###########
+.env
+# Keep .env.example in the repo as a template (no secrets)
+
+# Private uploaded files #
+##########################
+/app/storage/files/**
+!/app/storage/files/.gitkeep
+
 # One-off credential / export helper scripts (project root) #
 ############################################################
 /_*.php
 /tmp_*.php
+
+# Meeting briefs / security docs / generated reports (not app runtime) #
+######################################################################
+/docs/
+*.md
+!/README.md

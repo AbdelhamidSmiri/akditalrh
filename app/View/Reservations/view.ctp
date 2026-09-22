@@ -80,7 +80,7 @@
 											if ($key == 0)
 												$active = 'img_active';
 										?>
-											<a href="/akditalrh/files/reservations/<?php echo h($img); ?>" class="<?php echo $active; ?>">
+											<a href="<?php echo h($this->File->storageUrl('reservations', $img)); ?>" class="<?php echo $active; ?>">
 												<i class="fa-regular fa-eye"></i> <?php echo h($img); ?>
 											</a>
 										<?php endforeach; ?>
@@ -102,7 +102,7 @@
 											if ($key == 0)
 												$active = 'img_active';
 										?>
-											<a href="/akditalrh/files/reservations/<?php echo h($img); ?>" class="<?php echo $active; ?>">
+											<a href="<?php echo h($this->File->storageUrl('reservations', $img)); ?>" class="<?php echo $active; ?>">
 												<i class="fa-regular fa-eye"></i> <?php echo h($img); ?>
 											</a>
 										<?php endforeach; ?>

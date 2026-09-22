@@ -148,7 +148,15 @@
 							?>
 						</td>
 						<td class="actions">
-							<?php echo $this->Html->link('Voir', ['controller' => $item['controller'], 'action' => 'view', $item['id']], ['escape' => false, 'title' => 'Voir']); ?>
+							<?php
+							$opaqueId = $item['id'];
+							if ($item['controller'] === 'reservations') {
+								$opaqueId = $this->SecureId->encode('reservation', $item['id']);
+							} elseif ($item['controller'] === 'volreservations') {
+								$opaqueId = $this->SecureId->encode('volreservation', $item['id']);
+							}
+							echo $this->Html->link('Voir', ['controller' => $item['controller'], 'action' => 'view', $opaqueId], ['escape' => false, 'title' => 'Voir']);
+							?>
 						</td>
 					</tr>
 				<?php endforeach; ?>

@@ -144,7 +144,7 @@ class AppartementsController extends AppController
 
 			$images = $this->request->data['Appartement']['images'];
 			$outils = new OutilsController;
-			$uploadedImage = $outils->uploadFiles('reservations', $images);
+			$uploadedImage = $outils->uploadFiles('appartements', $images);
 			$this->request->data['Appartement']['images'] = json_encode($images);
 
 			$this->Appartement->create();
@@ -192,7 +192,7 @@ class AppartementsController extends AppController
 				$appt = $this->Appartement->findById($id);
 				$images = $this->request->data['Appartement']['images'];
 				$outils = new OutilsController;
-				$uploadedImage = $outils->uploadFiles('reservations', $images);
+				$uploadedImage = $outils->uploadFiles('appartements', $images);
 				$this->request->data['Appartement']['images'] = json_encode($images);
 			} else {
 				// Keep existing images if no new ones uploaded

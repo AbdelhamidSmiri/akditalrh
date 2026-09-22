@@ -13,30 +13,26 @@ class VolreservationsController extends AppController
 	{
 		$role = AuthComponent::user('Role.role');
 
-		// Admin: accès à tout
 		if ($role === 'Admin') {
 			return true;
 		}
 
-		// Actions autorisées pour "agence"
+		// Agence: strict flight-ops surface only (no generic index / CRUD)
 		if ($role === 'Agence') {
-			return in_array($this->action, [
-				'index',
+			return in_array($this->action, array(
 				'agence_index',
 				'agence_valider',
 				'agence_archive',
-				'view',
 				'agence_valide',
-				'agence_annuler'
-			]);
+				'agence_annuler',
+				'view',
+			), true);
 		}
 
-		// Actions autorisées pour "agent"
 		if ($role !== 'Admin' && $role !== 'Agence') {
-			return in_array($this->action, ['agent_index', 'add', 'view', 'edit']);
+			return in_array($this->action, array('agent_index', 'add', 'view', 'edit'), true);
 		}
 
-		// Refus par défaut
 		return false;
 	}
 
@@ -100,8 +96,9 @@ class VolreservationsController extends AppController
 		$this->set('volreservation', $this->Volreservation->find('first', $options));
 	}
 
-	public function agence_valide($id)
+	public function agence_valide($token = null)
 	{
+		$id = $this->decodeOpaqueId('volreservation', $token);
 		$title_for_layout = "Valider et émettre le billet";
 		$pageSubtitle = "Complétez les informations nécessaires pour valider la demande de billet d’avion.";
 		if ($this->request->is('post')) {
@@ -122,11 +119,13 @@ class VolreservationsController extends AppController
 		}
 		$vol = $this->Volreservation->findById($id);
 		$this->set('vol', $vol);
+		$this->set('opaqueId', SecureId::encode('volreservation', $id));
 		$this->set(compact("pageSubtitle", 'title_for_layout'));
 	}
 
-	function agence_archive($id)
+	function agence_archive($token = null)
 	{
+		$id = $this->decodeOpaqueId('volreservation', $token);
 		if (!$this->Volreservation->exists($id)) {
 			throw new NotFoundException(__('Invalid volreservation'));
 		}
@@ -166,14 +165,16 @@ public function index()
 
 
 
-	public function view($id = null)
+	public function view($token = null)
 	{
 		$title_for_layout = "Détails de la demande de billet d’avion";
 		$pageSubtitle = "Consultez les informations fournies par le demandeur et procédez à la validation ou au refus
 de la demande";
+		$id = $this->decodeOpaqueId('volreservation', $token);
 		if (!$this->Volreservation->exists($id)) {
 			throw new NotFoundException(__('Invalid volreservation'));
 		}
+		$this->_ensureVolAccess($id);
 		$options = array('conditions' => array('Volreservation.' . $this->Volreservation->primaryKey => $id));
 
 		$this->set('volreservation', $this->Volreservation->find('first', $options));
@@ -230,11 +231,13 @@ de la demande";
 	 * @param string $id
 	 * @return void
 	 */
-	public function edit($id = null)
+	public function edit($token = null)
 	{
+		$id = $this->decodeOpaqueId('volreservation', $token);
 		if (!$this->Volreservation->exists($id)) {
 			throw new NotFoundException(__('Invalid volreservation'));
 		}
+		$this->_ensureVolAccess($id, true);
 		if ($this->request->is(array('post', 'put'))) {
 			if ($this->Volreservation->save($this->request->data)) {
 				$this->Session->setFlash(__('The volreservation has been saved.'));
@@ -249,6 +252,7 @@ de la demande";
 		$users = $this->Volreservation->User->find('list');
 		$sites = $this->Volreservation->Site->find('list');
 		$this->set(compact('users', 'sites'));
+		$this->set('opaqueId', SecureId::encode('volreservation', $id));
 	}
 
 	/**
@@ -258,11 +262,13 @@ de la demande";
 	 * @param string $id
 	 * @return void
 	 */
-	public function delete($id = null)
+	public function delete($token = null)
 	{
+		$id = $this->decodeOpaqueId('volreservation', $token);
 		if (!$this->Volreservation->exists($id)) {
 			throw new NotFoundException(__('Invalid volreservation'));
 		}
+		$this->_ensureVolAccess($id, true);
 		$this->request->allowMethod('post', 'delete');
 		if ($this->Volreservation->delete($id)) {
 			$this->Session->setFlash(__('The volreservation has been deleted.'));
@@ -276,24 +282,28 @@ de la demande";
 
 	public function uploadFiles($folder, $files)
 	{
-		$uploadedFiles = [];
+		App::uses('FileStorage', 'Lib');
+		return FileStorage::storeUploadedMany($folder, $files);
+	}
 
-		foreach ($files as $file) {
-			if (!isset($file['error']) || $file['error'] !== 0) continue;
-
-			$ext = pathinfo($file['name'], PATHINFO_EXTENSION);
-			$allowed = ['jpg', 'jpeg', 'png', 'gif', 'pdf'];
-			if (!in_array(strtolower($ext), $allowed)) continue;
-
-			$newName = uniqid() . '.' . $ext;
-			$dir = WWW_ROOT . 'files' . DS . $folder . DS;
-			if (!file_exists($dir)) mkdir($dir, 0755, true);
-
-			if (move_uploaded_file($file['tmp_name'], $dir . $newName)) {
-				$uploadedFiles[] = $newName;
-			}
+	/**
+	 * Agents may only access their own records; Admin/Agence keep broader access.
+	 */
+	protected function _ensureVolAccess($id, $ownerOnlyForAgent = false)
+	{
+		$role = AuthComponent::user('Role.role');
+		if ($role === 'Admin' || $role === 'Agence') {
+			return;
 		}
 
-		return $uploadedFiles;
+		$record = $this->Volreservation->find('first', array(
+			'conditions' => array('Volreservation.id' => $id),
+			'fields' => array('Volreservation.id', 'Volreservation.user_id'),
+			'recursive' => -1,
+		));
+
+		if (empty($record) || (int)$record['Volreservation']['user_id'] !== (int)AuthComponent::user('id')) {
+			throw new ForbiddenException('Accès non autorisé à cette demande.');
+		}
 	}
 }

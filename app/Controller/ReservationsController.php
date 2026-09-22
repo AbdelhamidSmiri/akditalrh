@@ -14,7 +14,9 @@ class ReservationsController extends AppController
 	function beforeFilter()
 	{
 		parent::beforeFilter();
-		$this->Auth->allow('accepte', 'reject','fetch_hotels_with_details','fetch_chambres');
+		$this->Auth->allow('accepte', 'reject', 'fetch_hotels_with_details', 'fetch_chambres');
+		// AJAX endpoints without form tokens
+		$this->Security->unlockedActions = array('fetch_hotels_with_details', 'fetch_chambres');
 	}
 	public function isAuthorized($user)
 	{
@@ -71,13 +73,15 @@ class ReservationsController extends AppController
 	 * @param string $id
 	 * @return void
 	 */
-	public function view($id = null)
+	public function view($token = null)
 	{
 		$title_for_layout = "Détail de la réservation";
 		$pageSubtitle = " Informations complètes sur la demande de réservation";
+		$id = $this->decodeOpaqueId('reservation', $token);
 		if (!$this->Reservation->exists($id)) {
 			throw new NotFoundException(__('Invalid reservation'));
 		}
+		$this->_ensureReservationAccess($id);
 		$this->set('reservation', $this->Reservation->findById($id));
 		$this->set(compact("pageSubtitle", 'title_for_layout'));
 	}
@@ -113,7 +117,7 @@ class ReservationsController extends AppController
 				$hotel = $this->Hotel->findById($chambre["Chambre"]["hotel_id"]);
 				$resivation = $this->request->data['Reservation'];
 				App::uses('CakeEmail', 'Network/Email');
-				$Email = new CakeEmail();
+				$Email = new CakeEmail('default');
 				$Email->template('default', 'hotels_validation');
 				$Email->viewVars(array("hotel" => $hotel));
 				$Email->viewVars(array("chambre" => $chambre));
@@ -121,24 +125,52 @@ class ReservationsController extends AppController
 				$Email->viewVars(array("reservation" => $resivation));
 				$Email->emailFormat('html');
 				$Email->to("eljazouly.abdessamad2003@gmail.com"); //$hotel["Hotel"]["mail"]
-				$Email->from('no-repley@icoz.ma');
+				$Email->from(array('noreply@akdital.local' => 'Akdital MGR'));
 				$Email->subject('[AKDITAL] Demande de séjour – Validation requise');
-				// Pièce jointe : CIN
-				$Email->attachments(array(
-					'CIN.jpg' => array(
-						'file' => WWW_ROOT . 'files' . DS . 'reservations' . DS . json_decode($this->request->data['Reservation']['cin'], true)[0]
-					)
+
+				// Pièce jointe CIN (storage privé, avec fallback legacy)
+				App::uses('FileStorage', 'Lib');
+				$cinList = json_decode($this->request->data['Reservation']['cin'], true);
+				$cinName = (!empty($cinList[0])) ? $cinList[0] : null;
+				$cinPath = $cinName ? FileStorage::path('reservations', $cinName) : null;
+				if ($cinPath && is_file($cinPath)) {
+					$Email->attachments(array(
+						'CIN.' . pathinfo($cinPath, PATHINFO_EXTENSION) => array(
+							'file' => $cinPath,
+							'mimetype' => mime_content_type($cinPath),
+						),
+					));
+				}
+
+				$emailSent = false;
+				$emailError = null;
+				try {
+					$Email->send();
+					$emailSent = true;
+				} catch (Exception $e) {
+					$emailError = $e->getMessage();
+					CakeLog::write('error', 'Reservation email failed: ' . $emailError);
+				}
+
+				if ($emailSent) {
+					$this->Session->setFlash(
+						'La reservation a été ajoutée avec succès.',
+						'Flash/success',
+						array(),
+						'success'
+					);
+				} else {
+					$this->Session->setFlash(
+						'La réservation a été enregistrée, mais l\'e-mail n\'a pas pu être envoyé (SMTP non configuré).',
+						'Flash/warning',
+						array(),
+						'warning'
+					);
+				}
+				return $this->redirect(array(
+					'action' => 'view',
+					SecureId::encode('reservation', $this->Reservation->id),
 				));
-				$Email->send();
-
-
-				$this->Session->setFlash(
-					'La reservation a été ajoutée avec succès.',
-					'Flash/success',
-					array(),
-					'success'
-				);
-				return $this->redirect(array('action' => 'view', $this->Reservation->id));
 			} else {
 				$this->Session->setFlash(
 					"La reservation n'a pas été ajoutée.",
@@ -285,11 +317,13 @@ class ReservationsController extends AppController
 	 * @param string $id
 	 * @return void
 	 */
-	public function edit($id = null)
+	public function edit($token = null)
 	{
+		$id = $this->decodeOpaqueId('reservation', $token);
 		if (!$this->Reservation->exists($id)) {
 			throw new NotFoundException(__('Invalid reservation'));
 		}
+		$this->_ensureReservationAccess($id);
 		if ($this->request->is(array('post', 'put'))) {
 			if ($this->Reservation->save($this->request->data)) {
 				$this->Flash->success(__('The reservation has been saved.'));
@@ -304,6 +338,7 @@ class ReservationsController extends AppController
 		$users = $this->Reservation->User->find('list');
 		$sites = $this->Reservation->Site->find('list');
 		$this->set(compact('users', 'sites'));
+		$this->set('opaqueId', SecureId::encode('reservation', $id));
 	}
 
 	/**
@@ -313,11 +348,13 @@ class ReservationsController extends AppController
 	 * @param string $id
 	 * @return void
 	 */
-	public function delete($id = null)
+	public function delete($token = null)
 	{
+		$id = $this->decodeOpaqueId('reservation', $token);
 		if (!$this->Reservation->exists($id)) {
 			throw new NotFoundException(__('Invalid reservation'));
 		}
+		$this->_ensureReservationAccess($id);
 		$this->request->allowMethod('post', 'delete');
 		if ($this->Reservation->delete($id)) {
 			$this->Flash->success(__('The reservation has been deleted.'));
@@ -331,7 +368,11 @@ class ReservationsController extends AppController
 	public function accepte($encryptedId = null)
 	{
 		$this->layout = "vide";
-		$id = base64_decode(urldecode($encryptedId)) ^ 19051983;
+		App::uses('SecureToken', 'Lib');
+		$id = SecureToken::parse($encryptedId);
+		if ($id === null) {
+			throw new ForbiddenException('Lien invalide ou expiré.');
+		}
 
 		if ($this->request->is('post')) {
 			$this->Reservation->id = $id;
@@ -369,7 +410,11 @@ class ReservationsController extends AppController
 	public function reject($encryptedId = null)
 	{
 		$this->layout = "vide";
-		$id = base64_decode(urldecode($encryptedId)) ^ 19051983;
+		App::uses('SecureToken', 'Lib');
+		$id = SecureToken::parse($encryptedId);
+		if ($id === null) {
+			throw new ForbiddenException('Lien invalide ou expiré.');
+		}
 
 		if ($this->request->is('post')) {
 			$this->Reservation->id = $id;
@@ -401,5 +446,23 @@ class ReservationsController extends AppController
 		}
 
 		$this->set('id', $encryptedId);
+	}
+
+	protected function _ensureReservationAccess($id)
+	{
+		$role = AuthComponent::user('Role.role');
+		if ($role === 'Admin' || $role === 'Agence') {
+			return;
+		}
+
+		$record = $this->Reservation->find('first', array(
+			'conditions' => array('Reservation.id' => $id),
+			'fields' => array('Reservation.id', 'Reservation.user_id'),
+			'recursive' => -1,
+		));
+
+		if (empty($record) || (int)$record['Reservation']['user_id'] !== (int)AuthComponent::user('id')) {
+			throw new ForbiddenException('Accès non autorisé à cette réservation.');
+		}
 	}
 }

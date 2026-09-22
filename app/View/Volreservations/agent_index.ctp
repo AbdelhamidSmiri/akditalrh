@@ -70,7 +70,7 @@
 						</span>
 					</td>
 					<td class="actions">
-						<?php echo $this->Html->link(__('Voir détails'), array('action' => 'view', $volreservation['Volreservation']['id'])); ?>
+						<?php echo $this->Html->link(__('Voir détails'), array('action' => 'view', $this->SecureId->encode('volreservation', $volreservation['Volreservation']['id']))); ?>
 					</td>
 				</tr>
 			<?php endforeach; ?>

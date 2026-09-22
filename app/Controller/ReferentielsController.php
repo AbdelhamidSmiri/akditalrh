@@ -8,6 +8,11 @@ App::uses('AppController', 'Controller');
  */
 class ReferentielsController extends AppController {
 
+	public function isAuthorized($user)
+	{
+		return $this->isAdmin();
+	}
+
 	public function index() {
 		$this->set('referentiels', $this->Referentiel->find('all'));
 	}

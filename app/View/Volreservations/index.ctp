@@ -91,11 +91,11 @@
 					<td><?php echo $volreservation['Volreservation']['tel_transfer']; ?></td>
 					<td><?php echo $volreservation['Volreservation']['description_transfer']; ?></td>
 					<td class="actions">
-						<?php echo $this->Html->link(__('Voir'), array('action' => 'view', $volreservation['Volreservation']['id'])); ?>
+						<?php echo $this->Html->link(__('Voir'), array('action' => 'view', $this->SecureId->encode('volreservation', $volreservation['Volreservation']['id']))); ?>
 						/
-						<?php echo $this->Html->link(__('Modifier'), array('action' => 'edit', $volreservation['Volreservation']['id'])); ?>
+						<?php echo $this->Html->link(__('Modifier'), array('action' => 'edit', $this->SecureId->encode('volreservation', $volreservation['Volreservation']['id']))); ?>
 						/
-						<?php echo $this->Form->postLink(__('Supprimer'), array('action' => 'delete', $volreservation['Volreservation']['id']), array('confirm' => __('Are you sure you want to delete # %s?', $volreservation['Volreservation']['id']))); ?>
+						<?php echo $this->Form->postLink(__('Supprimer'), array('action' => 'delete', $this->SecureId->encode('volreservation', $volreservation['Volreservation']['id'])), array('confirm' => __('Are you sure you want to delete # %s?', $volreservation['Volreservation']['id']))); ?>
 					</td>
 				</tr>
 			<?php endforeach; ?>

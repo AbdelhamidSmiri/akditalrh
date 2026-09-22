@@ -149,7 +149,7 @@
 			<?php
 			$width = "100%";
 			if (!empty($hotel['Hotel']['images'])) { ?>
-				<div class="image" style="background-image: url('<?php echo Router::url('/files/hotels/' . $hotel['Hotel']['images'], true); ?>');">
+				<div class="image" style="background-image: url('<?php echo h($this->File->storageUrl('hotels', $hotel['Hotel']['images'], true)); ?>');">
 				</div>
 
 			<?php

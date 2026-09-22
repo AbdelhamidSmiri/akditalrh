@@ -645,7 +645,8 @@
 							let contentWidth = '100%';
 
 							if (hotel.images) {
-								imageHtml = `<div class="image" style="background-image: url('<?php echo Router::url('/files/hotels/', true); ?>${hotel.images}');"></div>`;
+								const imgUrl = '<?php echo $this->Html->url(array('controller' => 'media', 'action' => 'serve', 'hotels')); ?>?f=' + encodeURIComponent(hotel.images);
+								imageHtml = `<div class="image" style="background-image: url('${imgUrl}');"></div>`;
 								contentWidth = '58%';
 							}
 

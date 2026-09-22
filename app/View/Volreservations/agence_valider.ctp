@@ -52,7 +52,7 @@
 					<td><?php echo $volreservation['Volreservation']['prix_vol']; ?> DH</td>
 					<td><?php echo $volreservation['Volreservation']['prix_transfert']; ?> DH</td>
 					<td class="actions">
-						<?php echo $this->Html->link(__('Voir'), array('action' => 'view', $volreservation['Volreservation']['id'])); ?>
+						<?php echo $this->Html->link(__('Voir'), array('action' => 'view', $this->SecureId->encode('volreservation', $volreservation['Volreservation']['id']))); ?>
 					</td>
 				</tr>
 			<?php endforeach; ?>

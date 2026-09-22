@@ -8,6 +8,11 @@ App::uses('AppController', 'Controller');
  */
 class TagjawazsController extends AppController {
 
+	public function isAuthorized($user)
+	{
+		return $this->isAdmin();
+	}
+
 /**
  * Components
  *

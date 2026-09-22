@@ -15,16 +15,18 @@
     <p>Merci de valider ou refuser cette demande :</p>
 
     <div style="margin: 20px 0;">
-        <a href="<?php 
-        $encryptedId = urlencode(base64_encode($id ^ 19051983));
-        echo Router::url(array('controller' => 'reservations', 'action' => 'accepte',$encryptedId ), true); ?>" 
+        <?php
+        App::uses('SecureToken', 'Lib');
+        $secureToken = SecureToken::create($id);
+        ?>
+        <a href="<?php
+        echo Router::url(array('controller' => 'reservations', 'action' => 'accepte', $secureToken), true); ?>"
            style="padding: 10px 20px; background: #28a745; color: white; text-decoration: none; border-radius: 5px; margin-right: 10px;">
             ✅ Accepter
         </a>
 
-        <a href="<?php 
-        $encryptedId = urlencode(base64_encode($id ^ 19051983));
-        echo Router::url(array('controller' => 'reservations', 'action' => 'reject',$encryptedId ), true); ?>" 
+        <a href="<?php
+        echo Router::url(array('controller' => 'reservations', 'action' => 'reject', $secureToken), true); ?>"
            style="padding: 10px 20px; background: #dc3545; color: white; text-decoration: none; border-radius: 5px;">
             ❌ Refuser
         </a>

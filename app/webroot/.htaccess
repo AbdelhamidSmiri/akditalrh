@@ -1,12 +1,21 @@
 # Uncomment the following to prevent the httpoxy vulnerability
 # See: https://httpoxy.org/
-#<IfModule mod_headers.c>
-#	RequestHeader unset Proxy
-#</IfModule>
+<IfModule mod_headers.c>
+	RequestHeader unset Proxy
+	Header always set X-Frame-Options "SAMEORIGIN"
+	Header always set X-Content-Type-Options "nosniff"
+	Header always set Referrer-Policy "strict-origin-when-cross-origin"
+	Header always set Permissions-Policy "geolocation=(), microphone=(), camera=()"
+</IfModule>
 
 <IfModule mod_rewrite.c>
 	RewriteEngine On
 	RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+
+	# webroot/files/ exists on disk (legacy uploads + Deny). Force CakePHP
+	# routes for controlled file delivery instead of hitting that directory.
+	RewriteRule ^files/(serve|download)(/.*)?$ index.php?url=files/$1$2 [QSA,L]
+
 	RewriteCond %{REQUEST_FILENAME} !-d
 	RewriteCond %{REQUEST_FILENAME} !-f
 	RewriteRule ^ index.php [L]

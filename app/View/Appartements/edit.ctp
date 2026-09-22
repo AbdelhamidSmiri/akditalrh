@@ -78,7 +78,7 @@
 											if (!empty($image)):
 										?>
 											<div class="image-container" style="display: inline-block; position: relative; margin: 5px;">
-												<img src="<?php echo $this->webroot . 'files/appartements/' . $image; ?>" 
+												<img src="<?php echo h($this->File->storageUrl('appartements', $image)); ?>" 
 													 alt="Image appartement" 
 													 style="max-width: 150px; max-height: 100px; border: 1px solid #ddd; padding: 3px;">
 												<?php echo $this->Form->postLink(

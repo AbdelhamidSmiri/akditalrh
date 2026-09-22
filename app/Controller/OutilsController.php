@@ -1,28 +1,22 @@
 <?php
 App::uses('AppController', 'Controller');
+App::uses('FileStorage', 'Lib');
 
-class OutilsController extends AppController {
+class OutilsController extends AppController
+{
+	public function isAuthorized($user)
+	{
+		return $this->isAdmin();
+	}
 
 	public function uploadFiles($folder, $files)
 	{
-		$uploadedFiles = [];
+		return FileStorage::storeUploadedMany($folder, $files);
+	}
 
-		foreach ($files as $file) {
-			if (!isset($file['error']) || $file['error'] !== 0) continue;
-
-			$ext = pathinfo($file['name'], PATHINFO_EXTENSION);
-			$allowed = ['jpg', 'jpeg', 'png', 'gif', 'pdf'];
-			if (!in_array(strtolower($ext), $allowed)) continue;
-
-			$newName = uniqid() . '.' . $ext;
-			$dir = WWW_ROOT . 'files' . DS . $folder . DS;
-			if (!file_exists($dir)) mkdir($dir, 0755, true);
-
-			if (move_uploaded_file($file['tmp_name'], $dir . $newName)) {
-				$uploadedFiles[] = $newName;
-			}
-		}
-
-		return $uploadedFiles;
+	public function uploadFile($folder, $file)
+	{
+		$result = FileStorage::storeUploaded($folder, $file);
+		return $result ? $result : false;
 	}
 }

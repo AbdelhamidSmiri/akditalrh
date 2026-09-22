@@ -26,6 +26,32 @@
 Cache::config('default', array('engine' => 'File'));
 
 /**
+ * Private upload root (outside webroot).
+ */
+if (!defined('STORAGE')) {
+	define('STORAGE', APP . 'storage' . DS);
+}
+if (!is_dir(STORAGE . 'files')) {
+	@mkdir(STORAGE . 'files', 0750, true);
+}
+
+App::uses('FileStorage', 'Lib');
+App::uses('SecureToken', 'Lib');
+App::uses('SecureId', 'Lib');
+App::uses('AuditLog', 'Lib');
+App::uses('LoginThrottle', 'Lib');
+App::uses('Totp', 'Lib');
+
+CakeLog::config('audit', array(
+	'engine' => 'FileLog',
+	'types' => array('audit'),
+	'file' => 'audit',
+	'path' => TMP . 'logs' . DS,
+	'size' => '10MB',
+	'rotate' => 10,
+));
+
+/**
  * The settings below can be used to set additional paths to models, views and controllers.
  *
  * App::build(array(

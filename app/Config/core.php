@@ -22,6 +22,12 @@
 //Configure::write('Config.language', 'deu');
 
 /**
+ * Load environment overrides before security-sensitive Configure values.
+ */
+	require_once dirname(__FILE__) . DS . '..' . DS . 'Lib' . DS . 'Env.php';
+	Env::load(dirname(dirname(dirname(__FILE__))) . DS . '.env');
+
+/**
  * CakePHP Debug Level:
  *
  * Production Mode:
@@ -33,8 +39,10 @@
  *
  * In production mode, flash messages redirect after a time interval.
  * In development mode, you need to click the flash message to continue.
+ *
+ * Default is 0 (production-safe). Override with APP_DEBUG in .env for local work.
  */
-	Configure::write('debug', 2);
+	Configure::write('debug', (int)Env::get('APP_DEBUG', 0));
 
 /**
  * Configure the Error handler used to handle errors for your application. By default
@@ -227,18 +235,44 @@
  * the cake shell command: cake schema create Sessions
  */
 	Configure::write('Session', array(
-		'defaults' => 'php'
+		'defaults' => 'php',
+		'cookie' => 'MGRSESS',
+		'timeout' => 120,
+		'cookieTimeout' => 120,
+		'ini' => array(
+			'session.cookie_httponly' => 1,
+			'session.use_only_cookies' => 1,
+			'session.use_strict_mode' => 1,
+			'session.cookie_samesite' => 'Lax',
+		),
+	));
+
+	// Harden cookies when HTTPS is forced / used.
+	if (Env::get('FORCE_HTTPS', false)) {
+		Configure::write('Session.ini.session.cookie_secure', 1);
+	}
+
+/**
+ * A random string used in security hashing methods / HMAC tokens.
+ * Set via SECURITY_SALT in .env — never commit production secrets.
+ */
+	Configure::write('Security.salt', Env::get(
+		'SECURITY_SALT',
+		'8b5813c4b465ff6df51690163b23709add9ac172897ad7ea9e3f58fd7cb53997'
 	));
 
 /**
- * A random string used in security hashing methods.
+ * Digits only — used by CakePHP Security::cipher().
  */
-	Configure::write('Security.salt', 'koko');
+	Configure::write('Security.cipherSeed', Env::get(
+		'SECURITY_CIPHER_SEED',
+		'44119451957218424817473361167269191187117997094319'
+	));
 
 /**
- * A random numeric string (digits only) used to encrypt/decrypt strings.
+ * Previous salt kept solely to verify legacy SHA1 password hashes during migration.
  */
-	Configure::write('Security.cipherSeed', 'koko');
+	Configure::write('Security.legacySalt', Env::get('SECURITY_LEGACY_SALT', 'koko'));
 
 /**
  * Apply timestamps with the last modified time to static assets (js, css, images).

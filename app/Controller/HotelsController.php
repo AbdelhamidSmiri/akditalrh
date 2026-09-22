@@ -1,5 +1,6 @@
 <?php
 App::uses('AppController', 'Controller');
+App::uses('FileStorage', 'Lib');
 /**
  * Hotels Controller
  *
@@ -297,15 +298,10 @@ class HotelsController extends AppController
 
 	private function deleteImages($imageNames)
 	{
-		$dir = WWW_ROOT . 'files' . DS . 'hotels' . DS;
-
 		foreach ($imageNames as $imageName) {
 			$imageName = trim($imageName);
 			if (!empty($imageName)) {
-				$filePath = $dir . $imageName;
-				if (file_exists($filePath)) {
-					unlink($filePath);
-				}
+				FileStorage::delete('hotels', $imageName);
 			}
 		}
 	}
@@ -313,19 +309,11 @@ class HotelsController extends AppController
 
 	public function uploadFile($folder, $file)
 	{
-		if ($file['error'] !== 0)
+		App::uses('FileStorage', 'Lib');
+		if ($file['error'] !== 0) {
 			return "";
-
-		$ext = pathinfo($file['name'], PATHINFO_EXTENSION);
-		$allowed = ['jpg', 'jpeg', 'png', 'gif', 'pdf'];
-		if (!in_array(strtolower($ext), $allowed))
-			return false;
-
-		$name = uniqid() . '.' . $ext;
-		$dir = WWW_ROOT . 'files' . DS . $folder . DS;
-		if (!file_exists($dir))
-			mkdir($dir, 0755, true);
-
-		return move_uploaded_file($file['tmp_name'], $dir . $name) ? $name : false;
+		}
+		$result = FileStorage::storeUploaded($folder, $file);
+		return $result ? $result : false;
 	}
 }

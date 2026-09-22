@@ -1,8 +1,34 @@
+# Block dotfiles and project files even if mod_rewrite is unavailable
+# or the document root is set to the project folder instead of app/webroot.
+<FilesMatch "^\.">
+	<IfModule mod_authz_core.c>
+		Require all denied
+	</IfModule>
+	<IfModule !mod_authz_core.c>
+		Order allow,deny
+		Deny from all
+	</IfModule>
+</FilesMatch>
+
+<FilesMatch "\.(env|md|sql|lock|log|ini|yml|yaml|bak|docx|xlsx)$">
+	<IfModule mod_authz_core.c>
+		Require all denied
+	</IfModule>
+	<IfModule !mod_authz_core.c>
+		Order allow,deny
+		Deny from all
+	</IfModule>
+</FilesMatch>
+
 <IfModule mod_rewrite.c>
 	RewriteEngine on
 	# Uncomment if you have a .well-known directory in the root folder, e.g. for the Let's Encrypt challenge
 	# https://tools.ietf.org/html/rfc5785
 	#RewriteRule ^(\.well-known/.*)$ $1 [L]
+
+	# Never expose internal folders through the front controller path
+	RewriteRule ^(docs|logs)(/.*)?$ - [F,L]
+
 	RewriteRule ^$ app/webroot/ [L]
 	RewriteRule (.*) app/webroot/$1 [L]
 </IfModule>

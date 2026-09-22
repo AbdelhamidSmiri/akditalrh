@@ -78,7 +78,7 @@
 	else:
 	foreach ($chambres as $chambre): ?>
 		<div class="d-flex hotel-card">
-			<div class="image" style="background-image: url('<?php echo Router::url('/files/chambres/' . $chambre['Chambre']['images'], true); ?>');">
+			<div class="image" style="background-image: url('<?php echo h($this->File->storageUrl('chambres', $chambre['Chambre']['images'], true)); ?>');">
 			</div>
 
 			<div class="content-card">

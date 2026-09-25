@@ -1,0 +1,37 @@
+.drop-zone-label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: #1e2c5a;
+}
+
+/* L’input Cake est en opacity:0 absolu — on le sort du flux clic pour éviter les doubles dialogs */
+.drop-zone .drop-zone-input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.drop-zone .file-upload-area {
+  position: relative;
+}
+
+.drop-zone .remove-file {
+  border: none;
+  background: #fee2e2;
+  color: #b91c1c;
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  font-size: 18px;
+  line-height: 1;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.drop-zone .remove-file:hover {
+  background: #fecaca;
+}

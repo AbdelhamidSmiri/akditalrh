@@ -1,0 +1,142 @@
+/* Aligné sur app/View/Users/mfa_verify.ctp (CakePHP) */
+
+.mfa-page {
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  background: #f5f6f8;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+.mfa-box {
+  max-width: 420px;
+  width: calc(100% - 32px);
+  margin: 10vh auto;
+  padding: 32px;
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+  font-family: 'Poppins', sans-serif;
+}
+
+.mfa-box h1 {
+  font-size: 1.4rem;
+  color: #1e2c5a;
+  margin: 0 0 8px;
+  font-weight: 700;
+}
+
+.mfa-box > p {
+  color: #6c757d;
+  margin: 0 0 20px;
+  font-size: 0.95rem;
+  line-height: 1.45;
+}
+
+.mfa-box input[type='text'] {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #d0d7de;
+  border-radius: 8px;
+  letter-spacing: 4px;
+  font-size: 1.2rem;
+  text-align: center;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+  outline: none;
+  background: #fff;
+  color: #1e2c5a;
+}
+
+.mfa-box input[type='text']:focus {
+  border-color: #3780cb;
+}
+
+.mfa-box .btn-mfa {
+  width: 100%;
+  margin-top: 16px;
+  background: #3780cb;
+  color: #fff;
+  border: 0;
+  border-radius: 8px;
+  padding: 12px;
+  font-weight: 600;
+  font-family: 'Poppins', sans-serif;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.mfa-box .btn-mfa:hover:not(:disabled) {
+  background: #2e6bb0;
+}
+
+.mfa-box .btn-mfa:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.mfa-box .logout-link {
+  display: block;
+  text-align: center;
+  margin-top: 14px;
+  color: #9f9d9d;
+  text-decoration: underline;
+  font-size: 0.95rem;
+}
+
+.mfa-box .logout-link:hover {
+  color: #3780cb;
+}
+
+.mfa-box .alert-akdital {
+  margin-bottom: 12px;
+}
+
+/* Aligné sur app/View/Users/mfa_setup.ctp et mfa_disable.ctp */
+
+.users.form .mfa-secret {
+  font-size: 1.05rem;
+  letter-spacing: 1px;
+}
+
+.users.form .input.text {
+  margin-top: 8px;
+}
+
+.users.form .btn-submit {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.users.form .btn-submit:disabled {
+  opacity: 0.7;
+}
+
+.users.form .btn-link {
+  color: #2e61b4;
+  text-decoration: underline;
+}
+
+.mfa-profile-actions {
+  margin-top: 1.5rem;
+}
+
+.mfa-profile-actions .mfa-required-note {
+  color: #b80000;
+  margin-bottom: 10px;
+}
+
+.mfa-profile-actions .mfa-locked-note {
+  color: #6c757d;
+  margin: 0;
+}
+
+.mfa-profile-actions .btn-submit {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  line-height: 48px;
+}

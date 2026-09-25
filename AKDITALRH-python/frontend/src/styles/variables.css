@@ -1,0 +1,12 @@
+:root {
+  --text-color-primary: #283d62;
+  --sidebar-width: 280px;
+  --sidebar-bg: #152259;
+  --sidebar-text: #ffffff;
+  --sidebar-hover: #509cdb57;
+  --sidebar-active: #509cdb;
+  --dropdown-bg: #121c4a;
+  --primary-blue: #3780cb;
+  --title-navy: #1e2c5a;
+  --muted: #878787;
+}

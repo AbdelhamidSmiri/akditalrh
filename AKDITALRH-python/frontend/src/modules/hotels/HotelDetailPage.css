@@ -1,0 +1,141 @@
+/* Aligné sur app/View/Hotels/view.ctp (CakePHP) */
+
+.hotel-view.view .little-title-section {
+  margin-top: 24px;
+  align-items: center;
+}
+
+.hotel-view .starts {
+  display: flex;
+  align-items: center;
+  column-gap: 7px;
+}
+
+.hotel-view .mails {
+  font-size: 14px !important;
+  display: flex;
+  flex-direction: column;
+}
+
+.hotel-view .mails .mail-line {
+  margin: 0;
+}
+
+.hotel-view .card-header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  background: transparent;
+  padding: 24px 14px;
+}
+
+.hotel-view .card-title {
+  font-size: 16px;
+  margin: 0;
+  font-weight: 700;
+  color: #1e2c5a;
+}
+
+.hotel-view .div_card-title {
+  width: 70%;
+}
+
+.hotel-view .price_card .action {
+  display: flex;
+  gap: 6px;
+}
+
+.hotel-view .price_card .card-body {
+  padding: 27px 12px;
+}
+
+.hotel-view .price_card .card-body td {
+  font-size: 12px;
+}
+
+.hotel-view .price_card .card-body .fin,
+.hotel-view .price_card .card-body .debut {
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.hotel-view .price_card .table {
+  margin: 0;
+}
+
+.hotel-view .price_card .table > :not(caption) > * > * {
+  padding: 12px 4px;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.hotel-view .badge {
+  display: inline-flex;
+  align-items: center;
+  font-size: 12px;
+}
+
+.hotel-view .badge-light-danger {
+  background-color: #ffeef3 !important;
+  color: #f8285a;
+}
+
+.hotel-view .badge-light-success {
+  background-color: #dfffea;
+  color: #17c653;
+}
+
+.hotel-view .price_card .alert {
+  padding: 12px 1rem;
+  margin-bottom: 0;
+}
+
+.hotel-view .arrow_icon {
+  background: #d0d9ff;
+  border-radius: 25px;
+  padding: 1px 5px;
+  display: inline-block;
+}
+
+/* Modales chambre */
+.chambre-form .price-row {
+  align-items: flex-start;
+}
+
+.chambre-form .date-field label {
+  top: 3px;
+  font-size: 12px;
+}
+
+.chambre-form .date-field input[type='date'] {
+  font: 15px/24px 'inter', Arial, sans-serif;
+  color: #333;
+  width: 100%;
+  border: 1px solid #ebebeb;
+  padding: 16px 14px 0;
+  background: transparent;
+  height: 48px;
+  border-radius: 8px;
+  position: relative;
+  z-index: 2;
+}
+
+.chambre-form .date-field:focus-within input[type='date'] {
+  border-color: #2d2a32;
+}
+
+.chambre-form .btn-danger-rounded {
+  background-color: #f8285a;
+  border-color: #f8285a;
+  color: #fff;
+  border-radius: 25px;
+  font-size: 11px;
+  padding: 10px 12px;
+  margin-top: 4px;
+}
+
+.chambre-form .btn-danger-rounded:hover {
+  background-color: #d81b4a;
+  color: #fff;
+}

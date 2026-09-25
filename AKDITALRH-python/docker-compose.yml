@@ -1,0 +1,68 @@
+services:
+  db:
+    image: mysql:8.4
+    container_name: akditalrh-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: akditalrh
+      MYSQL_USER: akdital
+      MYSQL_PASSWORD: akdital
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./akditalrh.sql:/docker-entrypoint-initdb.d/01-akditalrh.sql:ro
+    command: --default-authentication-plugin=mysql_native_password --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-proot"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  api:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: akditalrh-api
+    restart: unless-stopped
+    env_file:
+      - ./backend/.env
+    environment:
+      DATABASE_URL: mysql+pymysql://akdital:akdital@db:3306/akditalrh
+      FLASK_ENV: development
+    ports:
+      - "5001:5001"
+    volumes:
+      - ./backend:/app
+      - storage_data:/app/storage
+    depends_on:
+      db:
+        condition: service_healthy
+
+  web:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: akditalrh-web
+    restart: unless-stopped
+    environment:
+      VITE_API_BASE_URL: http://localhost:5001/api/v1
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    depends_on:
+      - api
+
+  mailhog:
+    image: mailhog/mailhog:v1.0.1
+    container_name: akditalrh-mailhog
+    ports:
+      - "1025:1025"
+      - "8025:8025"
+
+volumes:
+  mysql_data:
+  storage_data:

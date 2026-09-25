@@ -19,7 +19,7 @@
 			<tr>
 																								<th>user_id</th>
 																				<th>ste_location</th>
-																				<th>immatriculation</th>
+																				<th>image.png</th>
 																				<th>marque</th>
 																				<th>modele</th>
 																				<th>valeur_locative_ht</th>

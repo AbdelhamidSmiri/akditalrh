@@ -1,0 +1,177 @@
+/* Styles hôtel/chambre — alignés sur app/View/Reservations/add.ctp */
+
+.reservation-form-page .step-header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.reservation-form-page .step-header h2 {
+  color: #333;
+  font-size: 24px;
+  margin-bottom: 10px;
+  font-weight: 700;
+}
+
+.reservation-form-page .step-header p {
+  color: #666;
+  font-size: 14px;
+  margin: 0;
+}
+
+.reservation-form-page .hotel-card {
+  border: 2px solid #d9d9d9;
+  box-shadow: 0 0 9px 0 #d9d9d9b0;
+  border-radius: 16px;
+  transition: 0.2s;
+  position: relative;
+  cursor: pointer;
+  display: flex;
+  overflow: hidden;
+  background: #fff;
+}
+
+.reservation-form-page .hotel-card:hover {
+  border: 2px solid #152259;
+}
+
+.reservation-form-page .hotel-card.selected {
+  border: 2px solid #152259;
+  background-color: #f8f9ff;
+}
+
+.reservation-form-page .hotel-card .radio-selection {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  z-index: 2;
+}
+
+.reservation-form-page .hotel-card .image {
+  height: auto;
+  min-height: 160px;
+  width: 42%;
+  background-size: cover;
+  background-position: center;
+  background-color: #eef2f6;
+}
+
+.reservation-form-page .hotel-card .content-card {
+  padding: 12px 18px;
+  width: 58%;
+}
+
+.reservation-form-page .hotel-card .content-card.full {
+  width: 100%;
+}
+
+.reservation-form-page .title-card {
+  font-size: 22px;
+  margin: 0;
+  font-weight: 600;
+  color: #1e2c5a;
+}
+
+.reservation-form-page .ville-row {
+  display: flex;
+  column-gap: 12px;
+  padding: 6px 0 16px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.reservation-form-page .ville-row span {
+  font-size: 16px;
+  font-weight: 400;
+  color: #5d5d5d;
+}
+
+.reservation-form-page .starts {
+  display: flex;
+  align-items: center;
+  column-gap: 4px;
+}
+
+.reservation-form-page .starts i {
+  font-size: 14px;
+  color: #ffd123;
+}
+
+.reservation-form-page .info .email,
+.reservation-form-page .info .tel {
+  font-size: 14px;
+  font-weight: 400;
+}
+
+.reservation-form-page .reglement {
+  color: #7c7c7c;
+  font-size: 14px;
+  margin-top: 8px;
+}
+
+.reservation-form-page #hotels-container,
+.reservation-form-page .hotels-container {
+  display: grid;
+  row-gap: 1rem;
+  max-height: 404px;
+  overflow: auto;
+  padding-right: 4px;
+}
+
+.reservation-form-page .chambre-card.view-card {
+  border: 2px solid #d9d9d9;
+  box-shadow: 0 0 9px 0 #d9d9d9b0;
+  border-radius: 16px;
+  transition: 0.2s;
+  cursor: pointer;
+  margin-bottom: 20px;
+  position: relative;
+  background: #fff;
+}
+
+.reservation-form-page .chambre-card.view-card:hover {
+  border: 2px solid #152259;
+}
+
+.reservation-form-page .chambre-card.view-card.selected {
+  border: 2px solid #152259;
+  background-color: #f8f9ff;
+}
+
+.reservation-form-page .chambre-card .radio-selection {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+}
+
+.reservation-form-page .chambre-card .card-body {
+  padding: 10px 18px;
+  position: relative;
+}
+
+.reservation-form-page .block-content {
+  margin-bottom: 15px;
+}
+
+.reservation-form-page .block-content label {
+  display: block;
+  font-weight: 600;
+  font-size: 12px;
+  color: #666;
+  margin-bottom: 5px;
+}
+
+.reservation-form-page .block-content span {
+  font-size: 14px;
+  color: #333;
+}
+
+.reservation-form-page .message-error {
+  color: #b80000;
+  font-size: 12px;
+  margin-top: 4px;
+  display: none;
+}
+
+.reservation-form-page .message-error.show {
+  display: block;
+}

@@ -1,0 +1,263 @@
+/* Overrides React — le design principal vient de akdital_style.css + sidebar_styles.css */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  min-height: 100%;
+  margin: 0;
+}
+
+body {
+  font-family: "Inter", "Kumbh Sans", Arial, sans-serif;
+  background: #fff;
+  color: #19161d;
+}
+
+a {
+  color: #19161d;
+  text-decoration: none;
+}
+
+a:hover {
+  color: #3780cb;
+}
+
+.muted {
+  color: #878787;
+}
+
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 1rem 1.25rem;
+  align-items: start;
+}
+
+.form-actions {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 1.25rem;
+  flex-wrap: wrap;
+}
+
+.field-static {
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.field-static input[type='date'],
+.field-static input[type='number'],
+.field-static input[type='email'],
+.field-static input[type='datetime-local'],
+.field-static input[type='time'] {
+  font: 15px/24px 'inter', Arial, sans-serif;
+  color: #333;
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid #ebebeb;
+  padding: 11px 14px;
+  height: 48px !important;
+  border-radius: 8px;
+  background: transparent;
+}
+
+.field-select {
+  width: 100%;
+  margin-bottom: 8px;
+}
+
+.dark-card .stats-number,
+.dark-card .stats-label,
+.dark-card .text-muted {
+  color: #ffffff !important;
+}
+
+/* Dates dans formulaires Cake : label flottant toujours en haut, une seule icône calendrier */
+.has-calendar-icon input[type='date'] {
+  font: 15px/24px 'inter', Arial, sans-serif;
+  color: #333;
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid #ebebeb;
+  padding: 11px 14px;
+  height: 48px !important;
+  border-radius: 8px;
+  background: transparent;
+  margin-bottom: 4px;
+  position: relative;
+  z-index: 2;
+  letter-spacing: 1px;
+}
+
+.input.text.has-calendar-icon input[type='date'] {
+  padding: 16px 40px 0 14px;
+}
+
+.has-calendar-icon:focus-within input[type='date'] {
+  border-color: #2d2a32;
+}
+
+.input.text.has-calendar-icon label,
+.input.text.has-calendar-icon:focus-within label {
+  top: 3px;
+  left: 14px;
+  font-size: 12px;
+}
+
+.input.text.has-calendar-icon::before {
+  font-family: 'Font Awesome 6 Free';
+  font-weight: 900;
+  font-size: 16px;
+  z-index: 1;
+}
+
+/* L’indicateur natif reste cliquable mais invisible, sous l’icône Font Awesome */
+.input.text.has-calendar-icon input[type='date']::-webkit-calendar-picker-indicator {
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 40px;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.input.text.has-calendar-icon input[type='date']::-webkit-datetime-edit {
+  padding: 0;
+}
+
+/* Pages listes : bouton ajouter aligné à droite */
+.page-toolbar {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1.25rem;
+  flex-wrap: wrap;
+}
+
+.alert-akdital {
+  border-radius: 0.5rem;
+  border: none;
+  padding: 0.85rem 1rem;
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+}
+
+.alert-akdital.danger {
+  background: #fde8e8;
+  color: #b80000;
+}
+
+.alert-akdital.success {
+  background: #e8f5e9;
+  color: #2e7d32;
+}
+
+.alert-akdital.info {
+  background: #eaf1fe;
+  color: #1e2c5a;
+}
+
+/* Login page split layout */
+.login-page {
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+}
+
+.login-page .image-bg {
+  position: relative;
+  height: 100%;
+  background: url("/img/bg-clinic.jpg") no-repeat center center;
+  background-size: cover;
+}
+
+.login-page .text-box {
+  color: white;
+  background: radial-gradient(
+    circle,
+    rgb(0 141 201 / 25%) 0%,
+    rgb(1 41 73 / 40%) 50%,
+    rgb(2 36 65) 100%
+  );
+  height: 100%;
+  padding: 89px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.login-page .login-form-panel {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  height: 100%;
+  padding: 0 100px;
+}
+
+.login-page .login-slogan {
+  font-family: "Poppins", sans-serif;
+  font-weight: 500;
+  color: #424242;
+  font-size: 18px;
+  margin-bottom: 1.5rem;
+}
+
+.login-page .links {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  width: 100%;
+}
+
+.login-page .links a,
+.login-page .links label {
+  font-family: "Poppins", sans-serif;
+  font-weight: 500;
+  color: #9f9d9d;
+  font-size: 16px;
+  text-decoration: none;
+}
+
+.login-page input[type="submit"],
+.login-page .btn-login {
+  width: 100%;
+  background: #3780cb;
+  color: white;
+  padding: 12px;
+  border: 0;
+  border-radius: 8px;
+  font-family: "Poppins", sans-serif;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.login-page .btn-login:hover {
+  background: #000;
+}
+
+@media (max-width: 768px) {
+  .login-page .text-box {
+    display: none;
+  }
+  .login-page .login-form-panel {
+    padding: 55px 35px !important;
+  }
+}

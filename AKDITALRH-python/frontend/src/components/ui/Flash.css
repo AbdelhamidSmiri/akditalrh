@@ -1,0 +1,74 @@
+.flash-container {
+  position: fixed;
+  top: 150px;
+  right: 24px;
+  z-index: 3000;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-width: 250px;
+}
+
+.flash-message {
+  position: relative;
+  overflow: hidden;
+  background: #fff;
+  color: #212529;
+  border-radius: 4px;
+  border-left: 4px solid #0d6efd;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
+  padding: 10px 32px 12px 14px;
+  font-size: 13px;
+  line-height: 1.4;
+  animation: flash-in 0.25s ease-out;
+}
+
+.flash-success { border-left-color: #28a745; }
+.flash-error { border-left-color: #dc3545; }
+.flash-warning { border-left-color: #ffc107; }
+.flash-info { border-left-color: #17a2b8; }
+
+.flash-close {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 16px;
+  height: 16px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  font-size: 12px;
+  line-height: 16px;
+  color: #fff;
+  background: #adb5bd;
+  cursor: pointer;
+}
+
+.flash-success .flash-close { background: #28a745; }
+.flash-error .flash-close { background: #f28b82; }
+.flash-warning .flash-close { background: #ffc107; }
+.flash-info .flash-close { background: #17a2b8; }
+
+.flash-progress {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 3px;
+  width: 100%;
+  background: currentColor;
+  opacity: 0.2;
+  transform-origin: left;
+  animation-name: flash-progress;
+  animation-timing-function: linear;
+  animation-fill-mode: forwards;
+}
+
+@keyframes flash-progress {
+  from { transform: scaleX(1); }
+  to { transform: scaleX(0); }
+}
+
+@keyframes flash-in {
+  from { opacity: 0; transform: translateX(20px); }
+  to { opacity: 1; transform: translateX(0); }
+}

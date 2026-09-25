@@ -1,0 +1,169 @@
+/* Aligné sur app/View/Hotels/index.ctp (CakePHP) */
+
+.hotels-index .hotel-list {
+  display: grid;
+  row-gap: 1rem;
+}
+
+.hotels-index .hotel-card {
+  display: flex;
+  border: 1px solid #d9d9d9;
+  box-shadow: 0 0 9px 0 #d9d9d9b0;
+  border-radius: 16px;
+  transition: 0.2s;
+  position: relative;
+  background: #fff;
+}
+
+.hotels-index .hotel-card .image {
+  height: 181px;
+  width: 42%;
+  flex-shrink: 0;
+  background-size: cover;
+  background-position: center;
+  background-color: #eef1f5;
+  border-top-left-radius: 16px;
+  border-bottom-left-radius: 16px;
+}
+
+.hotels-index .content-card {
+  padding: 12px 27px 32px;
+  width: 58%;
+  height: fit-content;
+}
+
+.hotels-index .content-card.full {
+  width: 100%;
+}
+
+.hotels-index .topcart {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.hotels-index .title-card {
+  font-size: 22px;
+  margin: 0;
+}
+
+.hotels-index .ville {
+  display: flex;
+  column-gap: 12px;
+  padding: 6px 0 16px;
+}
+
+.hotels-index .ville span {
+  font-size: 16px;
+  font-weight: 400;
+  color: #5d5d5d;
+}
+
+.hotels-index .starts {
+  display: flex;
+  align-items: center;
+  column-gap: 7px;
+}
+
+.hotels-index .starts i {
+  font-size: 14px;
+}
+
+.hotels-index .info .emails {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.hotels-index .info .email,
+.hotels-index .info .tel {
+  font-size: 14px;
+  font-weight: 400;
+  color: #1e2c5a;
+}
+
+.hotels-index .profil-info {
+  width: fit-content;
+  flex-shrink: 0;
+}
+
+.hotels-index .respo {
+  background-color: #eaf1fe;
+  padding: 7px 16px;
+  border-radius: 20px;
+  font-weight: 600;
+  font-size: 12px;
+  width: max-content;
+  display: inline-block;
+}
+
+.hotels-index .sub-content {
+  font-size: 14px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  row-gap: 3px;
+  padding-top: 6px;
+}
+
+.hotels-index .reglement {
+  color: #7c7c7c;
+  font-size: 14px;
+}
+
+.hotels-index .hotel-card .actions {
+  position: absolute;
+  bottom: 14px;
+  right: 16px;
+  font-size: 14px;
+}
+
+.hotels-index .hotel-card .actions a {
+  color: #1e2c5a;
+  text-decoration: none;
+  margin: 0 6px;
+}
+
+.hotels-index .hotel-card .actions a:hover {
+  color: #3780cb;
+}
+
+.hotels-index .empty-hotels {
+  text-align: center;
+  padding: 2rem;
+  color: #6c757d;
+}
+
+/* Popup ajout / modification */
+.hotel-form .existing-images {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.hotel-form .existing-images .thumb {
+  position: relative;
+  width: 96px;
+  height: 72px;
+  border-radius: 8px;
+  background-size: cover;
+  background-position: center;
+  background-color: #eef1f5;
+  border: 1px solid #e5e7eb;
+}
+
+.hotel-form .existing-images .thumb button {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 0;
+  background: #b80000;
+  color: #fff;
+  font-size: 13px;
+  line-height: 22px;
+  padding: 0;
+  cursor: pointer;
+}

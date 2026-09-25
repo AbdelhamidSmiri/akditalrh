@@ -1,0 +1,14 @@
+.public-page {
+  min-height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  background:
+    linear-gradient(180deg, #e8eef3 0%, var(--color-bg) 40%);
+}
+
+.public-page .card {
+  width: 100%;
+  max-width: 480px;
+}

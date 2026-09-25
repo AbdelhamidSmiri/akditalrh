@@ -1,0 +1,137 @@
+.ui-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(7, 42, 66, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  padding: 1rem;
+}
+
+.ui-modal {
+  position: relative;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 12px 40px rgba(7, 42, 66, 0.25);
+  width: 100%;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  pointer-events: auto;
+}
+
+.ui-modal-sm {
+  max-width: 400px;
+}
+
+.ui-modal-md {
+  max-width: 560px;
+}
+
+.ui-modal-lg {
+  max-width: 800px;
+}
+
+.ui-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid #e5e7eb;
+  background: #fff;
+}
+
+.ui-modal-header h2 {
+  margin: 0;
+  font-size: 1.1rem;
+  color: #1e2c5a;
+}
+
+.ui-modal-body {
+  padding: 1.25rem;
+  overflow-y: auto;
+  background: #fff;
+}
+
+.ui-modal-footer {
+  padding: 0.875rem 1.25rem;
+  border-top: 1px solid #e5e7eb;
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  background: #fff;
+}
+
+.ui-modal-body .table {
+  width: 100%;
+  margin: 0;
+  border-collapse: collapse;
+}
+
+.ui-modal-body .table th,
+.ui-modal-body .table td {
+  padding: 0.55rem 0.75rem;
+  border-bottom: 1px solid #eef1f5;
+  text-align: left;
+  vertical-align: top;
+}
+
+.ui-modal-body .table th {
+  width: 40%;
+  color: #64748b;
+  font-weight: 600;
+  background: #f8fafc;
+}
+
+/* Champs de saisie (même rendu que les formulaires CakePHP) */
+.ui-modal-body .input.text,
+.ui-modal-body .input.password,
+.ui-modal-body .input.tel {
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.ui-modal-body .input.text input,
+.ui-modal-body .input.password input,
+.ui-modal-body .input.tel input {
+  width: 100%;
+}
+
+.ui-modal-body .input.textarea {
+  margin-bottom: 20px;
+}
+
+.ui-modal-body .input.textarea label {
+  display: block;
+}
+
+.ui-modal-body .input.textarea textarea {
+  width: 100%;
+  padding: 11px 14px;
+}
+
+.ui-modal-body .message-error {
+  margin-top: -14px;
+  margin-bottom: 14px;
+  font-size: 13px;
+}
+
+.ui-modal-body .field-select {
+  margin-bottom: 20px;
+}
+
+.ui-modal-body .field-select .select {
+  margin-bottom: 0;
+}
+
+.ui-modal-body .cake-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.ui-modal-body .view-card {
+  border: 1.9px solid #3780cbc2;
+}

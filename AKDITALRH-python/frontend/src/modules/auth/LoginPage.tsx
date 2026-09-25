@@ -1,15 +1,17 @@
 import { FormEvent, useState } from 'react';
 import { Link, Navigate, useNavigate } from 'react-router-dom';
-import { Alert } from '../../components/ui/Alert';
+import { isAxiosError } from 'axios';
 import { useAuth } from '../../hooks/useAuth';
 import { getErrorMessage } from '../../api/client';
+import { flash } from '../../components/ui/Flash';
+
+const INVALID_CREDENTIALS = 'E-mail ou mot de passe incorrect. Veuillez réessayer.';
 
 export function LoginPage() {
   const { login, isAuthenticated, isAgence } = useAuth();
   const navigate = useNavigate();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
   if (isAuthenticated) {
@@ -18,7 +20,6 @@ export function LoginPage() {
 
   const onSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    setError('');
     setLoading(true);
     try {
       const data = await login(username.trim(), password);
@@ -26,10 +27,17 @@ export function LoginPage() {
         navigate('/mfa/verify');
         return;
       }
+      if (!data.user?.mfa_enrollment_required) {
+        flash.success(`Bonjour ${data.user?.nom ?? ''}, vous êtes connecté avec succès.`);
+      }
       const role = data.user?.role_name || data.user?.role?.role;
       navigate(role === 'Agence' ? '/agence/vols' : '/dashboard');
     } catch (err) {
-      setError(getErrorMessage(err, 'Identifiants invalides'));
+      const status = isAxiosError(err) ? err.response?.status : undefined;
+      if (status === 401) flash.error(INVALID_CREDENTIALS);
+      else if (status === 429) flash.error('Trop de tentatives. Réessayez dans environ 1 minute(s).');
+      else if (!status || status >= 500) flash.error('Le serveur est momentanément indisponible. Veuillez réessayer.');
+      else flash.error(getErrorMessage(err, INVALID_CREDENTIALS));
     } finally {
       setLoading(false);
     }
@@ -51,14 +59,7 @@ export function LoginPage() {
         <div className="col-md-6 col-sm-12 p-0 m-0">
           <div className="login-form-panel">
             <div className="mb-5">
-              <img
-                src="/img/svg/logo_colored.svg"
-                alt="Akdital"
-                style={{ maxWidth: 281, height: 'auto' }}
-                onError={(e) => {
-                  (e.target as HTMLImageElement).src = '/img/svg/logo.svg';
-                }}
-              />
+              <img src="/img/svg/logo_login.svg" alt="Akdital" width={281} height={73} />
             </div>
             <h2 className="poppins-bold fs-1 mb-4 text-color-primary">
               Connexion à votre espace
@@ -67,7 +68,6 @@ export function LoginPage() {
               Veuillez saisir vos identifiants pour accéder à l’interface de
               gestion complète.
             </p>
-            {error && <Alert variant="danger">{error}</Alert>}
             <form onSubmit={onSubmit} className="w-100">
               <div className="text">
                 <label htmlFor="username">E-mail ou nom d&apos;utilisateur</label>

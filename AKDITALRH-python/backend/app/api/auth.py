@@ -15,6 +15,8 @@ from app.utils.responses import error, success
 
 bp = Blueprint("auth", __name__)
 
+INVALID_CREDENTIALS_MESSAGE = "E-mail ou mot de passe incorrect. Veuillez réessayer."
+
 
 def _issue_tokens(user: User):
     claims = {
@@ -44,12 +46,12 @@ def login():
     user = User.query.filter_by(username=username).first()
     if not user:
         audit_service.audit("login_failed", details={"username": username})
-        return error("Identifiants invalides", 401, code="invalid_credentials")
+        return error(INVALID_CREDENTIALS_MESSAGE, 401, code="invalid_credentials")
 
     ok, _ = auth_service.verify_password(password, user.password)
     if not ok:
         audit_service.audit("login_failed", user_id=user.id)
-        return error("Identifiants invalides", 401, code="invalid_credentials")
+        return error(INVALID_CREDENTIALS_MESSAGE, 401, code="invalid_credentials")
 
     if auth_service.upgrade_password_if_needed(user, password):
         db.session.commit()

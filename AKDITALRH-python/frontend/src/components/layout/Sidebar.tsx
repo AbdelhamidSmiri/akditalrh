@@ -65,6 +65,32 @@ const iconParametres = (
   </svg>
 );
 
+/** Score de correspondance d’un lien avec l’URL courante (-1 = ne correspond pas). */
+function matchScore(to: string, pathname: string, search: string): number {
+  const [path, query = ''] = to.split('?');
+  if (pathname !== path && !pathname.startsWith(`${path}/`)) return -1;
+  const current = new URLSearchParams(search);
+  const wanted = new URLSearchParams(query);
+  for (const [key, value] of wanted) {
+    if (current.get(key) !== value) return -1;
+  }
+  return path.length * 10 + [...wanted.keys()].length;
+}
+
+/** Un seul lien actif : celui qui correspond le plus précisément (ex. /vols/new plutôt que /vols). */
+function activeChildTo(children: NavChild[], pathname: string, search: string): string | null {
+  let best: string | null = null;
+  let bestScore = -1;
+  for (const c of children) {
+    const score = matchScore(c.to, pathname, search);
+    if (score > bestScore) {
+      best = c.to;
+      bestScore = score;
+    }
+  }
+  return best;
+}
+
 function NavDropdown({
   group,
   open,
@@ -75,9 +101,8 @@ function NavDropdown({
   onToggle: () => void;
 }) {
   const location = useLocation();
-  const childActive = group.children.some((c) =>
-    location.pathname.startsWith(c.to.split('?')[0]),
-  );
+  const activeTo = activeChildTo(group.children, location.pathname, location.search);
+  const childActive = activeTo !== null;
 
   return (
     <li className="nav-item dropdown">
@@ -93,16 +118,15 @@ function NavDropdown({
       <div className={`collapse ${open ? 'show' : ''}`}>
         <div className="dropdown-menu show">
           {group.children.map((child) => (
-            <NavLink
+            <Link
               key={child.to}
               to={child.to}
-              className={({ isActive }) =>
-                `dropdown-item ${isActive ? 'active' : ''}`
-              }
+              className={`dropdown-item ${child.to === activeTo ? 'active' : ''}`}
+              aria-current={child.to === activeTo ? 'page' : undefined}
             >
               {child.icon}
               {child.label}
-            </NavLink>
+            </Link>
           ))}
         </div>
       </div>
@@ -246,12 +270,12 @@ export function Sidebar({ mobileOpen, onClose }: { mobileOpen?: boolean; onClose
   }
 
   useEffect(() => {
-    const match = groups.find((g) =>
-      g.children.some((c) => location.pathname.startsWith(c.to.split('?')[0])),
+    const match = groups.find(
+      (g) => activeChildTo(g.children, location.pathname, location.search) !== null,
     );
     if (match) setOpenId(match.id);
     // eslint-disable-next-line react-hooks/exhaustive-deps -- groups rebuilt each render
-  }, [location.pathname, isAdmin, isAgence]);
+  }, [location.pathname, location.search, isAdmin, isAgence]);
 
   return (
     <nav className={`sidebar ${mobileOpen ? 'show' : ''}`}>

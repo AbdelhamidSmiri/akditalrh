@@ -24,14 +24,7 @@ export function AuthLayout({ title, subtitle, children }: Props) {
         <div className="col-md-6 col-sm-12 p-0 m-0">
           <div className="login-form-panel">
             <div className="mb-5">
-              <img
-                src="/img/svg/logo_colored.svg"
-                alt="Akdital"
-                style={{ maxWidth: 281, height: 'auto' }}
-                onError={(e) => {
-                  (e.target as HTMLImageElement).src = '/img/svg/logo.svg';
-                }}
-              />
+              <img src="/img/svg/logo_login.svg" alt="Akdital" width={281} height={73} />
             </div>
             <h2 className="poppins-bold fs-1 mb-4 text-color-primary">{title}</h2>
             {subtitle && <p className="login-slogan">{subtitle}</p>}

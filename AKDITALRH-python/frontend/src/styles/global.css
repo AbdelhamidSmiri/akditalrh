@@ -84,6 +84,14 @@ a:hover {
   color: #ffffff !important;
 }
 
+input[type='date'],
+input[type='datetime-local'],
+input[type='month'],
+input[type='week'],
+input[type='time'] {
+  cursor: pointer;
+}
+
 /* Dates dans formulaires Cake : label flottant toujours en haut, une seule icône calendrier */
 .has-calendar-icon input[type='date'] {
   font: 15px/24px 'inter', Arial, sans-serif;

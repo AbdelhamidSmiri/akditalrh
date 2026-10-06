@@ -17,9 +17,6 @@ class UsersController extends AppController
 	{
 		parent::beforeFilter();
 		$this->Auth->allow('login', 'forgot_password');
-		// Login / MFA challenge forms still use CSRF tokens from FormHelper;
-		// unlock only the password-upgrade edge cases if needed later.
-		$this->Security->unlockedActions = array('login', 'mfa_verify', 'forgot_password');
 	}
 
 	public function isAuthorized($user)

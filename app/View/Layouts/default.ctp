@@ -445,8 +445,8 @@
 	<script>
 		document.addEventListener('DOMContentLoaded', function() {
 			// Handle active states based on current URL
-			const currentController = '<?php echo $this->request->controller; ?>';
-			const currentAction = '<?php echo $this->request->action; ?>';
+			const currentController = <?php echo json_encode((string)$this->request->controller, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP); ?>;
+			const currentAction = <?php echo json_encode((string)$this->request->action, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP); ?>;
 
 			// Remove active class from all nav links
 			document.querySelectorAll('.nav-link, .dropdown-item').forEach(link => {

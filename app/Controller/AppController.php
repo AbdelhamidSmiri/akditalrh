@@ -4,6 +4,7 @@ App::uses('Controller', 'Controller');
 App::uses('MigratingPasswordHasher', 'Controller/Component/Auth');
 App::uses('AuditLog', 'Lib');
 App::uses('Env', 'Lib');
+App::uses('TrustedProxy', 'Lib');
 
 class AppController extends Controller
 {
@@ -63,6 +64,17 @@ class AppController extends Controller
 	public function securityBlackhole($type)
 	{
 		AuditLog::write('security_blackhole', array('type' => $type));
+		// A login page left open past the session lifetime carries a stale token: reload it instead of a 400.
+		$retryable = array('login', 'mfa_verify', 'forgot_password');
+		if ($type === 'csrf' && strtolower($this->name) === 'users' && in_array($this->request->params['action'], $retryable, true)) {
+			$this->Session->setFlash(
+				'Votre session a expiré. Veuillez réessayer.',
+				'Flash/error',
+				array(),
+				'error'
+			);
+			return $this->redirect(array('controller' => 'users', 'action' => $this->request->params['action']));
+		}
 		if ($type === 'csrf') {
 			throw new BadRequestException('Jeton de sécurité invalide ou expiré. Rechargez la page et réessayez.');
 		}
@@ -222,6 +234,10 @@ class AppController extends Controller
 		if (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') {
 			return;
 		}
+		// The proxy owns the public scheme; redirecting here would loop if it omits X-Forwarded-Proto.
+		if (TrustedProxy::viaProxy()) {
+			return;
+		}
 		if (!empty($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https') {
 			return;
 		}
@@ -236,7 +252,7 @@ class AppController extends Controller
 			return;
 		}
 
-		$this->response->header('X-Frame-Options', 'SAMEORIGIN');
+		$this->response->header('X-Frame-Options', 'DENY');
 		$this->response->header('X-Content-Type-Options', 'nosniff');
 		$this->response->header('Referrer-Policy', 'strict-origin-when-cross-origin');
 		$this->response->header('Permissions-Policy', 'geolocation=(), microphone=(), camera=()');
@@ -248,13 +264,12 @@ class AppController extends Controller
 			"font-src 'self' data: https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://fonts.gstatic.com; " .
 			"img-src 'self' data: blob: https:; " .
 			"connect-src 'self'; " .
-			"frame-ancestors 'self'; " .
+			"frame-ancestors 'none'; " .
 			"base-uri 'self'; " .
 			"form-action 'self'"
 		);
 
-		$https = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
-			|| (!empty($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https');
+		$https = !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off';
 		if ($https || Env::get('FORCE_HTTPS', false)) {
 			$this->response->header('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
 		}

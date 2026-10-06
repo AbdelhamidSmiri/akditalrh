@@ -22,12 +22,12 @@ class AuditLog
 		CakeLog::write('audit', json_encode($payload, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
 	}
 
+	/**
+	 * REMOTE_ADDR is already rewritten by TrustedProxy when the request came through
+	 * a trusted proxy; raw X-Forwarded-For is client-controlled and must not be read here.
+	 */
 	public static function clientIp()
 	{
-		if (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
-			$parts = explode(',', $_SERVER['HTTP_X_FORWARDED_FOR']);
-			return trim($parts[0]);
-		}
 		return isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : 'cli';
 	}
 }

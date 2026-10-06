@@ -28,6 +28,12 @@
 	Env::load(dirname(dirname(dirname(__FILE__))) . DS . '.env');
 
 /**
+ * Behind a TLS-terminating reverse proxy: real client IP + HTTPS flag, from trusted proxies only.
+ */
+	require_once dirname(__FILE__) . DS . '..' . DS . 'Lib' . DS . 'TrustedProxy.php';
+	TrustedProxy::apply();
+
+/**
  * CakePHP Debug Level:
  *
  * Production Mode:
@@ -43,6 +49,9 @@
  * Default is 0 (production-safe). Override with APP_DEBUG in .env for local work.
  */
 	Configure::write('debug', (int)Env::get('APP_DEBUG', 0));
+	if (Configure::read('debug') === 0) {
+		ini_set('display_errors', '0');
+	}
 
 /**
  * Configure the Error handler used to handle errors for your application. By default
@@ -250,6 +259,10 @@
 	// Harden cookies when HTTPS is forced / used.
 	if (Env::get('FORCE_HTTPS', false)) {
 		Configure::write('Session.ini.session.cookie_secure', 1);
+		// Behind the proxy Apache only sees HTTP: absolute redirects must still point to https://.
+		if (!empty($_SERVER['HTTP_HOST'])) {
+			Configure::write('App.fullBaseUrl', 'https://' . $_SERVER['HTTP_HOST']);
+		}
 	}
 
 /**

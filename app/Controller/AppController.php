@@ -20,7 +20,7 @@ class AppController extends Controller
 		'Auth' => array(
 			'loginRedirect' => array('controller' => 'users', 'action' => 'view'),
 			'logoutRedirect' => array('controller' => 'users', 'action' => 'login'),
-			'authError' => 'You must be logged in to access this page.',
+			'authError' => 'Veuillez vous connecter pour accéder à cette page.',
 			'authorize' => array('Controller'),
 			'authenticate' => array(
 				'Form' => array(

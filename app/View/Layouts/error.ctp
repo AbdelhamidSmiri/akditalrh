@@ -1,59 +1,32 @@
-<?php
-/**
- * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
- * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
- *
- * Licensed under The MIT License
- * For full copyright and license information, please see the LICENSE.txt
- * Redistributions of files must retain the above copyright notice.
- *
- * @copyright     Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
- * @link          https://cakephp.org CakePHP(tm) Project
- * @package       app.View.Layouts
- * @since         CakePHP(tm) v 0.10.0.1076
- * @license       https://opensource.org/licenses/mit-license.php MIT License
- */
-
-$cakeDescription = __d('cake_dev', 'CakePHP: the rapid development php framework');
-?>
 <!DOCTYPE html>
-<html>
+<html lang="fr">
 <head>
-	<?php echo $this->Html->charset(); ?>
-	<title>
-		<?php echo $cakeDescription ?>:
-		<?php echo $this->fetch('title'); ?>
-	</title>
-	<?php
-		echo $this->Html->meta('icon');
-
-		echo $this->Html->css('cake.generic');
-
-		echo $this->fetch('meta');
-		echo $this->fetch('css');
-		echo $this->fetch('script');
-	?>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="robots" content="noindex, nofollow">
+	<title><?php echo h($this->fetch('title') ?: 'Erreur'); ?> | MGR Akdital</title>
+	<link rel="icon" type="image/png" href="<?php echo $this->webroot; ?>img/favicon.png">
+	<style>
+		* { box-sizing: border-box; }
+		body { margin: 0; min-height: 100vh; display: flex; align-items: center; justify-content: center;
+			font-family: "Segoe UI", Roboto, Arial, sans-serif; background: #f4f6fb; color: #1E2C5A; }
+		.box { width: 100%; max-width: 480px; margin: 24px; padding: 40px 32px; background: #fff;
+			border-radius: 16px; box-shadow: 0 10px 30px rgba(30, 44, 90, .08); text-align: center; }
+		.box img { height: 44px; margin-bottom: 28px; }
+		.code { font-size: 56px; font-weight: 700; line-height: 1; color: #3780CB; margin: 0 0 12px; }
+		h1 { font-size: 22px; margin: 0 0 10px; }
+		p { margin: 0 0 24px; color: #5b6581; line-height: 1.5; }
+		a.btn { display: inline-block; padding: 10px 22px; border-radius: 8px; background: #1E2C5A;
+			color: #fff; text-decoration: none; font-weight: 600; }
+		a.btn:hover { background: #3780CB; }
+		.debug { margin-top: 24px; text-align: left; font-size: 12px; overflow: auto; }
+	</style>
 </head>
 <body>
-	<div id="container">
-		<div id="header">
-			<h1><?php echo $this->Html->link($cakeDescription, 'https://cakephp.org'); ?></h1>
-		</div>
-		<div id="content">
-
-			<?php echo $this->Session->flash(); ?>
-
-			<?php echo $this->fetch('content'); ?>
-		</div>
-		<div id="footer">
-			<?php echo $this->Html->link(
-					$this->Html->image('cake.power.gif', array('alt' => $cakeDescription, 'border' => '0')),
-					'https://cakephp.org/',
-					array('target' => '_blank', 'escape' => false)
-				);
-			?>
-		</div>
+	<div class="box">
+		<img src="<?php echo $this->webroot; ?>img/svg/logo_colored.svg" alt="Akdital">
+		<?php echo $this->fetch('content'); ?>
+		<a class="btn" href="<?php echo $this->webroot; ?>">Retour à l'accueil</a>
 	</div>
-	<?php echo $this->element('sql_dump'); ?>
 </body>
 </html>

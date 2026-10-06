@@ -1,6 +1,6 @@
 <?php
 App::uses('AppController', 'Controller');
-App::uses('CakeEmail', 'Network/Email');
+App::uses('AppEmail', 'Lib');
 App::uses('MigratingPasswordHasher', 'Controller/Component/Auth');
 App::uses('LoginThrottle', 'Lib');
 App::uses('AuditLog', 'Lib');
@@ -644,7 +644,7 @@ class UsersController extends AppController
 				// Replace with your actual email field if you have one linked to the username
 				$toEmail = 'abde-smr@hotmail.fr'; // fallback email or admin email
 
-				$Email = new CakeEmail('default');
+				$Email = new AppEmail('default');
 				$Email->to($toEmail) // You must set a valid email address here
 					->subject('Réinitialisation du mot de passe')
 					->template('reset_password')

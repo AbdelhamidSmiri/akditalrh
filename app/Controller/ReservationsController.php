@@ -116,17 +116,16 @@ class ReservationsController extends AppController
 				$chambre = $this->Reservation->Chambre->findById($this->request->data["Reservation"]["chambre_id"]);
 				$hotel = $this->Hotel->findById($chambre["Chambre"]["hotel_id"]);
 				$resivation = $this->request->data['Reservation'];
-				App::uses('CakeEmail', 'Network/Email');
-				$Email = new CakeEmail('default');
+				App::uses('AppEmail', 'Lib');
+				$Email = new AppEmail('default');
 				$Email->template('default', 'hotels_validation');
 				$Email->viewVars(array("hotel" => $hotel));
 				$Email->viewVars(array("chambre" => $chambre));
 				$Email->viewVars(array("id" => $this->Reservation->id));
 				$Email->viewVars(array("reservation" => $resivation));
 				$Email->emailFormat('html');
-				$Email->to("eljazouly.abdessamad2003@gmail.com"); //$hotel["Hotel"]["mail"]
-				$Email->from(array('noreply@akdital.local' => 'Akdital MGR'));
 				$Email->subject('[AKDITAL] Demande de séjour – Validation requise');
+				$hotelRecipients = $this->_hotelRecipients($hotel);
 
 				// Pièce jointe CIN (storage privé, avec fallback legacy)
 				App::uses('FileStorage', 'Lib');
@@ -144,12 +143,15 @@ class ReservationsController extends AppController
 
 				$emailSent = false;
 				$emailError = null;
-				try {
-					$Email->send();
-					$emailSent = true;
-				} catch (Exception $e) {
-					$emailError = $e->getMessage();
-					CakeLog::write('error', 'Reservation email failed: ' . $emailError);
+				if (!empty($hotelRecipients)) {
+					try {
+						$Email->to($hotelRecipients);
+						$Email->send();
+						$emailSent = true;
+					} catch (Exception $e) {
+						$emailError = $e->getMessage();
+						CakeLog::write('error', 'Reservation email failed: ' . $emailError);
+					}
 				}
 
 				if ($emailSent) {
@@ -158,6 +160,14 @@ class ReservationsController extends AppController
 						'Flash/success',
 						array(),
 						'success'
+					);
+				} elseif (empty($hotelRecipients)) {
+					CakeLog::write('warning', 'Reservation #' . $this->Reservation->id . ': no valid hotel email, validation email skipped.');
+					$this->Session->setFlash(
+						'La réservation a été enregistrée, mais l\'hôtel n\'a pas d\'adresse e-mail valide : la demande de validation n\'a pas été envoyée.',
+						'Flash/warning',
+						array(),
+						'warning'
 					);
 				} else {
 					$this->Session->setFlash(
@@ -388,16 +398,7 @@ class ReservationsController extends AppController
 				$this->loadModel('Hotel');
 				$this->Hotel->recursive = -1;
 				$hotel = $this->Hotel->findById($reservation["Chambre"]["hotel_id"]);
-				App::uses('CakeEmail', 'Network/Email');
-				$email = new CakeEmail();
-				$email->template('default', 'hotel_accepte');
-				$email->emailFormat('html');
-				$email->to("eljazouly.abdessamad2003@gmail.com"); // $reservation['User']['email']
-				$email->from('no-reply@icoz.ma');
-				$email->subject('✅ Votre réservation a été acceptée');
-
-				$email->viewVars(array('reservation' => $reservation, 'hotel' => $hotel));
-				$email->send();
+				$this->_sendHotelDecisionEmail('hotel_accepte', '✅ Votre réservation a été acceptée', $reservation, $hotel);
 
 				echo "Demande validée avec succès.";
 				exit();
@@ -428,17 +429,7 @@ class ReservationsController extends AppController
 				$this->loadModel('Hotel');
 				$this->Hotel->recursive = -1;
 				$hotel = $this->Hotel->findById($reservation["Chambre"]["hotel_id"]);
-
-				App::uses('CakeEmail', 'Network/Email');
-				$email = new CakeEmail();
-				$email->template('default', 'hotels_refus');
-				$email->emailFormat('html');
-				$email->to("eljazouly.abdessamad2003@gmail.com"); // $reservation['User']['email']
-				$email->from('no-reply@icoz.ma');
-				$email->subject('❌ Votre réservation a été refusée');
-
-				$email->viewVars(array('reservation' => $reservation, 'hotel' => $hotel));
-				$email->send();
+				$this->_sendHotelDecisionEmail('hotels_refus', '❌ Votre réservation a été refusée', $reservation, $hotel);
 
 				echo 'Demande refusée avec succès.';
 				exit();
@@ -446,6 +437,51 @@ class ReservationsController extends AppController
 		}
 
 		$this->set('id', $encryptedId);
+	}
+
+	/**
+	 * Valid addresses from Hotel.mail, which may hold several separated by ";" or ",".
+	 *
+	 * @param array|false $hotel
+	 * @return array
+	 */
+	protected function _hotelRecipients($hotel)
+	{
+		$raw = isset($hotel['Hotel']['mail']) ? (string)$hotel['Hotel']['mail'] : '';
+		$emails = array();
+		foreach (preg_split('/[;,\s]+/', $raw, -1, PREG_SPLIT_NO_EMPTY) as $address) {
+			if (filter_var($address, FILTER_VALIDATE_EMAIL)) {
+				$emails[] = $address;
+			}
+		}
+		return array_values(array_unique($emails));
+	}
+
+	/**
+	 * The decision is already saved when this runs, so a mail failure must not break the hotel's page.
+	 */
+	protected function _sendHotelDecisionEmail($template, $subject, $reservation, $hotel)
+	{
+		$recipients = $this->_hotelRecipients($hotel);
+		if (empty($recipients)) {
+			CakeLog::write('warning', 'Reservation #' . $reservation['Reservation']['id'] . ': no valid hotel email, decision email skipped.');
+			return false;
+		}
+
+		App::uses('AppEmail', 'Lib');
+		try {
+			$email = new AppEmail('default');
+			$email->template('default', $template)
+				->emailFormat('html')
+				->to($recipients)
+				->subject($subject)
+				->viewVars(array('reservation' => $reservation, 'hotel' => $hotel))
+				->send();
+			return true;
+		} catch (Exception $e) {
+			CakeLog::write('error', 'Reservation decision email failed: ' . $e->getMessage());
+			return false;
+		}
 	}
 
 	protected function _ensureReservationAccess($id)

@@ -282,7 +282,7 @@
 	function validateStep1() {
 		let isValid = true;
 
-		// Get form elements using multiple possible selectors (CakePHP generates different IDs)
+		// Get form elements using multiple possible selectors (IDs can differ between forms)
 		const reponse = document.getElementById('VolreservationReponse') ||
 			document.querySelector('input[name="data[Volreservation][reponse]"]') ||
 			document.querySelector('#reponse');

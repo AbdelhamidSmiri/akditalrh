@@ -59,3 +59,8 @@ Thumbs.db
 /docs/
 *.md
 !/README.md
+
+# Python rewrite (lives in its own branch) and local DB dumps #
+###############################################################
+/AKDITALRH-python/
+/*.sql

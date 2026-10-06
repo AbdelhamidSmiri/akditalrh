@@ -1,29 +1,33 @@
 <?php
-/**
- * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
- * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
- *
- * Licensed under The MIT License
- * For full copyright and license information, please see the LICENSE.txt
- * Redistributions of files must retain the above copyright notice.
- *
- * @copyright     Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
- * @link          https://cakephp.org CakePHP(tm) Project
- * @package       app.View.Errors
- * @since         CakePHP(tm) v 0.10.0.1076
- * @license       https://opensource.org/licenses/mit-license.php MIT License
- */
+$this->layout = 'error';
+
+$code = (isset($error) && $error instanceof Exception) ? (int)$error->getCode() : 404;
+$titles = array(
+	400 => 'Requête invalide',
+	401 => 'Authentification requise',
+	403 => 'Accès refusé',
+	404 => 'Page introuvable',
+	405 => 'Méthode non autorisée',
+);
+$texts = array(
+	401 => 'Veuillez vous connecter pour accéder à cette page.',
+	403 => "Vous n'avez pas les droits nécessaires pour accéder à cette page.",
+	404 => "La page demandée n'existe pas ou a été déplacée.",
+);
+if ($code < 400 || $code > 499) {
+	$code = 400;
+}
+$title = isset($titles[$code]) ? $titles[$code] : 'Requête invalide';
+$text = isset($texts[$code]) ? $texts[$code] : "La requête n'a pas pu être traitée.";
+
+$this->assign('title', $title);
 ?>
-<h2><?php echo $message; ?></h2>
-<p class="error">
-	<strong><?php echo __d('cake', 'Error'); ?>: </strong>
-	<?php printf(
-		__d('cake', 'The requested address %s was not found on this server.'),
-		"<strong>'{$url}'</strong>"
-	); ?>
-</p>
-<?php
-if (Configure::read('debug') > 0):
-	echo $this->element('exception_stack_trace');
-endif;
-?>
+<div class="code"><?php echo $code; ?></div>
+<h1><?php echo h($title); ?></h1>
+<p><?php echo h($text); ?></p>
+<?php if (Configure::read('debug') > 0): ?>
+	<div class="debug">
+		<strong><?php echo h($message); ?></strong>
+		<?php echo $this->element('exception_stack_trace'); ?>
+	</div>
+<?php endif; ?>

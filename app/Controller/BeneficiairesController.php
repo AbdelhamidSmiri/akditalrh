@@ -174,17 +174,20 @@ class BeneficiairesController extends AppController
 			if ($this->Beneficiaire->save($this->request->data)) {
 				$this->Beneficiaire->Appartement->recursive = -1;
 				$appt = $this->Beneficiaire->Appartement->findById($this->request->data["Beneficiaire"]["appartement_id"]);
-				App::uses('CakeEmail', 'Network/Email');
-				$Email = new CakeEmail();
+				App::uses('AppEmail', 'Lib');
+				$Email = new AppEmail('default');
 				$Email->template('default', 'appartements_affectation');
 				$Email->viewVars(array("appt" => $appt));
 				$Email->viewVars(array("id" => $this->Beneficiaire->id));
 				$Email->viewVars(array("nom" => $this->request->data["Beneficiaire"]["nom"]));
 				$Email->emailFormat('html');
-				$Email->to($this->request->data["Beneficiaire"]["mail"]); //$this->request->data["Beneficiaire"]["mail"]
-				$Email->from('no-repley@icoz.ma');
+				$Email->to($this->request->data["Beneficiaire"]["mail"]);
 				$Email->subject('Affectation à un logement – Validation requise');
-				$Email->send();
+				try {
+					$Email->send();
+				} catch (Exception $e) {
+					CakeLog::write('error', 'Beneficiaire email failed: ' . $e->getMessage());
+				}
 				$this->Session->setFlash(
 					'La demenade de affectation a été ajoutée avec succès.',
 					'Flash/success',

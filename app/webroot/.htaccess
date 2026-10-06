@@ -2,6 +2,8 @@
 # See: https://httpoxy.org/
 <IfModule mod_headers.c>
 	RequestHeader unset Proxy
+	Header always unset X-Powered-By
+	Header unset X-Powered-By
 	Header always set X-Frame-Options "SAMEORIGIN"
 	Header always set X-Content-Type-Options "nosniff"
 	Header always set Referrer-Policy "strict-origin-when-cross-origin"
@@ -11,6 +13,8 @@
 <IfModule mod_rewrite.c>
 	RewriteEngine On
 	RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+
+	RewriteRule ^favicon\.ico$ img/favicon.png [L]
 
 	# webroot/files/ exists on disk (legacy uploads + Deny). Force CakePHP
 	# routes for controlled file delivery instead of hitting that directory.

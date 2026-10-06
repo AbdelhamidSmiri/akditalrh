@@ -1,20 +1,21 @@
 <?php
 /**
- * The Front Controller for handling every request
- *
- * CakePHP(tm) : Rapid Development Framework (https://cakephp.org)
- * Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
- *
- * Licensed under The MIT License
- * For full copyright and license information, please see the LICENSE.txt
- * Redistributions of files must retain the above copyright notice.
- *
- * @copyright     Copyright (c) Cake Software Foundation, Inc. (https://cakefoundation.org)
- * @link          https://cakephp.org CakePHP(tm) Project
- * @package       app.webroot
- * @since         CakePHP(tm) v 0.2.9
- * @license       https://opensource.org/licenses/mit-license.php MIT License
+ * Front controller: every request goes through this file.
  */
+
+/**
+ * Boot failures are logged server-side only; visitors get a neutral 503.
+ */
+function mgr_boot_failure($detail)
+{
+	error_log('[MGR boot] ' . $detail);
+	if (!headers_sent()) {
+		http_response_code(503);
+		header('Content-Type: text/plain; charset=UTF-8');
+	}
+	echo 'Service temporairement indisponible.';
+	exit(1);
+}
 
 /**
  * Use the DS to separate the directories in other defines
@@ -63,30 +64,14 @@ if (PHP_SAPI === 'cli-server') {
 	$_SERVER['PHP_SELF'] = '/' . basename(__FILE__);
 }
 
-if (!is_dir(VENDORS)) {
-	trigger_error(
-		'Composer vendors directory not found at "' . VENDORS . '". ' .
-		'Please run "composer install" in the app/ directory to install dependencies.',
-		E_USER_ERROR
-	);
-}
-
 if (!is_file(VENDORS . 'autoload.php')) {
-	trigger_error(
-		'Composer autoload file not found at "' . VENDORS . 'autoload.php". ' .
-		'Please run "composer install" in the app/ directory to generate the autoload file.',
-		E_USER_ERROR
-	);
+	mgr_boot_failure('Dependencies missing in ' . VENDORS . ' - run "composer install" in app/.');
 }
 
 require_once VENDORS . 'autoload.php';
 
 if (!require_once 'Cake' . DS . 'bootstrap.php') {
-	trigger_error(
-		'CakePHP core could not be found. ' .
-		'Please run "composer require pieceofcake2/cakephp" in the app/ directory.',
-		E_USER_ERROR
-	);
+	mgr_boot_failure('Framework core not found - run "composer install" in app/.');
 }
 
 App::uses('Dispatcher', 'Routing');

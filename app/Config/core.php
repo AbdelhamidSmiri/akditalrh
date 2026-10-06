@@ -258,7 +258,10 @@
 
 	// Harden cookies when HTTPS is forced / used.
 	if (Env::get('FORCE_HTTPS', false)) {
-		Configure::write('Session.ini.session.cookie_secure', 1);
+		// Configure::write() would split "session.cookie_secure" on the dot; edit the ini array directly.
+		$sessionConfig = Configure::read('Session');
+		$sessionConfig['ini']['session.cookie_secure'] = 1;
+		Configure::write('Session', $sessionConfig);
 		// Behind the proxy Apache only sees HTTP: absolute redirects must still point to https://.
 		if (!empty($_SERVER['HTTP_HOST'])) {
 			Configure::write('App.fullBaseUrl', 'https://' . $_SERVER['HTTP_HOST']);

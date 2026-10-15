@@ -1,13 +1,26 @@
 <div class="users index"></div>
 
-<div class="col-md-5">
-	<div class="search-section">
-		<div class="input-group mb-3">
-			<span class="input-group-text" id="basic-addon1"><i class="fa-solid fa-magnifying-glass"></i></span>
-			<input type="text" class="form-control" id="search_input" placeholder="Rechercher" aria-label="Search">
-			<button class="btn btn-primary-rounded search-btn" type="button"><i class="fa-solid fa-magnifying-glass"></i> Rechercher</button>
+<div class="row">
+	<div class="col-md-5">
+		<div class="search-section">
+			<div class="input-group mb-3">
+				<span class="input-group-text" id="basic-addon1"><i class="fa-solid fa-magnifying-glass"></i></span>
+				<input type="text" class="form-control" id="search_input" placeholder="Rechercher" aria-label="Search">
+				<button class="btn btn-primary-rounded search-btn" type="button"><i class="fa-solid fa-magnifying-glass"></i> Rechercher</button>
+			</div>
 		</div>
 	</div>
+	<?php if (AuthComponent::user('Role.role') === 'Admin'): ?>
+		<div class="col">
+			<div class="text-end">
+				<?php echo $this->Html->link(
+					'<i class="fa-regular fa-plus"></i> Nouvel utilisateur',
+					array('action' => 'add'),
+					array('escape' => false, 'class' => 'btn btn-primary-rounded')
+				); ?>
+			</div>
+		</div>
+	<?php endif; ?>
 </div>
 <div class="col-md-12 filter-section"></div>
 <div class="content-table">

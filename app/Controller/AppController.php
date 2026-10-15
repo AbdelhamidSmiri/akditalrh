@@ -45,7 +45,22 @@ class AppController extends Controller
 		$this->Auth->allow('login');
 		$this->_enforceHttps();
 		$this->_sendSecurityHeaders();
+		$this->_sendNoStore();
 		$this->_enforceMfaGate();
+	}
+
+	/**
+	 * Application pages carry personal data and the session cookie: no proxy or browser may store them.
+	 * MediaController overrides this for public images.
+	 */
+	protected function _sendNoStore()
+	{
+		if (!isset($this->response) || !is_object($this->response)) {
+			return;
+		}
+		$this->response->header('Cache-Control', 'no-store, no-cache, must-revalidate, private, max-age=0');
+		$this->response->header('Pragma', 'no-cache');
+		$this->response->header('Expires', '0');
 	}
 
 	public function beforeRender()
@@ -65,7 +80,7 @@ class AppController extends Controller
 	{
 		AuditLog::write('security_blackhole', array('type' => $type));
 		// A login page left open past the session lifetime carries a stale token: reload it instead of a 400.
-		$retryable = array('login', 'mfa_verify', 'forgot_password');
+		$retryable = array('login', 'mfa_verify');
 		if ($type === 'csrf' && strtolower($this->name) === 'users' && in_array($this->request->params['action'], $retryable, true)) {
 			$this->Session->setFlash(
 				'Votre session a expiré. Veuillez réessayer.',
@@ -73,7 +88,10 @@ class AppController extends Controller
 				array(),
 				'error'
 			);
-			return $this->redirect(array('controller' => 'users', 'action' => $this->request->params['action']));
+			return $this->redirect(array_merge(
+				array('controller' => 'users', 'action' => $this->request->params['action']),
+				(array)$this->request->params['pass']
+			));
 		}
 		if ($type === 'csrf') {
 			throw new BadRequestException('Jeton de sécurité invalide ou expiré. Rechargez la page et réessayez.');
@@ -241,8 +259,13 @@ class AppController extends Controller
 		if (!empty($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https') {
 			return;
 		}
-		$host = isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : 'localhost';
 		$uri = isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '/';
+		$base = (string)Configure::read('App.fullBaseUrl');
+		if (stripos($base, 'https://') === 0) {
+			$this->redirect($base . $uri, 301);
+			return;
+		}
+		$host = isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : 'localhost';
 		$this->redirect('https://' . $host . $uri, 301);
 	}
 

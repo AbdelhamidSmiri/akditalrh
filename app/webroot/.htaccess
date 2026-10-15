@@ -10,6 +10,10 @@
 	Header always set Permissions-Policy "geolocation=(), microphone=(), camera=()"
 </IfModule>
 
+# Apache's built-in error page would print the server signature.
+ErrorDocument 404 "Page introuvable."
+ErrorDocument 403 "Forbidden"
+
 <IfModule mod_rewrite.c>
 	RewriteEngine On
 	RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
@@ -19,6 +23,11 @@
 	# webroot/files/ exists on disk (legacy uploads + Deny). Force CakePHP
 	# routes for controlled file delivery instead of hitting that directory.
 	RewriteRule ^files/(serve|download)(/.*)?$ index.php?url=files/$1$2 [QSA,L]
+
+	# Web cache deception: a non-existent "*.css"/"*.png"... must never reach the app,
+	# otherwise a page (and its session cookie) gets cached under a static-looking URL.
+	RewriteCond %{REQUEST_FILENAME} !-f
+	RewriteRule \.(css|js|map|png|jpe?g|gif|ico|svg|webp|bmp|woff2?|ttf|otf|eot)$ - [NC,R=404,L]
 
 	RewriteCond %{REQUEST_FILENAME} !-d
 	RewriteCond %{REQUEST_FILENAME} !-f

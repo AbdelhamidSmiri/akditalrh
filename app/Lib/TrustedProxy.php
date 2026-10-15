@@ -13,6 +13,9 @@ class TrustedProxy
 
 	public static function apply()
 	{
+		// The public host comes from APP_BASE_URL / Host, never from a client-supplied forwarding header.
+		unset($_SERVER['HTTP_X_FORWARDED_HOST'], $_SERVER['HTTP_X_FORWARDED_SERVER'], $_SERVER['HTTP_X_ORIGINAL_HOST']);
+
 		$remote = isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '';
 		if ($remote === '' || !self::isTrusted($remote)) {
 			return;

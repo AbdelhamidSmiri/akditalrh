@@ -268,6 +268,12 @@
 		}
 	}
 
+	// Canonical public address: links in e-mails (password reset...) must not depend on request headers.
+	$appBaseUrl = rtrim((string)Env::get('APP_BASE_URL', ''), '/');
+	if ($appBaseUrl !== '' && preg_match('#^https?://[^/?\#\s]+$#i', $appBaseUrl)) {
+		Configure::write('App.fullBaseUrl', $appBaseUrl);
+	}
+
 /**
  * A random string used in security hashing methods / HMAC tokens.
  * Set via SECURITY_SALT in .env — never commit production secrets.

@@ -16,7 +16,7 @@ class UsersController extends AppController
 	public function beforeFilter()
 	{
 		parent::beforeFilter();
-		$this->Auth->allow('login', 'forgot_password');
+		$this->Auth->allow('login');
 	}
 
 	public function isAuthorized($user)
@@ -25,7 +25,7 @@ class UsersController extends AppController
 
 		// Self-service / session actions
 		if (in_array($this->action, array(
-			'view', 'login', 'logout', 'forgot_password', 'dashboard',
+			'view', 'login', 'logout', 'dashboard',
 			'mfa_verify', 'mfa_setup', 'mfa_enable', 'mfa_disable',
 		), true)) {
 			return true;
@@ -619,40 +619,5 @@ class UsersController extends AppController
 		}
 
 		$this->set(compact('title_for_layout', 'pageSubtitle'));
-	}
-
-	/**
-	 * forgot_password method
-	 *
-	 * Allows users to request a password reset.
-	 * Sends an email with a reset link if the email exists in the database.
-	 */
-
-
-	public function forgot_password()
-	{
-		$this->layout = 'login';
-
-		if ($this->request->is('post')) {
-			$username = $this->request->data['User']['username'];
-			$user = $this->User->findByUsername($username);
-
-			if ($user) {
-				// Replace with your actual email field if you have one linked to the username
-				$toEmail = 'abde-smr@hotmail.fr'; // fallback email or admin email
-
-				$Email = new AppEmail('default');
-				$Email->to($toEmail) // You must set a valid email address here
-					->subject('Réinitialisation du mot de passe')
-					->template('reset_password')
-					->emailFormat('html')
-					->viewVars(array('user' => $user))
-					->send();
-
-				$this->Session->setFlash(__('Un email a été envoyé pour réinitialiser votre mot de passe.'));
-			} else {
-				$this->Session->setFlash(__('Nom d\'utilisateur non trouvé.'));
-			}
-		}
 	}
 }

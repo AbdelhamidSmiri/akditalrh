@@ -173,8 +173,6 @@
                         <input type="checkbox" checked="checked" />
                         <div class="control__indicator"></div>
                     </label>
-                    <a href="">Mot de passe oublié ?</a>
-
                 </div>
                 <?php
                 echo $this->Form->submit('Se connecter', array('class' => 'btn'));

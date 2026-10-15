@@ -2,9 +2,16 @@
 
 App::uses('Cache', 'Cache');
 App::uses('AuditLog', 'Lib');
+App::uses('RateLimit', 'Lib');
+App::uses('TrustedProxy', 'Lib');
 
 /**
- * Simple login brute-force protection (Cache-backed).
+ * Login brute-force protection (Cache-backed).
+ *
+ * - per (IP + account): 5 failures / 15 min -> 15 min lock (only that IP is locked out of the
+ *   account, so a third party cannot lock a colleague out from another workstation);
+ * - per IP: 10 failures / 15 min -> 15 min lock;
+ * - password spraying: one IP failing on 5 distinct accounts / 15 min -> 30 min lock.
  */
 class LoginThrottle
 {
@@ -12,26 +19,51 @@ class LoginThrottle
 	const WINDOW_SECONDS = 900; // 15 minutes
 	const LOCK_SECONDS = 900;
 
-	/** Higher ceiling for a single IP trying many different accounts. */
-	const MAX_IP_ATTEMPTS = 15;
+	const MAX_IP_ATTEMPTS = 10;
+
+	const SPRAY_DISTINCT_ACCOUNTS = 5;
+	const SPRAY_LOCK_SECONDS = 1800;
 
 	public static function isBlocked($username)
 	{
-		return self::isCounterLocked(self::key($username)) || self::isCounterLocked(self::ipKey());
+		if (self::isCounterLocked(self::key($username))) {
+			return true;
+		}
+		return self::ipLimitsApply() && self::isCounterLocked(self::ipKey());
 	}
 
 	public static function remainingLockSeconds($username)
 	{
-		return max(
-			self::counterLockSeconds(self::key($username)),
-			self::counterLockSeconds(self::ipKey())
-		);
+		$seconds = self::counterLockSeconds(self::key($username));
+		if (self::ipLimitsApply()) {
+			$seconds = max($seconds, self::counterLockSeconds(self::ipKey()));
+		}
+		return $seconds;
 	}
 
 	public static function hitFailure($username)
 	{
-		$data = self::increment(self::key($username), self::MAX_ATTEMPTS);
-		$ipData = self::increment(self::ipKey(), self::MAX_IP_ATTEMPTS);
+		$data = self::increment(self::key($username), self::MAX_ATTEMPTS, self::LOCK_SECONDS);
+		$ipData = array();
+		$distinct = 0;
+
+		if (self::ipLimitsApply()) {
+			$ipData = self::increment(self::ipKey(), self::MAX_IP_ATTEMPTS, self::LOCK_SECONDS);
+			$distinct = RateLimit::addDistinct(
+				'login_spray',
+				AuditLog::clientIp(),
+				strtolower(trim((string)$username)),
+				self::WINDOW_SECONDS
+			);
+			if ($distinct >= self::SPRAY_DISTINCT_ACCOUNTS) {
+				$ipData = self::lock(self::ipKey(), self::SPRAY_LOCK_SECONDS);
+				AuditLog::write('login_spray_suspected', array(
+					'username' => $username,
+					'distinct_accounts' => $distinct,
+				));
+				return $data;
+			}
+		}
 
 		if (!empty($data['locked_until'])) {
 			AuditLog::write('login_locked', array(
@@ -56,10 +88,27 @@ class LoginThrottle
 	public static function clear($username)
 	{
 		Cache::delete(self::key($username), 'default');
-		Cache::delete(self::ipKey(), 'default');
+		if (self::ipLimitsApply()) {
+			Cache::delete(self::ipKey(), 'default');
+		}
 	}
 
-	protected static function increment($key, $maxAttempts)
+	/**
+	 * When the proxy does not forward the client address, every user shares the proxy IP:
+	 * IP-wide locks would then lock the whole company out at once.
+	 *
+	 * @return bool
+	 */
+	protected static function ipLimitsApply()
+	{
+		$ip = AuditLog::clientIp();
+		if ($ip === 'cli' || TrustedProxy::isTrusted($ip)) {
+			return false;
+		}
+		return true;
+	}
+
+	protected static function increment($key, $maxAttempts, $lockSeconds)
 	{
 		$data = Cache::read($key, 'default');
 		if (!is_array($data) || empty($data['window_start']) || (time() - $data['window_start']) > self::WINDOW_SECONDS) {
@@ -72,9 +121,20 @@ class LoginThrottle
 
 		$data['attempts']++;
 		if ($data['attempts'] >= $maxAttempts) {
-			$data['locked_until'] = time() + self::LOCK_SECONDS;
+			$data['locked_until'] = time() + $lockSeconds;
 		}
 
+		Cache::write($key, $data, 'default');
+		return $data;
+	}
+
+	protected static function lock($key, $seconds)
+	{
+		$data = Cache::read($key, 'default');
+		if (!is_array($data)) {
+			$data = array('window_start' => time(), 'attempts' => 0);
+		}
+		$data['locked_until'] = max(isset($data['locked_until']) ? (int)$data['locked_until'] : 0, time() + $seconds);
 		Cache::write($key, $data, 'default');
 		return $data;
 	}
